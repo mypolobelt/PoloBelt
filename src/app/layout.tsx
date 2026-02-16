@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Nav from "@/components/modules/shared/Nav";
 import Footer from "@/components/modules/shared/Footer";
+import FloatingChat from "@/components/modules/shared/FloatingChat";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -30,8 +31,9 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <Nav />
-        <div className="min-h-screen">
+        <div>
           {children}
+          <FloatingChat/>
         </div>
         <Footer />
       </body>
