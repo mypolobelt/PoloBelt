@@ -123,7 +123,7 @@ const Nav = () => {
                                         </li>
                                         <li>
                                             <Link
-                                                href="/login"
+                                                href="/signin"
                                                 className="block hover:bg-white/10 rounded-md px-4 py-2 text-white text-sm"
                                             >
                                                 My Account
