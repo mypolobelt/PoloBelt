@@ -1,5 +1,5 @@
-import Image from 'next/image';
 import React from 'react';
+import PoloLogo2 from '../shared/PoloLogo2';
 
 const OrderProcess = () => {
     const steps = [
@@ -32,42 +32,22 @@ const OrderProcess = () => {
 
     return (
         <section>
-            <div className='bg-[#0f1526] p-5'>
-                <div className="flex items-center justify-center">
-                    <div className="bg-white border-4 border-black px-10 py-6 shadow-xl flex items-center gap-6">
-
-                        <Image
-                            src="/assets/logo.webp"
-                            alt="Polo Belts Logo"
-                            priority
-                            className="object-cover"
-                            width={80}
-                            height={80}
-                        />
-
-                        {/* Brand Name */}
-                        <h1 className="text-3xl md:text-4xl font-serif tracking-wide text-gray-800">
-                            My Polo Belt
-                        </h1>
-
-                    </div>
-                </div>
-            </div>
-            <div className='p-5'>
-                <h1 className="text-5xl font-semibold text-center my-16 text-gray-900">
+            <PoloLogo2 />
+            <div className='p-5 sm:p-8 md:p-10'>
+                <h1 className="text-3xl sm:text-4xl md:text-5xl font-semibold text-center my-8 sm:my-12 md:my-16 text-gray-900">
                     THE ORDERING PROCESS
                 </h1>
 
-                <div className="w-8/12 mx-auto grid grid-cols-1 md:grid-cols-3 gap-16 mb-5">
+                <div className="w-full sm:w-11/12 md:w-10/12 lg:w-8/12 mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 sm:gap-12 md:gap-16 mb-5">
                     {steps.map((step) => (
                         <div key={step.number} className="flex flex-col">
-                            <h2 className="text-2xl font-semibold mb-6 text-gray-900 text-center">
+                            <h2 className="text-xl sm:text-2xl font-semibold mb-4 sm:mb-6 text-gray-900 text-center">
                                 {step.number}. {step.title}
                             </h2>
 
-                            <div className="space-y-6 text-center">
+                            <div className="space-y-4 sm:space-y-6 text-center">
                                 {step.paragraphs.map((paragraph, index) => (
-                                    <p key={index} className="text-gray-600 text-base">
+                                    <p key={index} className="text-gray-600 text-sm sm:text-base">
                                         {paragraph}
                                     </p>
                                 ))}

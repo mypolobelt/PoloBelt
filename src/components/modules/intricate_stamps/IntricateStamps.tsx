@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import React from 'react';
+import PoloLogo2 from '../shared/PoloLogo2';
 
 const IntricateStampsGallery = () => {
     // Organize images by column for manual masonry control
@@ -32,36 +33,19 @@ const IntricateStampsGallery = () => {
     ]
     return (
         <section className="w-full">
-            <div className='bg-[#0f1526] p-5'>
-                <div className="flex items-center justify-center">
-                    <div className="bg-white border-4 border-black px-10 py-6 shadow-xl flex items-center gap-6">
-
-                        <Image
-                            src="/assets/logo.webp"
-                            alt="Polo Belts Logo"
-                            priority
-                            className="object-cover"
-                            width={80}
-                            height={80}
-                        />
-
-                        {/* Brand Name */}
-                        <h1 className="text-3xl md:text-4xl font-serif tracking-wide text-gray-800">
-                            My Polo Belt
-                        </h1>
-
-                    </div>
-                </div>
-            </div>
-            <div className="max-w-5xl mx-auto">
-                <h2 className="uppercase text-5xl font-bold text-center my-6 text-gray-900 tracking-tight">
+            <PoloLogo2 />
+            <div className="max-w-full sm:max-w-6xl lg:max-w-5xl mx-auto px-4 sm:px-6">
+                <h2 className="uppercase text-3xl sm:text-4xl md:text-5xl font-bold text-center my-4 sm:my-6 text-gray-900 tracking-tight">
                     Intricate stamps
                 </h2>
 
                 {/* Three Column Layout */}
-                <div className="grid grid-cols-3 gap-1 md:gap-2 py-10">
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-1 md:gap-2 py-6 sm:py-8 md:py-10">
                     {columns.map((column, colIndex) => (
-                        <div key={colIndex} className="flex flex-col gap-1 md:gap-2">
+                        <div
+                            key={colIndex}
+                            className={`flex flex-col gap-1 md:gap-2 ${colIndex === 2 ? 'hidden sm:flex' : ''}`}
+                        >
                             {column.map((image, imgIndex) => (
                                 <div
                                     key={imgIndex}

@@ -1,67 +1,46 @@
 import Image from 'next/image';
 import React from 'react';
+import PoloLogo2 from '../shared/PoloLogo2';
 
 const AboutSection = () => {
     return (
         <section className="w-full">
-            <div className='bg-[#0f1526] p-5'>
-                <div className="flex items-center justify-center">
-                    <div className="bg-white border-4 border-black px-10 py-6 shadow-xl flex items-center gap-6">
-
-                        <Image
-                            src="/assets/logo.webp"
-                            alt="Polo Belts Logo"
-                            priority
-                            className="object-cover"
-                            width={80}
-                            height={80}
-                        />
-
-                        {/* Brand Name */}
-                        <h1 className="text-3xl md:text-4xl font-serif tracking-wide text-gray-800">
-                            My Polo Belt
-                        </h1>
-
-                    </div>
-                </div>
-            </div>
-
-
+            <PoloLogo2 />
             <div className="grid grid-cols-1 md:grid-cols-2">
 
                 {/* Left Content */}
-                <div className="flex items-center px-6 md:px-32 md:py-36">
-                    <div className="max-w-xl space-y-6">
+                <div className="flex items-center px-6 sm:px-12 md:px-16 lg:px-24 xl:px-32 py-12 sm:py-16 md:py-24 lg:py-32 xl:py-36">
+                    <div className="max-w-xl space-y-4 sm:space-y-5 md:space-y-6">
 
-                        <h2 className="text-3xl md:text-4xl font-bold tracking-wide text-[#0B1B3F]">
+                        <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-wide text-[#0B1B3F]">
                             ABOUT US
                         </h2>
 
-                        <h3 className="text-xl font-semibold text-gray-800">
+                        <h3 className="text-lg sm:text-xl font-semibold text-gray-800">
                             Bespoke Belts and Dog Collars
                         </h3>
 
-                        <p className="text-gray-600 leading-relaxed">
+                        <p className="text-sm sm:text-base text-gray-600 leading-relaxed">
                             We offer a bespoke belt service – a chance for you to create your
                             very own custom polo belt. Each belt is designed by you, for you.
                         </p>
 
-                        <p className="text-gray-600 leading-relaxed">
+                        <p className="text-sm sm:text-base text-gray-600 leading-relaxed">
                             You can choose from a wide range of colours that can be used for a
                             variety of different designs. We also offer a stamping service where
                             you can have any symbol/logo stamped onto your belt.
                         </p>
 
-                        <h4 className="text-lg font-semibold text-gray-800">
+                        <h4 className="text-base sm:text-lg font-semibold text-gray-800">
                             Previous Customers
                         </h4>
 
-                        <p className="text-gray-600 leading-relaxed">
+                        <p className="text-sm sm:text-base text-gray-600 leading-relaxed">
                             We have created a number of belts for individuals as well as
                             larger projects for military regiments, polo teams and schools.
                         </p>
 
-                        <p className="text-gray-600 font-medium">
+                        <p className="text-sm sm:text-base text-gray-600 font-medium">
                             Contact us to start your project now!
                         </p>
 
@@ -69,9 +48,9 @@ const AboutSection = () => {
                 </div>
 
                 {/* Right Image */}
-                <div className="relative w-full">
+                <div className="relative w-full h-100 sm:h-125 md:h-auto min-h-100">
                     <Image
-                        src="/assets/belt1.webp" // put your image inside public folder
+                        src="/assets/belt1.webp"
                         alt="Polo Belt"
                         fill
                         className="object-cover"

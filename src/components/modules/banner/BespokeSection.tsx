@@ -12,7 +12,7 @@ const BespokeSection = () => {
 
                     {/* Top Text */}
                     <div className="flex flex-col lg:flex-row items-center justify-center gap-6 mb-16">
-                        <h1 className="text-3xl md:text-5xl font-medium text-[#5e5e5e]">
+                        <h1 className="text-3xl text-center md:text-5xl font-medium text-[#5e5e5e]">
                             We provide bespoke Argentine style &apos;gaucho&apos; polo belts worldwide.
                         </h1>
 

@@ -3,7 +3,7 @@ import { FaFacebook, FaInstagram } from "react-icons/fa";
 
 export default function ConnectSection() {
     return (
-        <section className="bg-[#17243c] py-20">
+        <section className="bg-[#17243c] py-10 md:py-20">
             <div className="max-w-4xl mx-auto text-center">
 
                 {/* Title */}

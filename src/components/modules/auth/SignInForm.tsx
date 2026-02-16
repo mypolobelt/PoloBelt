@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import Image from "next/image";
+import PoloLogo2 from "../shared/PoloLogo2";
 
 const formSchema = z.object({
     email: z.string().email({
@@ -35,27 +35,7 @@ const SignIn = () => {
 
     return (
         <section>
-            <div className='bg-[#0f1526] p-5'>
-                <div className="flex items-center justify-center">
-                    <div className="bg-white border-4 border-black px-10 py-6 shadow-xl flex items-center gap-6">
-
-                        <Image
-                            src="/assets/logo.webp"
-                            alt="Polo Belts Logo"
-                            priority
-                            className="object-cover"
-                            width={80}
-                            height={80}
-                        />
-
-                        {/* Brand Name */}
-                        <h1 className="text-3xl md:text-4xl font-serif tracking-wide text-gray-800">
-                            My Polo Belt
-                        </h1>
-
-                    </div>
-                </div>
-            </div>
+            <PoloLogo2 />
             <div className="my-10 flex items-center justify-center px-4">
                 <div className="w-full max-w-2xl">
                     <h1 className="text-4xl md:text-5xl font-bold text-center text-[#0f1526] mb-6">
