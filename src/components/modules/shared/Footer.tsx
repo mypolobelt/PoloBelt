@@ -8,7 +8,7 @@ export default function Footer() {
             <div className="container flex flex-col items-center justify-center mx-auto px-4 sm:px-6 py-8 sm:py-10 md:py-12">
 
                 {/* Copyright */}
-                <p className="text-sm sm:text-base text-[#a9a9a9] mb-4 sm:mb-6 text-center">
+                <p className="text-lg text-[#a9a9a9] mb-4 md:mb-6 text-center">
                     Copyright @{new Date().getFullYear()} MyPoloBelt - All Rights Reserved.
                 </p>
 

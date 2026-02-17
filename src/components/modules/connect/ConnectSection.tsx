@@ -1,5 +1,5 @@
+import { Facebook, Instagram } from "lucide-react";
 import Link from "next/link";
-import { FaFacebook, FaInstagram } from "react-icons/fa";
 
 export default function ConnectSection() {
     return (
@@ -21,7 +21,7 @@ export default function ConnectSection() {
                         className="w-10 h-10 rounded-full bg-white flex items-center justify-center 
                        transition-all duration-300 hover:scale-110 hover:bg-gray-200"
                     >
-                        <FaFacebook className="w-6 h-6 text-[#17243c]" />
+                        <Facebook className="size-6 text-[#17243c] fill-[#17243c]" />
                     </Link>
 
                     {/* Instagram */}
@@ -31,7 +31,7 @@ export default function ConnectSection() {
                         className="w-10 h-10 rounded-full bg-white flex items-center justify-center 
                        transition-all duration-300 hover:scale-110 hover:bg-gray-200"
                     >
-                        <FaInstagram className="w-6 h-6 text-[#17243c]" />
+                        <Instagram className="size-6 text-[#17243c] " />
                     </Link>
 
                 </div>

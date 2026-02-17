@@ -55,12 +55,12 @@ const BespokeSection = () => {
 
                                 <div className="mt-6 space-y-3">
                                     <div className="flex justify-between items-center">
-                                        <h4 className="text-xl font-medium">Bespoke Polo Belts</h4>
+                                        <h4 className="text-3xl font-base">Bespoke Polo Belts</h4>
                                         <span className="text-lg">£25*</span>
                                     </div>
 
-                                    <p className="text-gray-600 text-lg">
-                                        Click <Link href="/bespoke-belts" className="underline hover:text-gray-900 transition-colors">here</Link> to see
+                                    <p className="text-[#5e5e5e] text-2xl">
+                                        Click <Link href="/bespoke-belts" className="underline hover:text-gray-900 text-gray-800 transition-colors">here</Link> to see
                                         examples of different bespoke gaucho polo belt designs.
                                         For Men and Women.
                                     </p>
@@ -83,12 +83,12 @@ const BespokeSection = () => {
 
                                 <div className="mt-6 space-y-3">
                                     <div className="flex justify-between items-center">
-                                        <h4 className="text-xl font-medium">Intricate Stamps</h4>
+                                        <h4 className="text-3xl font-base">Intricate Stamps</h4>
                                         <span className="text-lg">£12*</span>
                                     </div>
 
-                                    <p className="text-gray-600 text-lg">
-                                        Click <Link href="/intricate-stamps" className="underline hover:text-gray-900 transition-colors">here</Link> to see
+                                    <p className="text-[#5e5e5e] text-2xl">
+                                        Click <Link href="/intricate-stamps" className="underline hover:text-gray-900 text-gray-800 transition-colors">here</Link> to see
                                         examples of our bespoke stamps. We promise the most incredible
                                         level of detail.
                                     </p>
@@ -111,12 +111,12 @@ const BespokeSection = () => {
 
                                 <div className="mt-6 space-y-3">
                                     <div className="flex justify-between items-center">
-                                        <h4 className="text-xl font-medium">Dog Collars & Leads</h4>
+                                        <h4 className="text-3xl font-base">Dog Collars & Leads</h4>
                                         <span className="text-lg">£16.50*</span>
                                     </div>
 
-                                    <p className="text-gray-600 leading-relaxed">
-                                        Click <Link href="/dog-collars-leads" className="underline hover:text-gray-900 transition-colors">here</Link> to see
+                                    <p className="text-[#5e5e5e] text-2xl">
+                                        Click <Link href="/dog-collars-leads" className="underline hover:text-gray-900 text-gray-800 transition-colors">here</Link> to see
                                         examples of our bespoke gaucho dog collars.
                                     </p>
                                 </div>
