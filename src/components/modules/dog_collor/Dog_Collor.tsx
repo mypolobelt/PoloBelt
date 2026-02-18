@@ -7,27 +7,27 @@ const DogCollarsGallery = () => {
     const columns = [
         // Column 1
         [
-            { src: "/assets/dog/Dogcollor1.webp", alt: "Blue rope dog collar and lead" },
-            { src: "/assets/dog/Dogcollor4.webp", alt: "Blue rope dog collar and lead" },
-            { src: "/assets/dog/Dogcollor7.webp", alt: "Blue rope dog collar and lead" },
-            { src: "/assets/dog/Dogcollor13.webp", alt: "Blue rope dog collar and lead" },
-            { src: "/assets/dog/Dogcollor8.webp", alt: "Blue rope dog collar and lead" },],
+            { src: "/assets/dog/DogCollor1.webp", alt: "Blue rope dog collar and lead" },
+            { src: "/assets/dog/DogCollor4.webp", alt: "Blue rope dog collar and lead" },
+            { src: "/assets/dog/DogCollor7.webp", alt: "Blue rope dog collar and lead" },
+            { src: "/assets/dog/DogCollor13.webp", alt: "Blue rope dog collar and lead" },
+            { src: "/assets/dog/DogCollor8.webp", alt: "Blue rope dog collar and lead" },],
         // Column 2
         [
-            { src: "/assets/dog/Dogcollor2.webp", alt: "Blue rope dog collar and lead", tall: true },
-            { src: "/assets/dog/Dogcollor5.webp", alt: "Blue rope dog collar and lead" },
-            { src: "/assets/dog/Dogcollor8.webp", alt: "Blue rope dog collar and lead" },
-            { src: "/assets/dog/Dogcollor10.webp", alt: "Blue rope dog collar and lead" },
-            { src: "/assets/dog/Dogcollor11.webp", alt: "Blue rope dog collar and lead" },
-            { src: "/assets/dog/Dogcollor14.webp", alt: "Blue rope dog collar and lead" },
+            { src: "/assets/dog/DogCollor2.webp", alt: "Blue rope dog collar and lead", tall: true },
+            { src: "/assets/dog/DogCollor5.webp", alt: "Blue rope dog collar and lead" },
+            { src: "/assets/dog/DogCollor8.webp", alt: "Blue rope dog collar and lead" },
+            { src: "/assets/dog/DogCollor10.webp", alt: "Blue rope dog collar and lead" },
+            { src: "/assets/dog/DogCollor11.webp", alt: "Blue rope dog collar and lead" },
+            { src: "/assets/dog/DogCollor14.webp", alt: "Blue rope dog collar and lead" },
         ],
         // Column 3
         [
-            { src: "/assets/dog/Dogcollor3.webp", alt: "Blue rope dog collar and lead" },
-            { src: "/assets/dog/Dogcollor6.webp", alt: "Blue rope dog collar and lead" },
-            { src: "/assets/dog/Dogcollor9.webp", alt: "Blue rope dog collar and lead" },
-            { src: "/assets/dog/Dogcollor12.webp", alt: "Blue rope dog collar and lead" },
-            { src: "/assets/dog/Dogcollor15.webp", alt: "Blue rope dog collar and lead" },],
+            { src: "/assets/dog/DogCollor3.webp", alt: "Blue rope dog collar and lead" },
+            { src: "/assets/dog/DogCollor6.webp", alt: "Blue rope dog collar and lead" },
+            { src: "/assets/dog/DogCollor9.webp", alt: "Blue rope dog collar and lead" },
+            { src: "/assets/dog/DogCollor12.webp", alt: "Blue rope dog collar and lead" },
+            { src: "/assets/dog/DogCollor15.webp", alt: "Blue rope dog collar and lead" },],
     ]
 
     return (

@@ -103,7 +103,9 @@ const Nav = () => {
 
                 {/* Desktop Right Side */}
                 <div className="hidden lg:flex items-center gap-4">
-                    <h2 className="text-white text-lg xl:text-xl">sales@mypolobelt.com</h2>
+                    <a href="mailto:sales@mypolobelt.com" className="text-white text-lg xl:text-xl hover:text-white/80 transition-colors">
+                        sales@mypolobelt.com
+                    </a>
                     <div className="h-5 w-[0.5px] bg-white" />
                     <NavigationMenu viewport={false}>
                         <NavigationMenuList>
@@ -137,15 +139,17 @@ const Nav = () => {
                 </div>
 
                 {/* Mobile Header */}
-                <div className="flex lg:hidden items-center justify-between w-full">
-                    <h2 className="text-white text-center text-lg">sales@mypolobelt.com</h2>
+                <div className="flex flex-row-reverse lg:hidden items-center justify-between w-full">
+                    <a href="mailto:sales@mypolobelt.com" className="text-white text-lg xl:text-xl hover:text-white/80 transition-colors">
+                        sales@mypolobelt.com
+                    </a>
                     <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
                         <SheetTrigger asChild>
                             <button className="text-white p-2" aria-label="Toggle menu">
                                 <Menu size={24} />
                             </button>
                         </SheetTrigger>
-                        <SheetContent side="right" className="bg-[#0f1526] border-l w-full border-white/10">
+                        <SheetContent side="left" className="bg-[#0f1526] border-l w-full border-white/10">
                             <SheetHeader>
                                 <SheetTitle className="text-white text-left">Menu</SheetTitle>
                             </SheetHeader>
