@@ -1,7 +1,6 @@
 'use client'
 
 import { BELT_SIZES } from '@/database/constants'
-import { useState } from 'react'
 
 interface SizeRow {
   id: string
@@ -9,46 +8,37 @@ interface SizeRow {
   quantity: number
 }
 
-export function OrderForm() {
-  const [sizeRows, setSizeRows] = useState<SizeRow[]>([
-    { id: '1', size: '', quantity: 1 },
-  ])
+interface OrderFormProps {
+  sizeRows: SizeRow[]
+  onAddSize: () => void
+  onUpdateSize: (id: string, size: string, quantity: number) => void
+  onRemoveSize: (id: string) => void
+}
 
-  const addSizeRow = () => {
-    const newId = (Math.max(...sizeRows.map((r) => parseInt(r.id)), 0) + 1).toString()
-    setSizeRows([...sizeRows, { id: newId, size: '', quantity: 1 }])
-  }
-
-  const updateSizeRow = (id: string, size: string, quantity: number) => {
-    setSizeRows(
-      sizeRows.map((row) => (row.id === id ? { ...row, size, quantity } : row))
-    )
-  }
-
-  const removeSizeRow = (id: string) => {
-    if (sizeRows.length > 1) {
-      setSizeRows(sizeRows.filter((row) => row.id !== id))
-    }
-  }
-
+export function OrderForm({
+  sizeRows,
+  onAddSize,
+  onUpdateSize,
+  onRemoveSize,
+}: OrderFormProps) {
   return (
-    <div className="bg-white p-6 rounded-lg shadow-lg">
-      <h3 className="text-xl font-serif font-bold text-burgundy mb-4 pb-2 border-b-2 border-gold">
+    <div className="bg-white p-4 sm:p-5 md:p-6 lg:p-7 rounded-none shadow-lg">
+      <h3 className="text-lg sm:text-lg md:text-xl lg:text-2xl font-serif font-bold text-burgundy mb-3 sm:mb-4 pb-2 border-b-2 border-gold">
         Order Quantities
       </h3>
-      <p className="text-sm text-charcoal mb-4">
+      <p className="text-xs sm:text-sm md:text-sm lg:text-base text-charcoal mb-3 sm:mb-4">
         Add the sizes and quantities you need:
       </p>
 
-      <div className="space-y-3">
+      <div className="space-y-2 sm:space-y-3">
         {sizeRows.map((row) => (
-          <div key={row.id} className="flex gap-3 items-end">
+          <div key={row.id} className="flex flex-col sm:flex-row gap-2 sm:gap-3 items-stretch sm:items-end">
             <select
               value={row.size}
               onChange={(e) =>
-                updateSizeRow(row.id, e.target.value, row.quantity)
+                onUpdateSize(row.id, e.target.value, row.quantity)
               }
-              className="flex-1 px-3 py-2 border-2 border-gray-300 rounded-lg font-sans text-sm focus:outline-none focus:border-gold"
+              className="flex-1 px-3 py-2 sm:py-2 border-2 border-gray-300 rounded-none font-sans text-xs sm:text-sm focus:outline-none focus:border-gold"
             >
               <option value="">Select Size</option>
               {BELT_SIZES.map((size) => (
@@ -62,15 +52,15 @@ export function OrderForm() {
               min="1"
               value={row.quantity}
               onChange={(e) =>
-                updateSizeRow(row.id, row.size, parseInt(e.target.value) || 1)
+                onUpdateSize(row.id, row.size, parseInt(e.target.value) || 1)
               }
               placeholder="Qty"
-              className="w-20 px-3 py-2 border-2 border-gray-300 rounded-lg font-sans text-sm text-center focus:outline-none focus:border-gold"
+              className="w-full sm:w-24 px-3 py-2 border-2 border-gray-300 rounded-none font-sans text-xs sm:text-sm text-center focus:outline-none focus:border-gold"
             />
             {sizeRows.length > 1 && (
               <button
-                onClick={() => removeSizeRow(row.id)}
-                className="px-3 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-all text-sm"
+                onClick={() => onRemoveSize(row.id)}
+                className="w-full sm:w-auto px-3 py-2 bg-red-500 text-white rounded-none hover:bg-red-600 transition-all text-xs sm:text-sm"
               >
                 ✕
               </button>
@@ -80,8 +70,8 @@ export function OrderForm() {
       </div>
 
       <button
-        onClick={addSizeRow}
-        className="mt-4 w-full px-4 py-2 bg-sage text-white rounded-lg font-semibold hover:bg-sage/80 transition-all"
+        onClick={onAddSize}
+        className="mt-3 sm:mt-4 w-full px-4 py-2 sm:py-2.5 bg-sage text-white rounded-none font-semibold text-sm sm:text-base hover:bg-sage/80 transition-all"
       >
         + Add Another Size
       </button>

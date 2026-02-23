@@ -15,7 +15,7 @@ export function DesignPresets({ onLoadPreset }: DesignPresetsProps) {
   ]
 
   return (
-    <div className="bg-white p-6 rounded-lg shadow-lg">
+    <div className="bg-white border p-6 rounded-none shadow-lg">
       <h3 className="text-xl font-serif font-bold text-burgundy mb-4 pb-2 border-b-2 border-gold">
         Load Design
       </h3>
@@ -24,7 +24,7 @@ export function DesignPresets({ onLoadPreset }: DesignPresetsProps) {
           <button
             key={preset.id}
             onClick={() => onLoadPreset(preset.id)}
-            className="border-3 border-gray-300 rounded-lg p-3 hover:border-gold hover:-translate-y-1 hover:shadow-lg transition-all text-center bg-linear-to-br from-cream to-gray-100"
+            className="border-3 border-gray-300 rounded-none p-3 hover:border-gold hover:-translate-y-1 hover:shadow-lg transition-all text-center bg-linear-to-br from-cream to-gray-100"
           >
             <div className="w-full h-24 bg-linear-to-br from-burgundy/20 to-gold/20 rounded mb-2 flex items-center justify-center">
               <span className="text-2xl font-light text-charcoal/30">+</span>

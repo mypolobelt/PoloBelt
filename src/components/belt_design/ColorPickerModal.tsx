@@ -1,7 +1,7 @@
 'use client'
 
 import { BASIC_PALETTE, THREAD_COLORS } from '@/database/constants'
-import { Cross, X } from 'lucide-react'
+import {  X } from 'lucide-react'
 import { useState } from 'react'
 
 interface ColorPickerModalProps {
@@ -29,7 +29,7 @@ export function ColorPickerModal({
 
   return (
     <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-lg p-8 max-w-4xl w-full max-h-[80vh] overflow-y-auto">
+      <div className="bg-white rounded-none p-8 max-w-4xl w-full max-h-[80vh] overflow-y-auto">
         <div className="flex justify-between items-center mb-6 pb-4 border-b-2 border-gold">
           <h3 className="text-2xl font-serif font-bold text-burgundy">
             Choose Thread Colour
@@ -45,7 +45,7 @@ export function ColorPickerModal({
         <div className="flex gap-4 mb-6">
           <button
             onClick={() => setActiveTab('basic')}
-            className={`px-6 py-2 rounded-lg font-semibold transition-all ${activeTab === 'basic'
+            className={`px-6 py-2 rounded-none font-semibold transition-all ${activeTab === 'basic'
               ? 'bg-cream text-charcoal bg-yellow-600 cursor-pointer hover:border-gold border-2 border-transparent'
               : 'bg-white border text-black'
               }`}
@@ -54,7 +54,7 @@ export function ColorPickerModal({
           </button>
           <button
             onClick={() => setActiveTab('full')}
-            className={`px-6 py-2 rounded-lg font-semibold transition-all ${activeTab === 'full'
+            className={`px-6 py-2 rounded-none font-semibold transition-all ${activeTab === 'full'
               ? 'bg-cream text-charcoal bg-yellow-600 cursor-pointer hover:border-gold border-2 border-transparent'
               : 'bg-white border text-black'
               }`}
@@ -74,10 +74,10 @@ export function ColorPickerModal({
             <button
               key={id}
               onClick={() => handleColorSelect(id)}
-              className="border-3 border-gray-300 rounded-lg p-3 hover:border-gold hover:-translate-y-0.5 hover:shadow-lg transition-all text-center bg-white"
+              className="border-3 border-gray-300 rounded-none p-3 hover:border-gold hover:-translate-y-0.5 hover:shadow-lg transition-all text-center bg-white"
             >
               <div
-                className="w-full h-16 rounded mb-2 border border-gray-200"
+                className="w-full h-16 rounded-none mb-2 border border-gray-400"
                 style={{ backgroundColor: hex }}
               />
               <div className="font-bold text-burgundy text-sm">{id}</div>

@@ -19,6 +19,12 @@ const DEFAULT_PATTERN = Array(20)
             .map(() => '#FFFFFF')
     )
 
+interface SizeRow {
+    id: string
+    size: string
+    quantity: number
+}
+
 export default function BeltMaker() {
     const [gridData, setGridData] = useState<string[][]>(DEFAULT_PATTERN)
     const [designName, setDesignName] = useState('')
@@ -36,6 +42,9 @@ export default function BeltMaker() {
     const [showStripeColor, setShowStripeColor] = useState(false)
     const [stampImage, setStampImage] = useState<string | null>(null)
     const [activeTab, setActiveTab] = useState<'design' | 'order'>('design')
+    const [sizeRows, setSizeRows] = useState<SizeRow[]>([
+        { id: '1', size: '', quantity: 1 },
+    ])
     const canvasRef = useRef<HTMLCanvasElement>(null!)
 
     const handleStampChange = (file: File | null) => {
@@ -50,6 +59,46 @@ export default function BeltMaker() {
 
     const handleStampRemove = () => {
         setStampImage(null)
+    }
+
+    const handleAddSizeRow = () => {
+        const newId = (Math.max(...sizeRows.map((r) => parseInt(r.id)), 0) + 1).toString()
+        setSizeRows([...sizeRows, { id: newId, size: '', quantity: 1 }])
+    }
+
+    const handleUpdateSizeRow = (id: string, size: string, quantity: number) => {
+        setSizeRows(
+            sizeRows.map((row) => (row.id === id ? { ...row, size, quantity } : row))
+        )
+    }
+
+    const handleRemoveSizeRow = (id: string) => {
+        if (sizeRows.length > 1) {
+            setSizeRows(sizeRows.filter((row) => row.id !== id))
+        }
+    }
+
+    const handleResetDesign = () => {
+        setGridData(DEFAULT_PATTERN)
+        setDesignName('')
+        setBeltWidth('Standard (3cm)')
+        setLeatherColor('Brown')
+        setBuckleFinish('Brass')
+        setColorCount('')
+        setThreadColor1('')
+        setThreadColor2('')
+        setThreadColor3('')
+        setStripeColor('')
+        setShowColorCountSection(false)
+        setShowThreadColorSection(false)
+        setShowThreadColor3(false)
+        setShowStripeColor(false)
+        setStampImage(null)
+        setActiveTab('design')
+    }
+
+    const handleResetOrder = () => {
+        setSizeRows([{ id: '1', size: '', quantity: 1 }])
     }
 
     const handlePresetLoad = (presetId: string) => {
@@ -102,10 +151,10 @@ export default function BeltMaker() {
     }, [threadColor1, threadColor2, threadColor3, stripeColor])
 
     return (
-        <main className="min-h-screen bg-linear-to-br from-white to-gray-100">
-            <div className="w-10/12 mx-auto py-8 sm:py-12 lg:py-16">
+        <main className=" bg-linear-to-br from-white to-gray-100">
+            <div className="w-10/12 mx-auto py-8 sm:py-12 lg:py-8">
                 {/* Header - Responsive */}
-                <header className="px-4 sm:px-6 lg:px-8 text-center">
+                <header className="px-4 md:px-6 py-4 lg:px-8 text-center">
                     <h1 className="text-3xl sm:text-4xl lg:text-5xl font-serif font-bold text-burgundy mb-1 sm:mb-2 drop-shadow-sm">
                         Polo Belt Designer
                     </h1>
@@ -184,12 +233,12 @@ export default function BeltMaker() {
 
                         {/* Right Panel - Canvas and Specs - Full width on mobile */}
                         <div
-                            className={`lg:col-span-3 space-y-6 sm:space-y-8 ${activeTab === 'order' ? 'block' : 'hidden lg:block'
+                            className={`lg:col-span-3 border space-y-6 sm:space-y-8 ${activeTab === 'order' ? 'block' : 'hidden lg:block'
                                 }`}
                         >
                             {/* Design Name Display - Responsive */}
                             <div className="text-center">
-                                <h2 className="text-2xl sm:text-3xl lg:text-4xl font-serif font-bold text-burgundy">
+                                <h2 className="text-2xl sm:text-3xl lg:text-4xl font-serif font-bold text-burgundy p-2">
                                     {designName || 'New Design'}
                                 </h2>
                             </div>
@@ -216,12 +265,36 @@ export default function BeltMaker() {
 
                             {/* Order Form */}
                             <div className="pt-4 sm:pt-6">
-                                <OrderForm />
+                                <OrderForm
+                                    sizeRows={sizeRows}
+                                    onAddSize={handleAddSizeRow}
+                                    onUpdateSize={handleUpdateSizeRow}
+                                    onRemoveSize={handleRemoveSizeRow}
+                                />
                             </div>
 
                             {/* Customer Form */}
                             <div className="pt-4 sm:pt-6">
-                                <CustomerForm canvasRef={canvasRef} stampImage={stampImage} />
+                                <CustomerForm
+                                    canvasRef={canvasRef}
+                                    stampImage={stampImage}
+                                    designDetails={{
+                                        designName,
+                                        threadColors: [threadColor1, threadColor2, threadColor3, stripeColor].filter(c => c),
+                                        beltWidth,
+                                        leatherColor,
+                                        buckleFinish,
+                                        hasStamp: !!stampImage,
+                                    }}
+                                    sizeOrders={sizeRows
+                                        .filter(row => row.size)
+                                        .map(row => ({
+                                            size: row.size,
+                                            quantity: row.quantity,
+                                        }))}
+                                    onResetDesign={handleResetDesign}
+                                    onResetOrder={handleResetOrder}
+                                />
                             </div>
                         </div>
                     </div>
