@@ -1,0 +1,232 @@
+/* eslint-disable react-hooks/set-state-in-effect */
+'use client'
+
+import { BeltCanvas } from '@/components/belt_design/BeltCanvas'
+import { ControlsPanel } from '@/components/belt_design/ControlsPanel'
+import { CustomerForm } from '@/components/belt_design/CustomerForm'
+import { DesignPresets } from '@/components/belt_design/DesignPresets'
+import { OrderForm } from '@/components/belt_design/OrderForm'
+import { SpecificationSheet } from '@/components/belt_design/SpecificationSheet'
+import { DESIGN_PRESETS, THREAD_COLORS } from '@/database/constants'
+import { generateGridDataFromColors } from '@/database/utils'
+import { useState, useRef, useEffect } from 'react'
+
+const DEFAULT_PATTERN = Array(20)
+    .fill(null)
+    .map(() =>
+        Array(64)
+            .fill(null)
+            .map(() => '#FFFFFF')
+    )
+
+export default function BeltMaker() {
+    const [gridData, setGridData] = useState<string[][]>(DEFAULT_PATTERN)
+    const [designName, setDesignName] = useState('')
+    const [beltWidth, setBeltWidth] = useState('Standard (3cm)')
+    const [leatherColor, setLeatherColor] = useState('Brown')
+    const [buckleFinish, setBuckleFinish] = useState('Brass')
+    const [colorCount, setColorCount] = useState('')
+    const [threadColor1, setThreadColor1] = useState('')
+    const [threadColor2, setThreadColor2] = useState('')
+    const [threadColor3, setThreadColor3] = useState('')
+    const [stripeColor, setStripeColor] = useState('')
+    const [showColorCountSection, setShowColorCountSection] = useState(false)
+    const [showThreadColorSection, setShowThreadColorSection] = useState(false)
+    const [showThreadColor3, setShowThreadColor3] = useState(false)
+    const [showStripeColor, setShowStripeColor] = useState(false)
+    const [stampImage, setStampImage] = useState<string | null>(null)
+    const [activeTab, setActiveTab] = useState<'design' | 'order'>('design')
+    const canvasRef = useRef<HTMLCanvasElement>(null!)
+
+    const handleStampChange = (file: File | null) => {
+        if (file) {
+            const reader = new FileReader()
+            reader.onload = (e) => {
+                setStampImage(e.target?.result as string)
+            }
+            reader.readAsDataURL(file)
+        }
+    }
+
+    const handleStampRemove = () => {
+        setStampImage(null)
+    }
+
+    const handlePresetLoad = (presetId: string) => {
+        const preset = DESIGN_PRESETS[presetId]
+        if (preset) {
+            setDesignName(preset.name)
+            setLeatherColor(preset.leather)
+            setBuckleFinish(preset.buckle)
+
+            if (preset.threads.length > 0) {
+                setThreadColor1(preset.threads[0])
+            }
+            if (preset.threads.length > 1) {
+                setThreadColor2(preset.threads[1])
+            }
+            if (preset.threads.length > 2) {
+                setThreadColor3(preset.threads[2])
+            }
+            if (preset.threads.length > 3) {
+                setStripeColor(preset.threads[3])
+                setShowStripeColor(true)
+            } else {
+                setShowStripeColor(false)
+            }
+
+            setColorCount(preset.threads.length.toString())
+            setShowColorCountSection(true)
+        }
+    }
+
+    useEffect(() => {
+        if (colorCount === '2' || colorCount === '3') {
+            setShowThreadColorSection(true)
+            setShowThreadColor3(colorCount === '3')
+        } else {
+            setShowThreadColorSection(false)
+            setShowThreadColor3(false)
+        }
+    }, [colorCount])
+
+    useEffect(() => {
+        const newGridData = generateGridDataFromColors(
+            threadColor1,
+            threadColor2,
+            threadColor3,
+            stripeColor,
+            THREAD_COLORS
+        )
+        setGridData(newGridData)
+    }, [threadColor1, threadColor2, threadColor3, stripeColor])
+
+    return (
+        <main className="min-h-screen bg-linear-to-br from-white to-gray-100">
+            <div className="w-10/12 mx-auto py-8 sm:py-12 lg:py-16">
+                {/* Header - Responsive */}
+                <header className="px-4 sm:px-6 lg:px-8 text-center">
+                    <h1 className="text-3xl sm:text-4xl lg:text-5xl font-serif font-bold text-burgundy mb-1 sm:mb-2 drop-shadow-sm">
+                        Polo Belt Designer
+                    </h1>
+                    <p className="text-xs sm:text-sm uppercase tracking-widest text-sage">
+                        Custom Argentinian Polo Belts
+                    </p>
+                </header>
+
+                {/* Design Presets - Responsive */}
+                <section className="px-4 sm:px-6 lg:px-8 mb-8 sm:mb-10 lg:mb-12">
+                    <DesignPresets onLoadPreset={handlePresetLoad} />
+                </section>
+
+                {/* Mobile Tab Navigation */}
+                <div className="lg:hidden sticky top-0 z-40 bg-white shadow-sm">
+                    <div className="flex border-b border-gray-200 px-4">
+                        <button
+                            onClick={() => setActiveTab('design')}
+                            className={`flex-1 py-3 sm:py-4 font-medium text-center transition-colors ${activeTab === 'design'
+                                ? 'text-burgundy border-b-2 border-burgundy'
+                                : 'text-gray-600'
+                                }`}
+                        >
+                            Design
+                        </button>
+                        <button
+                            onClick={() => setActiveTab('order')}
+                            className={`flex-1 py-3 sm:py-4 font-medium text-center transition-colors ${activeTab === 'order'
+                                ? 'text-burgundy border-b-2 border-burgundy'
+                                : 'text-gray-600'
+                                }`}
+                        >
+                            Order
+                        </button>
+                    </div>
+                </div>
+
+                {/* Main Content - Responsive Grid */}
+                <div className="px-4 sm:px-6 lg:px-8 pb-8 sm:pb-12 lg:pb-16">
+                    <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 sm:gap-8 lg:gap-8">
+                        {/* Left Panel - Controls - Hidden on mobile, visible on tablet+ unless 'order' tab */}
+                        <div
+                            className={`lg:col-span-1 ${activeTab === 'design' ? 'block' : 'hidden lg:block'
+                                }`}
+                        >
+                            <div className="sticky top-20 sm:top-24 max-h-[calc(100vh-5rem)] overflow-y-auto">
+                                <ControlsPanel
+                                    designName={designName}
+                                    onDesignNameChange={setDesignName}
+                                    beltWidth={beltWidth}
+                                    onBeltWidthChange={setBeltWidth}
+                                    leatherColor={leatherColor}
+                                    onLeatherColorChange={setLeatherColor}
+                                    buckleFinish={buckleFinish}
+                                    onBuckleFinishChange={setBuckleFinish}
+                                    colorCount={colorCount}
+                                    onColorCountChange={setColorCount}
+                                    threadColor1={threadColor1}
+                                    onThreadColor1Change={setThreadColor1}
+                                    threadColor2={threadColor2}
+                                    onThreadColor2Change={setThreadColor2}
+                                    threadColor3={threadColor3}
+                                    onThreadColor3Change={setThreadColor3}
+                                    stripeColor={stripeColor}
+                                    onStripeColorChange={setStripeColor}
+                                    showColorCountSection={showColorCountSection}
+                                    showThreadColorSection={showThreadColorSection}
+                                    showThreadColor3={showThreadColor3}
+                                    showStripeColor={showStripeColor}
+                                    stampImage={stampImage}
+                                    onStampChange={handleStampChange}
+                                    onStampRemove={handleStampRemove}
+                                />
+                            </div>
+                        </div>
+
+                        {/* Right Panel - Canvas and Specs - Full width on mobile */}
+                        <div
+                            className={`lg:col-span-3 space-y-6 sm:space-y-8 ${activeTab === 'order' ? 'block' : 'hidden lg:block'
+                                }`}
+                        >
+                            {/* Design Name Display - Responsive */}
+                            <div className="text-center">
+                                <h2 className="text-2xl sm:text-3xl lg:text-4xl font-serif font-bold text-burgundy">
+                                    {designName || 'New Design'}
+                                </h2>
+                            </div>
+
+                            {/* Belt Canvas - Responsive Container */}
+                            <div className="w-full flex justify-center">
+                                <BeltCanvas
+                                    gridData={gridData}
+                                    leatherColor={leatherColor}
+                                />
+                            </div>
+
+                            {/* Specification Sheet */}
+                            <SpecificationSheet
+                                designName={designName}
+                                threadColors={[threadColor1, threadColor2, threadColor3, stripeColor].filter(
+                                    (c) => c
+                                )}
+                                beltWidth={beltWidth}
+                                leatherColor={leatherColor}
+                                buckleFinish={buckleFinish}
+                                hasStamp={!!stampImage}
+                            />
+
+                            {/* Order Form */}
+                            <div className="pt-4 sm:pt-6">
+                                <OrderForm />
+                            </div>
+
+                            {/* Customer Form */}
+                            <div className="pt-4 sm:pt-6">
+                                <CustomerForm canvasRef={canvasRef} stampImage={stampImage} />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    )
+}

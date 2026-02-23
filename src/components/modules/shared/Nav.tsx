@@ -98,6 +98,13 @@ const Nav = () => {
                                 </Link>
                             </NavigationMenuLink>
                         </NavigationMenuItem>
+                        <NavigationMenuItem>
+                            <NavigationMenuLink asChild>
+                                <Link href="/belt-maker" className="px-3 py-2 text-white hover:text-white/80 transition-colors">
+                                    Belt Maker
+                                </Link>
+                            </NavigationMenuLink>
+                        </NavigationMenuItem>
                     </NavigationMenuList>
                 </NavigationMenu>
 
