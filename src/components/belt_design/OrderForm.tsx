@@ -1,6 +1,7 @@
 'use client'
 
 import { BELT_SIZES } from '@/database/constants'
+import { Button } from '../ui/button'
 
 interface SizeRow {
   id: string
@@ -58,23 +59,23 @@ export function OrderForm({
               className="w-full sm:w-24 px-3 py-2 border-2 border-gray-300 rounded-none font-sans text-xs sm:text-sm text-center focus:outline-none focus:border-gold"
             />
             {sizeRows.length > 1 && (
-              <button
+              <Button
                 onClick={() => onRemoveSize(row.id)}
-                className="w-full sm:w-auto px-3 py-2 bg-red-500 text-white rounded-none hover:bg-red-600 transition-all text-xs sm:text-sm"
+                className="py-5"
               >
                 ✕
-              </button>
+              </Button>
             )}
           </div>
         ))}
       </div>
 
-      <button
+      <Button
         onClick={onAddSize}
-        className="mt-3 sm:mt-4 w-full px-4 py-2 sm:py-2.5 bg-sage text-white rounded-none font-semibold text-sm sm:text-base hover:bg-sage/80 transition-all"
+        className='mt-2'
       >
         + Add Another Size
-      </button>
+      </Button>
     </div>
   )
 }

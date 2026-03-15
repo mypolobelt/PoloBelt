@@ -40,8 +40,8 @@ export const generateGridDataFromColors = (
     const colorId = parts[parts.length - 1]
     return threadColors[colorId]?.hex || '#FFFFFF'
   }
-  
-  const colors = [
+
+  const backgroundColors = [
     getColorHex(color1),
     getColorHex(color2),
     ...(color3 ? [getColorHex(color3)] : []),
@@ -52,15 +52,44 @@ export const generateGridDataFromColors = (
     .fill(null)
     .map(() => Array(64).fill('#FFFFFF'))
 
-  if (colors.length === 0) return grid
+  if (backgroundColors.length === 0) return grid
 
-  // Create a stripe pattern with selected colors
-  const stripeWidth = Math.floor(64 / colors.length)
-  
+  // Fixed diamond color (brown)
+  const diamondColor = '#6B4830'
+
+  // Define repeating diamond dimensions - wider and more pixelated
+  const diamondSpacing = 16 // Distance between diamond centers (horizontally)
+  const diamondWidth = 8    // Half-width of each diamond (wider)
+  const diamondHeight = 6   // Half-height of each diamond
+
+  // First, fill sections with alternating background colors
+  const sectionWidth = diamondSpacing
   for (let row = 0; row < 20; row++) {
     for (let col = 0; col < 64; col++) {
-      const stripeIndex = Math.floor(col / stripeWidth) % colors.length
-      grid[row][col] = colors[stripeIndex]
+      const sectionIndex = Math.floor(col / sectionWidth) % backgroundColors.length
+      grid[row][col] = backgroundColors[sectionIndex]
+    }
+  }
+
+  // Then draw the fixed diamond shapes on top with pixelated edges
+  for (let diamondIndex = 0; diamondIndex < 5; diamondIndex++) {
+    const centerCol = 8 + (diamondIndex * diamondSpacing)
+    const centerRow = 10 // Center vertically (middle of 20 rows)
+
+    // Draw each diamond shape with harder edges (pixelated)
+    for (let row = 0; row < 20; row++) {
+      for (let col = 0; col < 64; col++) {
+        const distRow = Math.abs(row - centerRow)
+        const distCol = Math.abs(col - centerCol)
+
+        // Create a more blocky diamond shape with sharp angles
+        const normalizedDist = (distCol / diamondWidth) + (distRow / diamondHeight)
+
+        // If within diamond bounds, use fixed diamond color
+        if (normalizedDist <= 1.0) {
+          grid[row][col] = diamondColor
+        }
+      }
     }
   }
 

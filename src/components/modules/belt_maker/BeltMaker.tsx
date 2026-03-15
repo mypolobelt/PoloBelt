@@ -41,7 +41,6 @@ export default function BeltMaker() {
     const [showThreadColor3, setShowThreadColor3] = useState(false)
     const [showStripeColor, setShowStripeColor] = useState(false)
     const [stampImage, setStampImage] = useState<string | null>(null)
-    const [activeTab, setActiveTab] = useState<'design' | 'order'>('design')
     const [sizeRows, setSizeRows] = useState<SizeRow[]>([
         { id: '1', size: '', quantity: 1 },
     ])
@@ -94,7 +93,6 @@ export default function BeltMaker() {
         setShowThreadColor3(false)
         setShowStripeColor(false)
         setStampImage(null)
-        setActiveTab('design')
     }
 
     const handleResetOrder = () => {
@@ -108,6 +106,14 @@ export default function BeltMaker() {
             setLeatherColor(preset.leather)
             setBuckleFinish(preset.buckle)
 
+            // Clear all thread colors first
+            setThreadColor1('')
+            setThreadColor2('')
+            setThreadColor3('')
+            setStripeColor('')
+            setShowStripeColor(false)
+
+            // Then set the new ones based on preset
             if (preset.threads.length > 0) {
                 setThreadColor1(preset.threads[0])
             }
@@ -151,8 +157,8 @@ export default function BeltMaker() {
     }, [threadColor1, threadColor2, threadColor3, stripeColor])
 
     return (
-        <main className=" bg-linear-to-br from-white to-gray-100">
-            <div className="w-10/12 mx-auto py-8 sm:py-12 lg:py-8">
+        <main className="bg-linear-to-br from-white to-gray-100">
+            <div className="md:w-10/12 mx-auto py-8 sm:py-12 lg:py-8">
                 {/* Header - Responsive */}
                 <header className="px-4 md:px-6 py-4 lg:px-8 text-center">
                     <h1 className="text-3xl sm:text-4xl lg:text-5xl font-serif font-bold text-burgundy mb-1 sm:mb-2 drop-shadow-sm">
@@ -168,38 +174,46 @@ export default function BeltMaker() {
                     <DesignPresets onLoadPreset={handlePresetLoad} />
                 </section>
 
-                {/* Mobile Tab Navigation */}
-                <div className="lg:hidden sticky top-0 z-40 bg-white shadow-sm">
-                    <div className="flex border-b border-gray-200 px-4">
-                        <button
-                            onClick={() => setActiveTab('design')}
-                            className={`flex-1 py-3 sm:py-4 font-medium text-center transition-colors ${activeTab === 'design'
-                                ? 'text-burgundy border-b-2 border-burgundy'
-                                : 'text-gray-600'
-                                }`}
-                        >
-                            Design
-                        </button>
-                        <button
-                            onClick={() => setActiveTab('order')}
-                            className={`flex-1 py-3 sm:py-4 font-medium text-center transition-colors ${activeTab === 'order'
-                                ? 'text-burgundy border-b-2 border-burgundy'
-                                : 'text-gray-600'
-                                }`}
-                        >
-                            Order
-                        </button>
+                {/* Belt Canvas - Shows below presets on mobile/tablet */}
+                <section className="lg:hidden px-4 sm:px-6 mb-8 sm:mb-10">
+                    {/* belt canvas */}
+                    <div className="w-full flex justify-center">
+                        <BeltCanvas
+                            gridData={gridData}
+                            leatherColor={leatherColor}
+                        />
                     </div>
-                </div>
+                    
+                    {/* Specification Sheet - Mobile only */}
+                    <div className="mt-6 sm:mt-8 md:w-full">
+                        <SpecificationSheet
+                            designName={designName}
+                            threadColors={[threadColor1, threadColor2, threadColor3, stripeColor].filter(
+                                (c) => c
+                            )}
+                            beltWidth={beltWidth}
+                            leatherColor={leatherColor}
+                            buckleFinish={buckleFinish}
+                            hasStamp={!!stampImage}
+                        />
+                    </div>
+                    {/* Order Form - Mobile only */}
+                    <div className="mt-6 sm:mt-8">
+                        <OrderForm
+                            sizeRows={sizeRows}
+                            onAddSize={handleAddSizeRow}
+                            onUpdateSize={handleUpdateSizeRow}
+                            onRemoveSize={handleRemoveSizeRow}
+                        />
+                    </div>
+                    
+                </section>
 
                 {/* Main Content - Responsive Grid */}
                 <div className="px-4 sm:px-6 lg:px-8 pb-8 sm:pb-12 lg:pb-16">
                     <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 sm:gap-8 lg:gap-8">
-                        {/* Left Panel - Controls - Hidden on mobile, visible on tablet+ unless 'order' tab */}
-                        <div
-                            className={`lg:col-span-1 ${activeTab === 'design' ? 'block' : 'hidden lg:block'
-                                }`}
-                        >
+                        {/* Left Panel - Controls */}
+                        <div className="lg:col-span-1">
                             <div className="sticky top-20 sm:top-24 max-h-[calc(100vh-5rem)] overflow-y-auto">
                                 <ControlsPanel
                                     designName={designName}
@@ -231,19 +245,16 @@ export default function BeltMaker() {
                             </div>
                         </div>
 
-                        {/* Right Panel - Canvas and Specs - Full width on mobile */}
-                        <div
-                            className={`lg:col-span-3 border space-y-6 sm:space-y-8 ${activeTab === 'order' ? 'block' : 'hidden lg:block'
-                                }`}
-                        >
-                            {/* Design Name Display - Responsive */}
+                        {/* Right Panel - Everything (Hidden on mobile) */}
+                        <div className="hidden lg:block lg:col-span-3 border space-y-6 sm:space-y-8">
+                            {/* Design Name Display */}
                             <div className="text-center">
                                 <h2 className="text-2xl sm:text-3xl lg:text-4xl font-serif font-bold text-burgundy p-2">
                                     {designName || 'New Design'}
                                 </h2>
                             </div>
 
-                            {/* Belt Canvas - Responsive Container */}
+                            {/* Belt Canvas */}
                             <div className="w-full flex justify-center">
                                 <BeltCanvas
                                     gridData={gridData}
@@ -298,6 +309,29 @@ export default function BeltMaker() {
                             </div>
                         </div>
                     </div>
+                </div>
+                {/* Customer Form - Mobile only */}
+                <div className="lg:hidden  px-4 sm:px-6 mb-8 sm:mb-10">
+                    <CustomerForm
+                        canvasRef={canvasRef}
+                        stampImage={stampImage}
+                        designDetails={{
+                            designName,
+                            threadColors: [threadColor1, threadColor2, threadColor3, stripeColor].filter(c => c),
+                            beltWidth,
+                            leatherColor,
+                            buckleFinish,
+                            hasStamp: !!stampImage,
+                        }}
+                        sizeOrders={sizeRows
+                            .filter(row => row.size)
+                            .map(row => ({
+                                size: row.size,
+                                quantity: row.quantity,
+                            }))}
+                        onResetDesign={handleResetDesign}
+                        onResetOrder={handleResetOrder}
+                    />
                 </div>
             </div>
         </main>

@@ -152,7 +152,7 @@ export function CustomerForm({
   }
 
   return (
-    <div className="bg-white p-4 sm:p-5 md:p-6 lg:p-7 rounded-none shadow-lg">
+    <div className="bg-white p-4 md:p-6 lg:p-7 rounded-none shadow-lg">
       <h3 className="text-lg sm:text-lg md:text-xl lg:text-2xl font-serif font-bold text-burgundy mb-3 sm:mb-4 pb-2 border-b-2 border-gold">
         Customer Details
       </h3>
