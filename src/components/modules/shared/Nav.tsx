@@ -25,27 +25,27 @@ const Nav = () => {
     const closeSheet = () => setSheetOpen(false);
 
     return (
-        <div className="flex bg-[#0f1526] p-5 font-medium z-50">
-            <div className="container mx-auto flex items-center justify-between">
+        <div className="sticky top-0 z-50 flex bg-[#0f1526] px-2 sm:px-4 md:px-5 py-3 sm:py-4 md:py-5 font-medium">
+            <div className="w-full flex items-center justify-between max-w-7xl mx-auto">
                 {/* Desktop Navigation */}
-                <NavigationMenu viewport={false} className="hidden lg:flex">
-                    <NavigationMenuList>
+                <NavigationMenu viewport={false} className="hidden lg:flex flex-1">
+                    <NavigationMenuList className="flex-wrap">
                         <NavigationMenuItem>
                             <NavigationMenuLink asChild>
-                                <Link href="/" className="px-3 py-2 text-white hover:text-white/80 transition-colors">
+                                <Link href="/" className="px-2 sm:px-3 py-2 text-sm sm:text-base text-white hover:text-white/80 transition-colors">
                                     Home
                                 </Link>
                             </NavigationMenuLink>
                         </NavigationMenuItem>
                         <NavigationMenuItem>
                             <NavigationMenuLink asChild>
-                                <Link href="/about" className="px-3 py-2 text-white hover:text-white/80 transition-colors">
+                                <Link href="/about" className="px-2 sm:px-3 py-2 text-sm sm:text-base text-white hover:text-white/80 transition-colors">
                                     About Us
                                 </Link>
                             </NavigationMenuLink>
                         </NavigationMenuItem>
                         <NavigationMenuItem>
-                            <NavigationMenuTrigger className="text-white">
+                            <NavigationMenuTrigger className="text-sm sm:text-base text-white">
                                 What We Offer
                             </NavigationMenuTrigger>
                             <NavigationMenuContent>
@@ -79,28 +79,35 @@ const Nav = () => {
                         </NavigationMenuItem>
                         <NavigationMenuItem>
                             <NavigationMenuLink asChild>
-                                <Link href="/ordering-process" className="px-3 py-2 text-white hover:text-white/80 transition-colors">
+                                <Link href="/ordering-process" className="px-2 sm:px-3 py-2 text-sm sm:text-base text-white hover:text-white/80 transition-colors">
                                     Ordering Process
                                 </Link>
                             </NavigationMenuLink>
                         </NavigationMenuItem>
                         <NavigationMenuItem>
                             <NavigationMenuLink asChild>
-                                <Link href="/sizing" className="px-3 py-2 text-white hover:text-white/80 transition-colors">
+                                <Link href="/sizing" className="px-2 sm:px-3 py-2 text-sm sm:text-base text-white hover:text-white/80 transition-colors">
                                     Sizing
                                 </Link>
                             </NavigationMenuLink>
                         </NavigationMenuItem>
                         <NavigationMenuItem>
                             <NavigationMenuLink asChild>
-                                <Link href="/contact" className="px-3 py-2 text-white hover:text-white/80 transition-colors">
+                                <Link href="/contact" className="px-2 sm:px-3 py-2 text-sm sm:text-base text-white hover:text-white/80 transition-colors">
                                     Contact Us
                                 </Link>
                             </NavigationMenuLink>
                         </NavigationMenuItem>
                         <NavigationMenuItem>
                             <NavigationMenuLink asChild>
-                                <Link href="/belt-maker" className="px-3 py-2 text-white hover:text-white/80 transition-colors">
+                                <Link href="/pricing" className="px-2 sm:px-3 py-2 text-sm sm:text-base text-white hover:text-white/80 transition-colors">
+                                    Pricing
+                                </Link>
+                            </NavigationMenuLink>
+                        </NavigationMenuItem>
+                        <NavigationMenuItem>
+                            <NavigationMenuLink asChild>
+                                <Link href="/belt-maker" className="px-2 sm:px-3 py-2 text-sm sm:text-base text-white hover:text-white/80 transition-colors">
                                     Belt Maker
                                 </Link>
                             </NavigationMenuLink>
@@ -109,8 +116,8 @@ const Nav = () => {
                 </NavigationMenu>
 
                 {/* Desktop Right Side */}
-                <div className="hidden lg:flex items-center gap-4">
-                    <a href="mailto:sales@mypolobelt.com" className="text-white text-lg xl:text-xl hover:text-white/80 transition-colors">
+                <div className="hidden lg:flex items-center gap-2 sm:gap-4">
+                    <a href="mailto:sales@mypolobelt.com" className="text-white text-sm sm:text-base lg:text-lg hover:text-white/80 transition-colors truncate">
                         sales@mypolobelt.com
                     </a>
                     <div className="h-5 w-[0.5px] bg-white" />
@@ -118,7 +125,7 @@ const Nav = () => {
                         <NavigationMenuList>
                             <NavigationMenuItem>
                                 <NavigationMenuTrigger className="bg-transparent hover:bg-transparent p-0">
-                                    <UserRound className="text-white" />
+                                    <UserRound className="text-white" size={20} />
                                 </NavigationMenuTrigger>
                                 <NavigationMenuContent>
                                     <ul className="flex flex-col min-w-50 bg-[#0f1526] gap-1 p-2">
@@ -146,26 +153,26 @@ const Nav = () => {
                 </div>
 
                 {/* Mobile Header */}
-                <div className="flex flex-row-reverse lg:hidden items-center justify-between w-full">
-                    <a href="mailto:sales@mypolobelt.com" className="text-white text-lg xl:text-xl hover:text-white/80 transition-colors">
+                <div className="flex lg:hidden items-center justify-between w-full gap-2">
+                    <a href="mailto:sales@mypolobelt.com" className="text-white text-md hover:text-white/80 transition-colors truncate">
                         sales@mypolobelt.com
                     </a>
                     <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
                         <SheetTrigger asChild>
-                            <button className="text-white p-2" aria-label="Toggle menu">
+                            <button className="text-white p-1 sm:p-2 hover:bg-white/10 rounded-md transition-colors" aria-label="Toggle menu">
                                 <Menu size={24} />
                             </button>
                         </SheetTrigger>
-                        <SheetContent side="left" className="bg-[#0f1526] border-l w-full border-white/10">
+                        <SheetContent side="left" className="bg-[#0f1526] border-l border-white/10 w-[80%] sm:w-64">
                             <SheetHeader>
-                                <SheetTitle className="text-white text-left">Menu</SheetTitle>
+                                <SheetTitle className="text-white text-left text-lg sm:text-xl">Menu</SheetTitle>
                             </SheetHeader>
-                            <nav className="mt-8">
-                                <ul className="flex flex-col gap-2">
+                            <nav className="mt-6 sm:mt-8">
+                                <ul className="flex flex-col gap-1">
                                     <li>
                                         <Link
                                             href="/"
-                                            className="block px-4 py-3 text-white hover:bg-white/10 rounded-md transition-colors"
+                                            className="block px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base text-white hover:bg-white/10 rounded-md transition-colors"
                                             onClick={closeSheet}
                                         >
                                             Home
@@ -174,7 +181,7 @@ const Nav = () => {
                                     <li>
                                         <Link
                                             href="/about"
-                                            className="block px-4 py-3 text-white hover:bg-white/10 rounded-md transition-colors"
+                                            className="block px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base text-white hover:bg-white/10 rounded-md transition-colors"
                                             onClick={closeSheet}
                                         >
                                             About Us
@@ -183,19 +190,19 @@ const Nav = () => {
                                     <li>
                                         <button
                                             onClick={() => setMobileOfferOpen(!mobileOfferOpen)}
-                                            className="w-full text-left px-4 py-3 text-white hover:bg-white/10 rounded-md flex items-center justify-between transition-colors"
+                                            className="w-full text-left px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base text-white hover:bg-white/10 rounded-md flex items-center justify-between transition-colors"
                                         >
                                             What We Offer
-                                            <span className={`transform transition-transform duration-200 ${mobileOfferOpen ? 'rotate-180' : ''}`}>
+                                            <span className={`transform transition-transform duration-200 text-xs ${mobileOfferOpen ? 'rotate-180' : ''}`}>
                                                 ▼
                                             </span>
                                         </button>
                                         {mobileOfferOpen && (
-                                            <ul className="ml-4 mt-2 flex flex-col gap-1">
+                                            <ul className="ml-3 sm:ml-4 mt-2 flex flex-col gap-1">
                                                 <li>
                                                     <Link
                                                         href="/bespoke-polo-belts"
-                                                        className="block px-4 py-2 text-white text-sm hover:bg-white/10 rounded-md transition-colors"
+                                                        className="block px-3 sm:px-4 py-2 text-xs sm:text-sm text-white hover:bg-white/10 rounded-md transition-colors"
                                                         onClick={closeSheet}
                                                     >
                                                         Bespoke Polo Belts
@@ -204,7 +211,7 @@ const Nav = () => {
                                                 <li>
                                                     <Link
                                                         href="/intricate-stamps"
-                                                        className="block px-4 py-2 text-white text-sm hover:bg-white/10 rounded-md transition-colors"
+                                                        className="block px-3 sm:px-4 py-2 text-xs sm:text-sm text-white hover:bg-white/10 rounded-md transition-colors"
                                                         onClick={closeSheet}
                                                     >
                                                         Intricate Stamps
@@ -213,7 +220,7 @@ const Nav = () => {
                                                 <li>
                                                     <Link
                                                         href="/dog-collars-leads"
-                                                        className="block px-4 py-2 text-white text-sm hover:bg-white/10 rounded-md transition-colors"
+                                                        className="block px-3 sm:px-4 py-2 text-xs sm:text-sm text-white hover:bg-white/10 rounded-md transition-colors"
                                                         onClick={closeSheet}
                                                     >
                                                         Dog Collars & Leads
@@ -225,7 +232,7 @@ const Nav = () => {
                                     <li>
                                         <Link
                                             href="/ordering-process"
-                                            className="block px-4 py-3 text-white hover:bg-white/10 rounded-md transition-colors"
+                                            className="block px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base text-white hover:bg-white/10 rounded-md transition-colors"
                                             onClick={closeSheet}
                                         >
                                             Ordering Process
@@ -234,7 +241,7 @@ const Nav = () => {
                                     <li>
                                         <Link
                                             href="/sizing"
-                                            className="block px-4 py-3 text-white hover:bg-white/10 rounded-md transition-colors"
+                                            className="block px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base text-white hover:bg-white/10 rounded-md transition-colors"
                                             onClick={closeSheet}
                                         >
                                             Sizing
@@ -243,16 +250,34 @@ const Nav = () => {
                                     <li>
                                         <Link
                                             href="/contact"
-                                            className="block px-4 py-3 text-white hover:bg-white/10 rounded-md transition-colors"
+                                            className="block px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base text-white hover:bg-white/10 rounded-md transition-colors"
                                             onClick={closeSheet}
                                         >
                                             Contact Us
                                         </Link>
                                     </li>
+                                    <li>
+                                        <Link
+                                            href="/pricing"
+                                            className="block px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base text-white hover:bg-white/10 rounded-md transition-colors"
+                                            onClick={closeSheet}
+                                        >
+                                            Pricing
+                                        </Link>
+                                    </li>
+                                    <li>
+                                        <Link
+                                            href="/belt-maker"
+                                            className="block px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base text-white hover:bg-white/10 rounded-md transition-colors"
+                                            onClick={closeSheet}
+                                        >
+                                            Belt Maker
+                                        </Link>
+                                    </li>
                                     <li className="border-t border-white/10 mt-4 pt-4">
                                         <Link
                                             href="/signin"
-                                            className="block px-4 py-3 text-white hover:bg-white/10 rounded-md transition-colors"
+                                            className="block px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base text-white hover:bg-white/10 rounded-md transition-colors"
                                             onClick={closeSheet}
                                         >
                                             Sign In
@@ -261,7 +286,7 @@ const Nav = () => {
                                     <li>
                                         <Link
                                             href="/signin"
-                                            className="block px-4 py-3 text-white hover:bg-white/10 rounded-md transition-colors"
+                                            className="block px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base text-white hover:bg-white/10 rounded-md transition-colors"
                                             onClick={closeSheet}
                                         >
                                             My Account

@@ -1,8 +1,38 @@
+'use client';
+
 import Image from 'next/image';
 import React from 'react';
+import { motion } from 'framer-motion';
 import PoloLogo2 from '../shared/PoloLogo2';
 
 const DogCollarsGallery = () => {
+    const containerVariants = {
+        hidden: { opacity: 0 },
+        visible: {
+            opacity: 1,
+            transition: {
+                staggerChildren: 0.05,
+                delayChildren: 0.1,
+            },
+        },
+    };
+
+    const imageVariants = {
+        hidden: { opacity: 0, scale: 0.95 },
+        visible: {
+            opacity: 1,
+            scale: 1,
+            transition: {
+                duration: 0.4,
+            },
+        },
+        hover: {
+            scale: 1.05,
+            transition: {
+                duration: 0.3,
+            },
+        },
+    };
     // Organize images by column for manual masonry control
     const columns = [
         // Column 1
@@ -34,21 +64,35 @@ const DogCollarsGallery = () => {
         <section className="w-full">
             <PoloLogo2 />
             <div className="max-w-full sm:max-w-6xl lg:max-w-5xl mx-auto px-4 sm:px-6">
-                <h2 className="uppercase text-3xl sm:text-4xl md:text-5xl font-bold text-center my-4 sm:my-6 text-gray-900 tracking-tight">
+                <motion.h2
+                    className="uppercase text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-center my-4 sm:my-6 text-gray-900 tracking-tight"
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: false, amount: 0.3 }}
+                    transition={{ duration: 0.7 }}
+                >
                     Dog Collars & Leads
-                </h2>
+                </motion.h2>
 
                 {/* Three Column Layout */}
-                <div className="grid grid-cols-2 sm:grid-cols-3 gap-1 md:gap-2 py-6 sm:py-8 md:py-10">
+                <motion.div
+                    className="grid grid-cols-2 sm:grid-cols-3 gap-1 md:gap-2 py-6 sm:py-8 md:py-10"
+                    variants={containerVariants}
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: false, amount: 0.15 }}
+                >
                     {columns.map((column, colIndex) => (
                         <div
                             key={colIndex}
                             className={`flex flex-col gap-1 md:gap-2 ${colIndex === 2 ? 'hidden sm:flex' : ''}`}
                         >
                             {column.map((image, imgIndex) => (
-                                <div
+                                <motion.div
                                     key={imgIndex}
                                     className="relative overflow-hidden hover:opacity-95 transition-opacity cursor-pointer"
+                                    variants={imageVariants}
+                                    whileHover="hover"
                                 >
                                     <Image
                                         src={image.src}
@@ -57,11 +101,11 @@ const DogCollarsGallery = () => {
                                         height={image.tall ? 200 : 150}
                                         width={500}
                                     />
-                                </div>
+                                </motion.div>
                             ))}
                         </div>
                     ))}
-                </div>
+                </motion.div>
             </div>
         </section>
     )

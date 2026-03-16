@@ -18,12 +18,18 @@ export function BeltCanvas({ gridData, leatherColor }: BeltCanvasProps) {
   }, [gridData, leatherColor])
 
   return (
-    <div className="flex justify-center bg-white p-4 rounded-lg shadow-md">
+    <div className="w-full flex justify-center p-2 sm:p-3 md:p-4 rounded-none shadow-md overflow-x-auto">
       <canvas
         ref={canvasRef}
-        width={768}
+        width={968}
         height={120}
-        className="border border-gray-300 rounded"
+        className="border border-gray-700 rounded-none min-w-min"
+        style={{
+          width: '100%',
+          maxWidth: '968px',
+          height: 'auto',
+          aspectRatio: '968 / 120',
+        }}
       />
     </div>
   )
