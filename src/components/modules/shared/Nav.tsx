@@ -151,7 +151,6 @@ const Nav = () => {
                         </NavigationMenuList>
                     </NavigationMenu>
                 </div>
-
                 {/* Mobile Header */}
                 <div className="flex lg:hidden items-center justify-between w-full gap-2">
                     <a href="mailto:sales@mypolobelt.com" className="text-white text-md hover:text-white/80 transition-colors truncate">

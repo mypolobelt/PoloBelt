@@ -16,7 +16,6 @@ export function BeltCanvas({ gridData, leatherColor }: BeltCanvasProps) {
       renderBeltCanvas(canvasRef.current, gridData, leatherColor)
     }
   }, [gridData, leatherColor])
-
   return (
     <div className="w-full flex justify-center p-2 sm:p-3 md:p-4 rounded-none shadow-md overflow-x-auto">
       <canvas
