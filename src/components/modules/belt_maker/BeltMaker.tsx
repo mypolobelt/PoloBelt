@@ -246,7 +246,7 @@ export default function BeltMaker() {
                         </div>
 
                         {/* Right Panel - Everything (Hidden on mobile) */}
-                        <div className="hidden lg:block lg:col-span-3 border space-y-6 sm:space-y-8">
+                        <div className="hidden lg:block lg:col-span-3 border">
                             {/* Design Name Display */}
                             <div className="text-center">
                                 <h2 className="text-2xl sm:text-3xl lg:text-4xl font-serif font-bold text-burgundy p-2">

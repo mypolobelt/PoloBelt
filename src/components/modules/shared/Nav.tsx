@@ -154,7 +154,7 @@ const Nav = () => {
 
                 {/* Mobile Header */}
                 <div className="flex lg:hidden items-center justify-between w-full gap-2">
-                    <a href="mailto:sales@mypolobelt.com" className="text-white text-xs sm:text-sm hover:text-white/80 transition-colors truncate">
+                    <a href="mailto:sales@mypolobelt.com" className="text-white text-md hover:text-white/80 transition-colors truncate">
                         sales@mypolobelt.com
                     </a>
                     <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
@@ -271,7 +271,7 @@ const Nav = () => {
                                             className="block px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base text-white hover:bg-white/10 rounded-md transition-colors"
                                             onClick={closeSheet}
                                         >
-                                            Pricing
+                                            Belt Maker
                                         </Link>
                                     </li>
                                     <li className="border-t border-white/10 mt-4 pt-4">

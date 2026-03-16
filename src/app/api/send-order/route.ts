@@ -71,7 +71,7 @@ export async function POST(request: NextRequest) {
     // Build email HTML
     const emailHTML = buildOrderEmail(data)
 
-    // Send to admin
+    // Send same detailed email to admin/seller
     await transporter.sendMail({
       from: process.env.GMAIL_USER,
       to: process.env.ADMIN_EMAIL || 'sales@example.com',
@@ -80,12 +80,12 @@ export async function POST(request: NextRequest) {
       attachments: attachments,
     })
 
-    // Send confirmation to customer
+    // Send same detailed email to customer
     await transporter.sendMail({
       from: process.env.GMAIL_USER,
       to: data.email,
-      subject: 'Order Confirmation - Polo Belt Designer',
-      html: buildCustomerConfirmationEmail(data),
+      subject: `Order Confirmation - ${data.customerName}`,
+      html: emailHTML,
       attachments: attachments,
     })
 
@@ -111,6 +111,8 @@ function buildOrderEmail(data: OrderData): string {
     .map((item) => `<li>${item.size}: ${item.quantity} belt(s)</li>`)
     .join('')
 
+  const orderId = generateOrderId()
+
   return `
     <!DOCTYPE html>
     <html>
@@ -118,19 +120,25 @@ function buildOrderEmail(data: OrderData): string {
         <style>
           body { font-family: Arial, sans-serif; color: #333; }
           .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-          .header { background: #6B2E1F; color: white; padding: 20px; border-radius: 5px; }
+          .header { background: #6B2E1F; color: white; padding: 20px; border-radius: 5px; margin-bottom: 20px; }
+          .order-id { background: #D4A574; color: #6B2E1F; padding: 10px; border-radius: 5px; margin-bottom: 20px; font-weight: bold; text-align: center; }
           .section { margin: 20px 0; padding: 15px; border: 1px solid #ddd; border-radius: 5px; }
-          .section h3 { color: #6B2E1F; margin-top: 0; }
+          .section h3 { color: #6B2E1F; margin-top: 0; border-bottom: 2px solid #D4A574; padding-bottom: 10px; }
           ul { margin: 10px 0; padding-left: 20px; }
           li { margin: 8px 0; }
           .timestamp { color: #999; font-size: 12px; margin-top: 10px; }
+          .footer { text-align: center; margin-top: 30px; padding-top: 20px; border-top: 1px solid #ddd; color: #666; font-size: 12px; }
         </style>
       </head>
       <body>
         <div class="container">
           <div class="header">
-            <h1>New Polo Belt Order</h1>
-            <p>Order submitted at: ${new Date(data.timestamp).toLocaleString()}</p>
+            <h1 style="margin: 0; text-align: center;">Polo Belt Order</h1>
+            <p style="margin: 10px 0 0 0; text-align: center;">Order submitted: ${new Date(data.timestamp).toLocaleString()}</p>
+          </div>
+
+          <div class="order-id">
+            Order ID: ${orderId}
           </div>
 
           <div class="section">
@@ -157,60 +165,19 @@ function buildOrderEmail(data: OrderData): string {
             <p><strong>Leather Color:</strong> ${escapeHtml(data.designDetails.leatherColor)}</p>
             <p><strong>Buckle Finish:</strong> ${escapeHtml(data.designDetails.buckleFinish)}</p>
             <p><strong>Thread Colors:</strong></p>
-            <ul>${threadColorsList}</ul>
+            <ul>${threadColorsList || '<li>None specified</li>'}</ul>
             <p><strong>Custom Stamp:</strong> ${data.designDetails.hasStamp ? 'Yes - See attached file' : 'No'}</p>
           </div>
 
           <div class="section">
             <h3>Order Quantities</h3>
-            <ul>${orderItemsList}</ul>
+            <ul>${orderItemsList || '<li>No items specified</li>'}</ul>
           </div>
 
-          <p class="timestamp">
-            Order ID: ${generateOrderId()}<br/>
-            Created: ${new Date(data.timestamp).toISOString()}
-          </p>
-        </div>
-      </body>
-    </html>
-  `
-}
-
-function buildCustomerConfirmationEmail(data: OrderData): string {
-  return `
-    <!DOCTYPE html>
-    <html>
-      <head>
-        <style>
-          body { font-family: Arial, sans-serif; color: #333; }
-          .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-          .header { background: #D4A574; color: #6B2E1F; padding: 20px; border-radius: 5px; }
-          .section { margin: 20px 0; padding: 15px; border: 1px solid #ddd; border-radius: 5px; }
-        </style>
-      </head>
-      <body>
-        <div class="container">
-          <div class="header">
-            <h1>Thank You for Your Order</h1>
-            <p>Dear ${escapeHtml(data.customerName)},</p>
+          <div class="footer">
+            <p>Thank you for your order. We will process this and contact you shortly with pricing and delivery details.</p>
+            <p>Order Time: ${new Date(data.timestamp).toISOString()}</p>
           </div>
-
-          <p>We have received your polo belt order. Our team will review your design and contact you within 24 hours with a detailed quote.</p>
-
-          <div class="section">
-            <h3>Your Design: ${escapeHtml(data.designDetails.designName)}</h3>
-            <p>We'll be crafting your belt with:</p>
-            <ul>
-              <li>Width: ${escapeHtml(data.designDetails.beltWidth)}</li>
-              <li>Leather: ${escapeHtml(data.designDetails.leatherColor)}</li>
-              <li>Buckle: ${escapeHtml(data.designDetails.buckleFinish)}</li>
-            </ul>
-            ${data.designDetails.hasStamp ? `<div style="margin-top: 15px; padding: 10px; background: #f5f5f5; border-radius: 5px;"><strong>Your Custom Stamp:</strong><br/><p style="font-size: 12px; color: #666; margin-top: 8px;">Check the attachment in this email to download your stamp design.</p></div>` : ''}
-          </div>
-
-          <p>If you have any questions, feel free to reach out to us.</p>
-
-          <p>Best regards,<br/><strong>Polo Belt Team</strong></p>
         </div>
       </body>
     </html>

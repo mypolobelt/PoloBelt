@@ -4,6 +4,7 @@ import { validateEmail } from '@/database/utils'
 import { useState } from 'react'
 import { Button } from '../ui/button'
 import { useRouter } from 'next/navigation'
+import { countries } from '@/database/countries'
 
 interface SizeOrder {
   size: string
@@ -159,7 +160,7 @@ export function CustomerForm({
 
       <form onSubmit={handleSubmit} className="space-y-3 sm:space-y-4">
         <div>
-          <label className="block text-xs font-semibold text-charcoal uppercase tracking-wider mb-2">
+          <label className="block text-xs font-semibold  uppercase tracking-wider mb-2">
             Name
           </label>
           <input
@@ -173,7 +174,7 @@ export function CustomerForm({
         </div>
 
         <div>
-          <label className="block text-xs font-semibold text-charcoal uppercase tracking-wider mb-2">
+          <label className="block text-xs font-semibold  uppercase tracking-wider mb-2">
             Email Address
           </label>
           <input
@@ -191,13 +192,16 @@ export function CustomerForm({
         </div>
 
         <div>
-          <label className="block text-xs font-semibold text-charcoal uppercase tracking-wider mb-2">
+          <label className="block text-md text-center font-semibold  uppercase tracking-wider mb-2">
             Postal Address
           </label>
-          <p className="text-xs text-charcoal italic mb-2">
+          <p className="text-xs  italic mb-2 text-blue-500">
             Full address required to accurately quote total cost including shipping
           </p>
           <div className="space-y-2">
+            <label className="block text-xs font-semibold  uppercase tracking-wider mb-2">
+              Address Line 1
+            </label>
             <input
               type="text"
               required
@@ -206,6 +210,9 @@ export function CustomerForm({
               placeholder="Address Line 1 (Street, House Number)"
               className="w-full px-3 py-2 border-2 border-gray-300 rounded-none font-sans text-xs sm:text-sm focus:outline-none focus:border-gold"
             />
+            <label className="block text-xs font-semibold  uppercase tracking-wider mb-2">
+              Address Line 2
+            </label>
             <input
               type="text"
               value={addressLine2}
@@ -213,6 +220,9 @@ export function CustomerForm({
               placeholder="Address Line 2 (Apartment, Suite, etc.) - Optional"
               className="w-full px-3 py-2 border-2 border-gray-300 rounded-none font-sans text-xs sm:text-sm focus:outline-none focus:border-gold"
             />
+            <label className="block text-xs font-semibold  uppercase tracking-wider mb-2">
+              City
+            </label>
             <input
               type="text"
               required
@@ -221,14 +231,20 @@ export function CustomerForm({
               placeholder="City / Town"
               className="w-full px-3 py-2 border-2 border-gray-300 rounded-none font-sans text-xs sm:text-sm focus:outline-none focus:border-gold"
             />
+            <label className="block text-xs font-semibold  uppercase tracking-wider mb-2">
+              State
+            </label>
             <input
               type="text"
               required
               value={stateRegion}
               onChange={(e) => setStateRegion(e.target.value)}
-              placeholder="County / State / Region"
+              placeholder="State / Region"
               className="w-full px-3 py-2 border-2 border-gray-300 rounded-none font-sans text-xs sm:text-sm focus:outline-none focus:border-gold"
             />
+            <label className="block text-xs font-semibold  uppercase tracking-wider mb-2">
+              Post Code
+            </label>
             <input
               type="text"
               required
@@ -237,14 +253,26 @@ export function CustomerForm({
               placeholder="Postcode / ZIP Code"
               className="w-full px-3 py-2 border-2 border-gray-300 rounded-none font-sans text-xs sm:text-sm focus:outline-none focus:border-gold"
             />
-            <input
-              type="text"
-              required
-              value={country}
-              onChange={(e) => setCountry(e.target.value)}
-              placeholder="Country"
-              className="w-full px-3 py-2 border-2 border-gray-300 rounded-none font-sans text-xs sm:text-sm focus:outline-none focus:border-gold"
-            />
+
+            {/* Country Select Dropdown */}
+            <div>
+              <label className="block text-xs font-semibold  uppercase tracking-wider mb-2">
+                Country
+              </label>
+              <select
+                required
+                value={country}
+                onChange={(e) => setCountry(e.target.value)}
+                className="w-full px-3 py-2 border-2 border-gray-300 rounded-none font-sans text-xs sm:text-sm focus:outline-none focus:border-gold bg-white"
+              >
+                <option value="">Select a country</option>
+                {countries.map((countryName) => (
+                  <option key={countryName} value={countryName}>
+                    {countryName}
+                  </option>
+                ))}
+              </select>
+            </div>
           </div>
         </div>
 
