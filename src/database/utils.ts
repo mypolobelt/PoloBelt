@@ -1,19 +1,35 @@
 export const adjustColorBrightness = (hex: string, percent: number): string => {
-  hex = hex.replace('#', '')
+  hex = hex.replace('#', '');
 
-  let r = parseInt(hex.substring(0, 2), 16)
-  let g = parseInt(hex.substring(2, 4), 16)
-  let b = parseInt(hex.substring(4, 6), 16)
 
-  r = Math.max(0, Math.min(255, r + percent))
-  g = Math.max(0, Math.min(255, g + percent))
-  b = Math.max(0, Math.min(255, b + percent))
 
-  const rr = r.toString(16).padStart(2, '0')
-  const gg = g.toString(16).padStart(2, '0')
-  const bb = b.toString(16).padStart(2, '0')
+  // Convert to RGB 
 
-  return `#${rr}${gg}${bb}`
+  let r = parseInt(hex.substring(0, 2), 16);
+
+  let g = parseInt(hex.substring(2, 4), 16);
+
+  let b = parseInt(hex.substring(4, 6), 16);
+
+  // Adjust brightness 
+
+  r = Math.max(0, Math.min(255, r + percent));
+
+  g = Math.max(0, Math.min(255, g + percent));
+
+  b = Math.max(0, Math.min(255, b + percent));
+
+  // Convert back to hex 
+
+  const rr = r.toString(16).padStart(2, '0');
+
+  const gg = g.toString(16).padStart(2, '0');
+
+  const bb = b.toString(16).padStart(2, '0');
+
+
+
+  return `#${rr}${gg}${bb}`;
 }
 
 export const validateEmail = (email: string): boolean => {
@@ -34,6 +50,7 @@ export const generateGridDataFromColors = (
   color4: string = '',
   threadColors: Record<string, { name: string; hex: string }> = {}
 ): string[][] => {
+
   const getColorHex = (colorText: string): string => {
     if (!colorText) return '#FFFFFF'
     const parts = colorText.trim().split(' ')
@@ -48,46 +65,55 @@ export const generateGridDataFromColors = (
     ...(color4 ? [getColorHex(color4)] : [])
   ].filter(c => c !== '#FFFFFF')
 
-  const grid: string[][] = Array(20)
-    .fill(null)
-    .map(() => Array(64).fill('#FFFFFF'))
+  const rows = 10
+  const cols = 64
+
+  const grid: string[][] = Array.from({ length: rows }, () =>
+    Array(cols).fill('#FFFFFF')
+  )
 
   if (backgroundColors.length === 0) return grid
 
-  // Fixed diamond color (brown)
-  const diamondColor = '#6B4830'
+  // 🔥 Diamond color (you can tweak)
+  const diamondColor = '#7a3b00'
 
-  // Define repeating diamond dimensions - wider and more pixelated
-  const diamondSpacing = 16 // Distance between diamond centers (horizontally)
-  const diamondWidth = 8    // Half-width of each diamond (wider)
-  const diamondHeight = 6   // Half-height of each diamond
-
-  // First, fill sections with alternating background colors
+  // 🔥 Layout settings
+  const diamondSpacing =16
   const sectionWidth = diamondSpacing
-  for (let row = 0; row < 20; row++) {
-    for (let col = 0; col < 64; col++) {
-      const sectionIndex = Math.floor(col / sectionWidth) % backgroundColors.length
+
+  // Step diamond size (controls shape)
+  const diamondHalfHeight = 3
+
+  // ✅ STEP 1: Fill background stripes
+  for (let row = 0; row < rows; row++) {
+    for (let col = 0; col < cols; col++) {
+      const sectionIndex =
+        Math.floor(col / sectionWidth) % backgroundColors.length
       grid[row][col] = backgroundColors[sectionIndex]
     }
   }
 
-  // Then draw the fixed diamond shapes on top with pixelated edges
+  // ✅ STEP 2: Draw pixel-perfect diamonds (ON TOP)
   for (let diamondIndex = 0; diamondIndex < 5; diamondIndex++) {
-    const centerCol = 8 + (diamondIndex * diamondSpacing)
-    const centerRow = 10 // Center vertically (middle of 20 rows)
+    const centerCol = 8 + diamondIndex * diamondSpacing
+    const centerRow = Math.floor(rows / 2)
 
-    // Draw each diamond shape with harder edges (pixelated)
-    for (let row = 0; row < 20; row++) {
-      for (let col = 0; col < 64; col++) {
-        const distRow = Math.abs(row - centerRow)
-        const distCol = Math.abs(col - centerCol)
+    for (let rowOffset = -diamondHalfHeight; rowOffset <= diamondHalfHeight; rowOffset++) {
+      const currentRow = centerRow + rowOffset
 
-        // Create a more blocky diamond shape with sharp angles
-        const normalizedDist = (distCol / diamondWidth) + (distRow / diamondHeight)
+      // This creates the stepped width (like your image)
+      const width = diamondHalfHeight - Math.abs(rowOffset)
 
-        // If within diamond bounds, use fixed diamond color
-        if (normalizedDist <= 1.0) {
-          grid[row][col] = diamondColor
+      for (let colOffset = -width; colOffset <= width; colOffset++) {
+        const currentCol = centerCol + colOffset
+
+        if (
+          currentRow >= 0 &&
+          currentRow < rows &&
+          currentCol >= 0 &&
+          currentCol < cols
+        ) {
+          grid[currentRow][currentCol] = diamondColor
         }
       }
     }
