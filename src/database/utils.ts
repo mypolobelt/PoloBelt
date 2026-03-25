@@ -1,35 +1,23 @@
+import {
+  PLK_PATTERN_2COLOR,
+  PLK_PATTERN_3COLOR,
+  STRIPE_PATTERN_2COLOR,
+  STRIPE_PATTERN_3COLOR,
+  applyColorsToPattern,
+} from './canvas'
+
 export const adjustColorBrightness = (hex: string, percent: number): string => {
-  hex = hex.replace('#', '');
-
-
-
-  // Convert to RGB 
-
-  let r = parseInt(hex.substring(0, 2), 16);
-
-  let g = parseInt(hex.substring(2, 4), 16);
-
-  let b = parseInt(hex.substring(4, 6), 16);
-
-  // Adjust brightness 
-
-  r = Math.max(0, Math.min(255, r + percent));
-
-  g = Math.max(0, Math.min(255, g + percent));
-
-  b = Math.max(0, Math.min(255, b + percent));
-
-  // Convert back to hex 
-
-  const rr = r.toString(16).padStart(2, '0');
-
-  const gg = g.toString(16).padStart(2, '0');
-
-  const bb = b.toString(16).padStart(2, '0');
-
-
-
-  return `#${rr}${gg}${bb}`;
+  hex = hex.replace('#', '')
+  let r = parseInt(hex.substring(0, 2), 16)
+  let g = parseInt(hex.substring(2, 4), 16)
+  let b = parseInt(hex.substring(4, 6), 16)
+  r = Math.max(0, Math.min(255, r + percent))
+  g = Math.max(0, Math.min(255, g + percent))
+  b = Math.max(0, Math.min(255, b + percent))
+  const rr = r.toString(16).padStart(2, '0')
+  const gg = g.toString(16).padStart(2, '0')
+  const bb = b.toString(16).padStart(2, '0')
+  return `#${rr}${gg}${bb}`
 }
 
 export const validateEmail = (email: string): boolean => {
@@ -43,83 +31,74 @@ export const extractColorIdFromText = (text: string): string | null => {
   return parts[parts.length - 1] || null
 }
 
+/**
+ * Build the grid that gets passed to BeltCanvas / renderBeltCanvas.
+ *
+ * designType controls which base pattern is used:
+ *   'classic-2'  →  PLK 2-colour
+ *   'classic-3'  →  PLK 3-colour
+ *   'stripe-2'   →  Stripe 2-colour
+ *   'stripe-3'   →  Stripe 3-colour
+ *
+ * color1 / color2 / color3 / color4 are the "Name ID" strings as returned by
+ * the colour picker (e.g. "Mid Grey 399").  color4 is the stripe colour.
+ *
+ * threadColors is the THREAD_COLORS database from constants.ts.
+ */
 export const generateGridDataFromColors = (
   color1: string,
   color2: string,
   color3: string = '',
   color4: string = '',
-  threadColors: Record<string, { name: string; hex: string }> = {}
+  threadColors: Record<string, { name: string; hex: string }> = {},
+  designType: 'classic-2' | 'classic-3' | 'stripe-2' | 'stripe-3' = 'classic-2'
 ): string[][] => {
-
-  const getColorHex = (colorText: string): string => {
-    if (!colorText) return '#FFFFFF'
+  const getColorHex = (colorText: string): string | null => {
+    if (!colorText) return null
     const parts = colorText.trim().split(' ')
     const colorId = parts[parts.length - 1]
-    return threadColors[colorId]?.hex || '#FFFFFF'
+    return threadColors[colorId]?.hex ?? null
   }
 
-  const backgroundColors = [
-    getColorHex(color1),
-    getColorHex(color2),
-    ...(color3 ? [getColorHex(color3)] : []),
-    ...(color4 ? [getColorHex(color4)] : [])
-  ].filter(c => c !== '#FFFFFF')
+  const color1Hex = getColorHex(color1)
+  const color2Hex = getColorHex(color2)
+  const color3Hex = getColorHex(color3)
+  const stripeHex = getColorHex(color4)   // color4 is the stripe colour
 
-  const rows = 10
-  const cols = 64
+  // Pick the matching base pattern
+  let basePattern: string[][]
+  switch (designType) {
+    case 'classic-3':
+      basePattern = PLK_PATTERN_3COLOR
+      break
+    case 'stripe-2':
+      basePattern = STRIPE_PATTERN_2COLOR
+      break
+    case 'stripe-3':
+      basePattern = STRIPE_PATTERN_3COLOR
+      break
+    case 'classic-2':
+    default:
+      basePattern = PLK_PATTERN_2COLOR
+  }
 
-  const grid: string[][] = Array.from({ length: rows }, () =>
-    Array(cols).fill('#FFFFFF')
+  // If no colours have been chosen yet, return the base pattern as-is
+  // (the canvas will show the placeholder grey/red shades).
+  if (!color1Hex && !color2Hex && !color3Hex && !stripeHex) {
+    return basePattern.map((row) => [...row])
+  }
+
+  // For stripe patterns the stripe colour is color4 / stripeHex
+  // For classic patterns there is no stripe; color3 maps to the 3rd thread.
+  const isStripe = designType === 'stripe-2' || designType === 'stripe-3'
+
+  return applyColorsToPattern(
+    basePattern,
+    color1Hex,
+    color2Hex,
+    color3Hex,
+    isStripe ? stripeHex : null
   )
-
-  if (backgroundColors.length === 0) return grid
-
-  // 🔥 Diamond color (you can tweak)
-  const diamondColor = '#7a3b00'
-
-  // 🔥 Layout settings
-  const diamondSpacing =16
-  const sectionWidth = diamondSpacing
-
-  // Step diamond size (controls shape)
-  const diamondHalfHeight = 3
-
-  // ✅ STEP 1: Fill background stripes
-  for (let row = 0; row < rows; row++) {
-    for (let col = 0; col < cols; col++) {
-      const sectionIndex =
-        Math.floor(col / sectionWidth) % backgroundColors.length
-      grid[row][col] = backgroundColors[sectionIndex]
-    }
-  }
-
-  // ✅ STEP 2: Draw pixel-perfect diamonds (ON TOP)
-  for (let diamondIndex = 0; diamondIndex < 5; diamondIndex++) {
-    const centerCol = 8 + diamondIndex * diamondSpacing
-    const centerRow = Math.floor(rows / 2)
-
-    for (let rowOffset = -diamondHalfHeight; rowOffset <= diamondHalfHeight; rowOffset++) {
-      const currentRow = centerRow + rowOffset
-
-      // This creates the stepped width (like your image)
-      const width = diamondHalfHeight - Math.abs(rowOffset)
-
-      for (let colOffset = -width; colOffset <= width; colOffset++) {
-        const currentCol = centerCol + colOffset
-
-        if (
-          currentRow >= 0 &&
-          currentRow < rows &&
-          currentCol >= 0 &&
-          currentCol < cols
-        ) {
-          grid[currentRow][currentCol] = diamondColor
-        }
-      }
-    }
-  }
-
-  return grid
 }
 
 export const generateInvoiceEmail = (
