@@ -20,9 +20,9 @@ export function BeltCanvas({ gridData, leatherColor }: BeltCanvasProps) {
     <div className="w-full flex justify-center p-2 sm:p-3 md:p-4 rounded-none shadow-md overflow-x-auto">
       <canvas
         ref={canvasRef}
-        width={968}
-        height={120}
-        className="border border-gray-700 rounded-none min-w-min"
+        width={960}
+        height={240}
+        className=" rounded-none min-w-min"
         style={{
           width: '100%',
           maxWidth: '968px',
