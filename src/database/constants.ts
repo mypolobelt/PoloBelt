@@ -227,8 +227,8 @@ export const DESIGN_PRESETS: DesignPresets = {
     colors: ['#C03830', '#488050', '#FFFFFF', '#988070', '#552B06'],
     pattern: null,
   },
-  design3: {
-    name: 'Design 3',
+  Sunset_Elegance: {
+    name: 'Sunset Elegance',
     threads: ['Blue 132', 'White White'],
     leather: 'Brown',
     buckle: 'Brass',
@@ -236,8 +236,8 @@ export const DESIGN_PRESETS: DesignPresets = {
     colors: ['#3060A0', '#FFFFFF', '#552B06'],
     pattern: null,
   },
-  design4: {
-    name: 'Design 4',
+  Ocean_Breeze: {
+    name: 'Ocean Breeze',
     threads: ['Green 228', 'Yellow 290'],
     leather: 'Brown',
     buckle: 'Silver',
@@ -245,8 +245,8 @@ export const DESIGN_PRESETS: DesignPresets = {
     colors: ['#488050', '#F0D040', '#552B06'],
     pattern: null,
   },
-  design5: {
-    name: 'Design 5',
+  Forest_Walk: {
+    name: 'Forest Walk',
     threads: ['Black 381', 'Red 46', 'White White'],
     leather: 'Black',
     buckle: 'Gunmetal',
@@ -254,8 +254,8 @@ export const DESIGN_PRESETS: DesignPresets = {
     colors: ['#1A0F0A', '#CC2222', '#FFFFFF', '#552B06'],
     pattern: null,
   },
-  design6: {
-    name: 'Design 6',
+  Royal_Purple: {
+    name: 'Royal Purple',
     threads: ['Navy 132', 'White White'],
     leather: 'Brown',
     buckle: 'Silver',
@@ -263,8 +263,8 @@ export const DESIGN_PRESETS: DesignPresets = {
     colors: ['#3060A0', '#FFFFFF', '#552B06'],
     pattern: null,
   },
-  design7: {
-    name: 'Design 7',
+  Ruby_Gold: {
+    name: 'Ruby & Gold',
     threads: ['Red 46', 'Yellow 290'],
     leather: 'Brown',
     buckle: 'Brass',
@@ -272,8 +272,8 @@ export const DESIGN_PRESETS: DesignPresets = {
     colors: ['#CC2222', '#F0D040', '#552B06'],
     pattern: null,
   },
-  design8: {
-    name: 'Design 8',
+  Emerald_Ivory: {
+    name: 'Emerald & Ivory',
     threads: ['Green 228', 'White White'],
     leather: 'Brown',
     buckle: 'Brass',
@@ -281,8 +281,8 @@ export const DESIGN_PRESETS: DesignPresets = {
     colors: ['#488050', '#FFFFFF', '#552B06'],
     pattern: null,
   },
-  design9: {
-    name: 'Design 9',
+  Grape_Ivory: {
+    name: 'Grape & Ivory',
     threads: ['Purple 89', 'White White'],
     leather: 'Brown',
     buckle: 'Silver',
@@ -290,8 +290,8 @@ export const DESIGN_PRESETS: DesignPresets = {
     colors: ['#7B3A7B', '#FFFFFF', '#552B06'],
     pattern: null,
   },
-  design10: {
-    name: 'Design 10',
+  Tangerine_Azure: {
+    name: 'Tangerine & Azure',
     threads: ['Orange 304', 'Navy 132'],
     leather: 'Brown',
     buckle: 'Brass',
@@ -299,8 +299,8 @@ export const DESIGN_PRESETS: DesignPresets = {
     colors: ['#E87830', '#3060A0', '#552B06'],
     pattern: null,
   },
-  design11: {
-    name: 'Design 11',
+  Crimson_Aurum: {
+    name: 'Crimson & Aurum',
     threads: ['Burgundy 22', 'Gold 290'],
     leather: 'Brown',
     buckle: 'Gold',
@@ -308,8 +308,8 @@ export const DESIGN_PRESETS: DesignPresets = {
     colors: ['#5C0F0F', '#F0D040', '#552B06'],
     pattern: null,
   },
-  design12: {
-    name: 'Design 12',
+  Turquoise_Ivory: {
+    name: 'Turquoise & Ivory',
     threads: ['Teal 529', 'White White'],
     leather: 'Brown',
     buckle: 'Silver',
@@ -317,8 +317,8 @@ export const DESIGN_PRESETS: DesignPresets = {
     colors: ['#008080', '#FFFFFF', '#552B06'],
     pattern: null,
   },
-  design13: {
-    name: 'Design 13',
+  Rose_Azure: {
+    name: 'Rose & Azure',
     threads: ['Pink 52', 'Navy 132'],
     leather: 'Brown',
     buckle: 'Silver',
@@ -326,8 +326,8 @@ export const DESIGN_PRESETS: DesignPresets = {
     colors: ['#E85B8B', '#3060A0', '#552B06'],
     pattern: null,
   },
-  design14: {
-    name: 'Design 14',
+  Chestnut_Vanilla: {
+    name: 'Chestnut & Vanilla',
     threads: ['Brown 310', 'Cream 301'],
     leather: 'Brown',
     buckle: 'Brass',
@@ -335,8 +335,8 @@ export const DESIGN_PRESETS: DesignPresets = {
     colors: ['#6B4830', '#FFF8DC', '#552B06'],
     pattern: null,
   },
-  design15: {
-    name: 'Design 15',
+  Forest_Sunshine: {
+    name: 'Forest & Sunshine',
     threads: ['Dark Green 211', 'Yellow 290'],
     leather: 'Brown',
     buckle: 'Brass',
@@ -344,8 +344,8 @@ export const DESIGN_PRESETS: DesignPresets = {
     colors: ['#1A4D2E', '#F0D040', '#552B06'],
     pattern: null,
   },
-  design16: {
-    name: 'Design 16',
+  Wine_Pearl: {
+    name: 'Wine & Pearl',
     threads: ['Maroon 65', 'White White'],
     leather: 'Black',
     buckle: 'Gunmetal',
