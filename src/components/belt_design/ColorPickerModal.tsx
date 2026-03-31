@@ -28,7 +28,7 @@ export function ColorPickerModal({
   }
 
   return (
-    <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4" style={{ WebkitBackdropFilter: 'blur(4px)' }}>
+    <div className="fixed inset-0 bg-black/70 flex items-center justify-center p-4" style={{ WebkitBackdropFilter: 'blur(4px)' }}>
       <div className="bg-white rounded-none p-8 max-w-5xl w-full max-h-[80vh] md:max-h-[70vh] overflow-y-auto relative z-50 shadow-2xl" style={{ WebkitOverflowScrolling: 'touch' }}>
         <div className="flex justify-between items-center mb-6 pb-4 border-b-2 border-gold">
           <h3 className="text-2xl font-serif font-bold text-burgundy">

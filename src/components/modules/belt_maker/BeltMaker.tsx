@@ -233,7 +233,7 @@ export default function BeltMaker() {
                         {/* Right Panel - Everything (Visible on all screens) */}
                         <div className="col-span-1 lg:col-span-3">
                             {/* Belt Canvas - Fixed at bottom */}
-                            <div className="fixed bottom-0 left-0 right-0 z-40 bg-white border-t-2 shadow-lg h-auto">
+                            <div className="fixed bottom-0 left-0 right-0 z-10 bg-white border-t-2 shadow-lg h-auto">
                                 <div className="w-full flex justify-center overflow-auto">
                                     <BeltCanvas
                                         gridData={gridData}

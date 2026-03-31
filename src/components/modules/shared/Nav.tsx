@@ -25,7 +25,7 @@ const Nav = () => {
     const closeSheet = () => setSheetOpen(false);
 
     return (
-        <div className="sticky top-0 z-50 flex bg-[#0f1526] px-2 sm:px-4 md:px-5 py-3 sm:py-4 md:py-5 font-medium">
+        <div className="sticky top-0 z-10 flex bg-[#0f1526] px-2 sm:px-4 md:px-5 py-3 sm:py-4 md:py-5 font-medium">
             <div className=" flex items-center justify-between w-11/12 mx-auto">
                 {/* Desktop Navigation */}
                 <NavigationMenu viewport={false} className="hidden lg:hidden xl:flex flex-1">
