@@ -11,16 +11,13 @@ import { DESIGN_PRESETS, THREAD_COLORS } from '@/database/constants'
 import { generateGridDataFromColors } from '@/database/utils'
 import { useState, useRef, useEffect } from 'react'
 
-// Create default striped pattern with vertical stripes
+// Create empty grid pattern - just plain canvas with grid lines
 const DEFAULT_PATTERN = Array(20)
     .fill(null)
     .map(() =>
         Array(64)
             .fill(null)
-            .map((_, colIndex) => {
-                // Create alternating vertical stripes: light and medium grey
-                return colIndex % 4 < 2 ? '#E8E8E8' : '#D0D0D0'
-            })
+            .map(() => '#F5F5F5') // Light grey grid, no design
     )
 
 interface SizeRow {
@@ -150,13 +147,22 @@ export default function BeltMaker() {
     }, [colorCount])
 
     useEffect(() => {
-        let designType: 'classic-2' | 'classic-3' | 'stripe-2' | 'stripe-3' = 'classic-2'
+        // Only update grid if a color count is actually selected
+        if (!colorCount) {
+            return
+        }
 
-        // Determine design type based on color count and stripe color
-        if (colorCount === '3') {
-            designType = stripeColor ? 'stripe-3' : 'classic-3'
-        } else if (colorCount === '2') {
-            designType = stripeColor ? 'stripe-2' : 'classic-2'
+        let designType: 'classic-2' | 'classic-3' | 'stripe-2' | 'stripe-3' = 'classic-2'
+        const colorCountNum = parseInt(colorCount) || 0
+        const hasStripe = !!stripeColor
+
+        // Determine design type based on stripe and color count
+        if (hasStripe) {
+            // Stripe design: 3+ colors or colorCount >= 3 means stripe-3, else stripe-2
+            designType = colorCountNum >= 3 ? 'stripe-3' : 'stripe-2'
+        } else {
+            // Classic design without stripe
+            designType = colorCount === '3' ? 'classic-3' : 'classic-2'
         }
 
         const newGridData = generateGridDataFromColors(
@@ -188,43 +194,8 @@ export default function BeltMaker() {
                     <DesignPresets onLoadPreset={handlePresetLoad} />
                 </section>
 
-                {/* Belt Canvas - Shows below presets on mobile/tablet */}
-                <section className="lg:hidden px-4 sm:px-6 mb-8 sm:mb-10">
-                    {/* belt canvas */}
-                    <div className="w-full flex justify-center">
-                        <BeltCanvas
-                            gridData={gridData}
-                            leatherColor={leatherColor}
-                        />
-                    </div>
-
-                    {/* Specification Sheet - Mobile only */}
-                    <div className="mt-6 sm:mt-8 md:w-full">
-                        <SpecificationSheet
-                            designName={designName}
-                            threadColors={[threadColor1, threadColor2, threadColor3, stripeColor].filter(
-                                (c) => c
-                            )}
-                            beltWidth={beltWidth}
-                            leatherColor={leatherColor}
-                            buckleFinish={buckleFinish}
-                            hasStamp={!!stampImage}
-                        />
-                    </div>
-                    {/* Order Form - Mobile only */}
-                    <div className="mt-6 sm:mt-8">
-                        <OrderForm
-                            sizeRows={sizeRows}
-                            onAddSize={handleAddSizeRow}
-                            onUpdateSize={handleUpdateSizeRow}
-                            onRemoveSize={handleRemoveSizeRow}
-                        />
-                    </div>
-
-                </section>
-
                 {/* Main Content - Responsive Grid */}
-                <div className="px-4 sm:px-6 lg:px-8 pb-8 sm:pb-12 lg:pb-16">
+                <div className="px-4 sm:px-6 lg:px-8 pb-12 md::pb-30 lg:pb-34">
                     <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 sm:gap-8 lg:gap-8">
                         {/* Left Panel - Controls */}
                         <div className="lg:col-span-1">
@@ -259,21 +230,16 @@ export default function BeltMaker() {
                             </div>
                         </div>
 
-                        {/* Right Panel - Everything (Hidden on mobile) */}
-                        <div className="hidden lg:block lg:col-span-3 border">
-                            {/* Design Name Display */}
-                            <div className="text-center">
-                                <h2 className="text-2xl sm:text-3xl lg:text-4xl font-serif font-bold text-burgundy p-2">
-                                    {designName || 'New Design'}
-                                </h2>
-                            </div>
-
-                            {/* Belt Canvas */}
-                            <div className="w-full flex justify-center">
-                                <BeltCanvas
-                                    gridData={gridData}
-                                    leatherColor={leatherColor}
-                                />
+                        {/* Right Panel - Everything (Visible on all screens) */}
+                        <div className="col-span-1 lg:col-span-3">
+                            {/* Belt Canvas - Fixed at bottom */}
+                            <div className="fixed bottom-0 left-0 right-0 z-40 bg-white border-t-2 shadow-lg h-auto">
+                                <div className="w-full flex justify-center overflow-auto">
+                                    <BeltCanvas
+                                        gridData={gridData}
+                                        leatherColor={leatherColor}
+                                    />
+                                </div>
                             </div>
 
                             {/* Specification Sheet */}
@@ -299,7 +265,7 @@ export default function BeltMaker() {
                             </div>
 
                             {/* Customer Form */}
-                            <div className="pt-4 sm:pt-6">
+                            <div className="pt-4 sm:pt-6 md:mb-25 xl:mb-0 lg:mb-0">
                                 <CustomerForm
                                     canvasRef={canvasRef}
                                     stampImage={stampImage}
@@ -325,7 +291,7 @@ export default function BeltMaker() {
                     </div>
                 </div>
                 {/* Customer Form - Mobile only */}
-                <div className="lg:hidden  px-4 sm:px-6 mb-8 sm:mb-10">
+                <div className="lg:hidden md:hidden xl:hidden px-4 sm:px-6 mb-18 sm:mb-10">
                     <CustomerForm
                         canvasRef={canvasRef}
                         stampImage={stampImage}

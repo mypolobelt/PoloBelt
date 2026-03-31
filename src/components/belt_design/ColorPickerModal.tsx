@@ -28,8 +28,8 @@ export function ColorPickerModal({
   }
 
   return (
-    <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-none p-8 max-w-4xl w-full max-h-[80vh] overflow-y-auto">
+    <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-40 p-4">
+      <div className="bg-white rounded-none p-8 max-w-5xl w-full max-h-[60vh] overflow-y-auto">
         <div className="flex justify-between items-center mb-6 pb-4 border-b-2 border-gold">
           <h3 className="text-2xl font-serif font-bold text-burgundy">
             Choose Thread Colour
@@ -80,7 +80,7 @@ export function ColorPickerModal({
                 className="w-full h-16 rounded-none mb-2 border border-gray-400"
                 style={{ backgroundColor: hex }}
               />
-              <div className="font-bold text-burgundy text-sm">{id}</div>
+              <div className="font-bold text-sm">{id}</div>
               <div className="text-xs text-charcoal mt-1">{name}</div>
             </button>
           ))}

@@ -4,8 +4,15 @@ import Link from "next/link"
 import { Separator } from "@/components/ui/separator"
 import { SiGodaddy } from "react-icons/si"
 import { motion } from "framer-motion"
+import { usePathname } from "next/navigation"
 
 export default function Footer() {
+    const pathname = usePathname()
+    
+    // Hide footer on belt-maker route
+    if (pathname.includes('belt-maker')) {
+        return null
+    }
     const containerVariants = {
         hidden: { opacity: 0 },
         visible: {

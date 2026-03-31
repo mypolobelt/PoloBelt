@@ -31,7 +31,7 @@ export function DesignPresets({ onLoadPreset }: DesignPresetsProps) {
       <h3 className="text-xl font-serif font-bold text-burgundy mb-4 pb-2 border-b-2 border-gold">
         Load Design
       </h3>
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 gap-3">
+      <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-4 gap-3">
         {presets.map((preset) => (
           <Button
             key={preset.id}

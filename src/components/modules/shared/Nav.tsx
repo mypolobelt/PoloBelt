@@ -116,7 +116,7 @@ const Nav = () => {
                 </NavigationMenu>
 
                 {/* Desktop Right Side */}
-                <div className="lg:hidden xl:flex items-center gap-2 sm:gap-4">
+                <div className="lg:hidden hidden xl:flex items-center gap-2 sm:gap-4">
                     <a href="mailto:sales@mypolobelt.com" className="text-white text-sm sm:text-base lg:text-lg hover:text-white/80 transition-colors truncate">
                         sales@mypolobelt.com
                     </a>
@@ -152,7 +152,7 @@ const Nav = () => {
                     </NavigationMenu>
                 </div>
                 {/* Mobile Header */}
-                <div className="lg:flex xl:hidden items-center justify-between w-full gap-2">
+                <div className="lg:flex md:flex flex xl:hidden items-center justify-between w-full gap-10">
                     <a href="mailto:sales@mypolobelt.com" className="text-white text-md hover:text-white/80 transition-colors truncate">
                         sales@mypolobelt.com
                     </a>
