@@ -2,6 +2,7 @@
 
 import { BELT_SIZES } from '@/database/constants'
 import { Button } from '../ui/button'
+import Link from 'next/link'
 
 interface SizeRow {
   id: string
@@ -27,9 +28,14 @@ export function OrderForm({
       <h3 className="text-lg sm:text-lg md:text-xl lg:text-2xl font-serif font-bold text-burgundy mb-3 sm:mb-4 pb-2 border-b-2 border-gold">
         Order Quantities
       </h3>
-      <p className="text-xs sm:text-sm md:text-sm lg:text-base text-charcoal mb-3 sm:mb-4">
-        Add the sizes and quantities you need:
-      </p>
+      <div className='flex justify-between gap-5'>
+        <p className="text-xs sm:text-sm md:text-sm lg:text-base text-charcoal mb-3 sm:mb-4">
+          Add the sizes and quantities you need
+        </p>
+        <Link href="sizing" className=" text-xs sm:text-sm md:text-sm lg:text-base text-blue-500 mb-3 sm:mb-4">
+          See Our Sizing Guide
+        </Link>
+      </div>
 
       <div className="space-y-2 sm:space-y-3">
         {sizeRows.map((row) => (
