@@ -98,7 +98,7 @@ export function ControlsPanel({
 
   return (
     <>
-      <aside className="bg-white border p-4 sm:p-5 md:p-6 lg:p-7 rounded-none shadow-lg h-fit sticky top-16 sm:top-20 md:top-24 max-w-full sm:max-w-sm overflow-y-auto max-h-[calc(100vh-6rem)] sm:max-h-none">
+      <aside className="bg-white border p-4 sm:p-5 md:p-6 lg:p-2 rounded-none shadow-lg h-fit sticky top-16 sm:top-20 md:top-24 overflow-y-auto max-h-[calc(100vh-6rem)] sm:max-h-none">
         {/* Design Presets */}
         <div className="mb-4 sm:mb-5 md:mb-6">
           <h3 className="text-base sm:text-lg md:text-xl lg:text-2xl font-serif font-bold text-burgundy mb-2 sm:mb-3 pb-2 border-b-2 border-gold">
@@ -142,7 +142,7 @@ export function ControlsPanel({
               <label className="block text-xs font-semibold text-charcoal uppercase tracking-wider mb-2">
                 Thread Colour 1
               </label>
-              <div className="flex gap-2 flex-col sm:flex-row">
+              <div className="flex flex-col gap-2">
                 <input
                   type="text"
                   value={threadColor1}
@@ -163,7 +163,7 @@ export function ControlsPanel({
               <label className="block text-xs font-semibold text-charcoal uppercase tracking-wider mb-2">
                 Thread Colour 2
               </label>
-              <div className="flex gap-2 flex-col sm:flex-row">
+              <div className="flex gap-2 flex-col">
                 <input
                   type="text"
                   value={threadColor2}
@@ -185,7 +185,7 @@ export function ControlsPanel({
                 <label className="block text-xs font-semibold text-charcoal uppercase tracking-wider mb-2">
                   Thread Colour 3
                 </label>
-                <div className="flex gap-2 flex-col sm:flex-row">
+                <div className="flex gap-2 flex-col">
                   <input
                     type="text"
                     value={threadColor3}
@@ -208,7 +208,7 @@ export function ControlsPanel({
                 <label className="block text-xs font-semibold text-charcoal uppercase tracking-wider mb-2">
                   Stripe Color
                 </label>
-                <div className="flex gap-2 flex-col sm:flex-row">
+                <div className="flex gap-2 flex-col">
                   <input
                     type="text"
                     value={stripeColor}

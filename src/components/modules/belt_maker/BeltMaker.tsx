@@ -11,12 +11,16 @@ import { DESIGN_PRESETS, THREAD_COLORS } from '@/database/constants'
 import { generateGridDataFromColors } from '@/database/utils'
 import { useState, useRef, useEffect } from 'react'
 
+// Create default striped pattern with vertical stripes
 const DEFAULT_PATTERN = Array(20)
     .fill(null)
     .map(() =>
         Array(64)
             .fill(null)
-            .map(() => '#FFFFFF')
+            .map((_, colIndex) => {
+                // Create alternating vertical stripes: light and medium grey
+                return colIndex % 4 < 2 ? '#E8E8E8' : '#D0D0D0'
+            })
     )
 
 interface SizeRow {
@@ -168,7 +172,7 @@ export default function BeltMaker() {
 
     return (
         <main className="bg-linear-to-br from-white to-gray-100">
-            <div className="md:w-10/12 mx-auto py-8 sm:py-12 lg:py-8">
+            <div className="w-full mx-auto py-8 sm:py-12 lg:py-8">
                 {/* Header - Responsive */}
                 <header className="px-4 md:px-6 py-4 lg:px-8 text-center">
                     <h1 className="text-3xl sm:text-4xl lg:text-5xl font-serif font-bold text-burgundy mb-1 sm:mb-2 drop-shadow-sm">

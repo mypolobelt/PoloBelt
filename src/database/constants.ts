@@ -179,27 +179,32 @@ export const THREAD_COLORS: ThreadColorDatabase = {
 }
 
 export const BASIC_PALETTE = [
-  'Black',
+  '22',   // dark red
+  '46',   // classic red
+  '225',  // green
+  '212',  // green
+  '291',  // yellow
+  '329',  // orange
+  '50',   // light pink
+  '57',   // pink
+  '68',   // dark pink
+  '149',  // navy
+  '130',  // sky blue
+  '132',  // royal blue
+  '112',  // dark purple
+  '98',   // light purple
+  '110',  // purple
+  '897',  // maroon
+  '187',  // turquoise
+  '399',  // grey
+  '397',  // light grey
+  '400',  // dark grey
+  '1009', // cream
+  '386',  // off white
   'White',
-  '10',
-  '46',
-  '19',
-  '132',
-  '134',
-  '228',
-  '211',
-  '279',
-  '290',
-  '304',
-  '326',
-  '310',
-  '352',
-  '399',
-  '381',
-  '89',
-  '100',
-  '52',
-  '62',
+  'Black',
+  '355',  // light brown
+  '360',  // dark brown
 ]
 
 export const LEATHER_COLORS = {

@@ -26,9 +26,9 @@ const Nav = () => {
 
     return (
         <div className="sticky top-0 z-50 flex bg-[#0f1526] px-2 sm:px-4 md:px-5 py-3 sm:py-4 md:py-5 font-medium">
-            <div className="w-full flex items-center justify-between max-w-7xl mx-auto">
+            <div className=" flex items-center justify-between w-11/12 mx-auto">
                 {/* Desktop Navigation */}
-                <NavigationMenu viewport={false} className="hidden lg:flex flex-1">
+                <NavigationMenu viewport={false} className="hidden lg:hidden xl:flex flex-1">
                     <NavigationMenuList className="flex-wrap">
                         <NavigationMenuItem>
                             <NavigationMenuLink asChild>
@@ -116,7 +116,7 @@ const Nav = () => {
                 </NavigationMenu>
 
                 {/* Desktop Right Side */}
-                <div className="hidden lg:flex items-center gap-2 sm:gap-4">
+                <div className="lg:hidden xl:flex items-center gap-2 sm:gap-4">
                     <a href="mailto:sales@mypolobelt.com" className="text-white text-sm sm:text-base lg:text-lg hover:text-white/80 transition-colors truncate">
                         sales@mypolobelt.com
                     </a>
@@ -152,7 +152,7 @@ const Nav = () => {
                     </NavigationMenu>
                 </div>
                 {/* Mobile Header */}
-                <div className="flex lg:hidden items-center justify-between w-full gap-2">
+                <div className="lg:flex xl:hidden items-center justify-between w-full gap-2">
                     <a href="mailto:sales@mypolobelt.com" className="text-white text-md hover:text-white/80 transition-colors truncate">
                         sales@mypolobelt.com
                     </a>
