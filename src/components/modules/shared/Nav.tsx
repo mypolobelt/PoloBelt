@@ -108,7 +108,7 @@ const Nav = () => {
                         <NavigationMenuItem>
                             <NavigationMenuLink asChild>
                                 <Link href="/belt-maker" className="px-2 sm:px-3 py-2 text-sm sm:text-base text-white hover:text-white/80 transition-colors">
-                                    Belt Maker
+                                    Custom Design Tool
                                 </Link>
                             </NavigationMenuLink>
                         </NavigationMenuItem>
@@ -270,7 +270,7 @@ const Nav = () => {
                                             className="block px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base text-white hover:bg-white/10 rounded-md transition-colors"
                                             onClick={closeSheet}
                                         >
-                                            Belt Maker
+                                            Custom Design Tool
                                         </Link>
                                     </li>
                                     <li className="border-t border-white/10 mt-4 pt-4">

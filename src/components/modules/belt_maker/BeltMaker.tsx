@@ -146,15 +146,25 @@ export default function BeltMaker() {
     }, [colorCount])
 
     useEffect(() => {
+        let designType: 'classic-2' | 'classic-3' | 'stripe-2' | 'stripe-3' = 'classic-2'
+
+        // Determine design type based on color count and stripe color
+        if (colorCount === '3') {
+            designType = stripeColor ? 'stripe-3' : 'classic-3'
+        } else if (colorCount === '2') {
+            designType = stripeColor ? 'stripe-2' : 'classic-2'
+        }
+
         const newGridData = generateGridDataFromColors(
             threadColor1,
             threadColor2,
             threadColor3,
             stripeColor,
-            THREAD_COLORS
+            THREAD_COLORS,
+            designType
         )
         setGridData(newGridData)
-    }, [threadColor1, threadColor2, threadColor3, stripeColor])
+    }, [threadColor1, threadColor2, threadColor3, stripeColor, colorCount])
 
     return (
         <main className="bg-linear-to-br from-white to-gray-100">
@@ -183,7 +193,7 @@ export default function BeltMaker() {
                             leatherColor={leatherColor}
                         />
                     </div>
-                    
+
                     {/* Specification Sheet - Mobile only */}
                     <div className="mt-6 sm:mt-8 md:w-full">
                         <SpecificationSheet
@@ -206,7 +216,7 @@ export default function BeltMaker() {
                             onRemoveSize={handleRemoveSizeRow}
                         />
                     </div>
-                    
+
                 </section>
 
                 {/* Main Content - Responsive Grid */}

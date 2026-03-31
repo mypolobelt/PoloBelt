@@ -3,6 +3,7 @@ export const countries = [
     "Ireland",
     "United States",
     "Germany",
+    "",
     "Afghanistan",
     "Albania",
     "Algeria",
