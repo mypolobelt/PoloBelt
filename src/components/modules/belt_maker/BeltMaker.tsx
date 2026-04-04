@@ -265,7 +265,7 @@ export default function BeltMaker() {
                             </div>
 
                             {/* Customer Form */}
-                            <div className="pt-4 sm:pt-6 md:mb-25 xl:mb-0 lg:mb-0">
+                            <div className="pt-4 sm:pt-6 md:mb-25 xl:mb-0 lg:mb-0 hidden lg:block md:block">
                                 <CustomerForm
                                     canvasRef={canvasRef}
                                     stampImage={stampImage}
