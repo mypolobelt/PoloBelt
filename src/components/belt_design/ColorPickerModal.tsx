@@ -94,7 +94,7 @@ export function ColorPickerModal({
                 }}
               />
               <div className="font-bold text-sm" style={{ color: '#1A1A1A' }}>{id}</div>
-              <div className="text-xs mt-1" style={{ color: '#3D3D3D' }}>{name}</div>
+              {activeTab === 'basic' && <div className="text-xs mt-1" style={{ color: '#3D3D3D' }}>{name}</div>}
             </button>
           ))}
         </div>

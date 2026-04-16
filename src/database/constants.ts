@@ -5,21 +5,21 @@ export const THREAD_COLORS: ThreadColorDatabase = {
   '9': { name: 'Light Pink', hex: '#E8A090' },
   '10': { name: 'Red', hex: '#D87860' },
   '19': { name: 'Dark Red', hex: '#B83830' },
-  '22': { name: 'Burgundy', hex: '#6B2820' },
+  '22': { name: 'dark red', hex: '#6B2820' },
   '27': { name: 'Rose', hex: '#D68B8B' },
-  '46': { name: 'Bright Red', hex: '#D84838' },
+  '46': { name: 'classic red', hex: '#D84838' },
   '47': { name: 'Deep Red', hex: '#B83028' },
   '49': { name: 'Pale Pink', hex: '#F5D5D5' },
-  '50': { name: 'Blush', hex: '#F0C8C8' },
+  '50': { name: 'light pink', hex: '#F0C8C8' },
   '52': { name: 'Hot Pink', hex: '#E85B8B' },
   '54': { name: 'Magenta', hex: '#D6357D' },
-  '57': { name: 'Fuchsia', hex: '#C4286F' },
+  '57': { name: 'pink', hex: '#C4286F' },
   '59': { name: 'Wine', hex: '#7D1B44' },
   '62': { name: 'Purple Pink', hex: '#B8488B' },
   '63': { name: 'Berry', hex: '#A03370' },
   '65': { name: 'Maroon', hex: '#6B1830' },
   '66': { name: 'Dusty Rose', hex: '#C5648F' },
-  '68': { name: 'Crimson', hex: '#A8245B' },
+  '68': { name: 'dark pink', hex: '#A8245B' },
   '69': { name: 'Dark Berry', hex: '#5D1030' },
   '70': { name: 'Black', hex: '#0F0F0F' },
   '72': { name: 'Charcoal', hex: '#1F1F1F' },
@@ -29,35 +29,35 @@ export const THREAD_COLORS: ThreadColorDatabase = {
   '89': { name: 'Purple', hex: '#7B3A7B' },
   '92': { name: 'Orchid', hex: '#9A4D9A' },
   '94': { name: 'Deep Purple', hex: '#5C2B5C' },
-  '98': { name: 'Violet Purple', hex: '#6B3372' },
+  '98': { name: 'light purple', hex: '#6B3372' },
   '100': { name: 'Dark Purple', hex: '#3D1F3D' },
   '101': { name: 'Navy Purple', hex: '#2E1A3A' },
   '102': { name: 'Eggplant', hex: '#3A1F3D' },
-  '110': { name: 'Royal Purple', hex: '#5A3480' },
-  '112': { name: 'Midnight Purple', hex: '#2B1A3D' },
+  '110': { name: 'purple', hex: '#5A3480' },
+  '112': { name: 'dark purple', hex: '#2B1A3D' },
   '123': { name: 'Navy', hex: '#202838' },
   '127': { name: 'Black Navy', hex: '#101820' },
   '129': { name: 'Sky Blue', hex: '#8098B0' },
-  '130': { name: 'Light Blue', hex: '#90A8C0' },
+  '130': { name: 'sky blue', hex: '#90A8C0' },
   '131': { name: 'Blue', hex: '#5078A0' },
-  '132': { name: 'Royal Blue', hex: '#3060A0' },
+  '132': { name: 'royal blue', hex: '#3060A0' },
   '134': { name: 'Dark Blue', hex: '#204080' },
   '142': { name: 'Cobalt', hex: '#3068A0' },
-  '149': { name: 'Midnight Blue', hex: '#182848' },
+  '149': { name: 'navy', hex: '#182848' },
   '168': { name: 'Teal Blue', hex: '#3D7B8B' },
   '169': { name: 'Deep Teal', hex: '#2B6070' },
   '170': { name: 'Dark Teal', hex: '#1A4352' },
   '185': { name: 'Aqua', hex: '#5BA09A' },
   '186': { name: 'Turquoise', hex: '#4A8B82' },
-  '187': { name: 'Seafoam', hex: '#3D7A73' },
+  '187': { name: 'turquoise', hex: '#3D7A73' },
   '188': { name: 'Forest Teal', hex: '#2E635C' },
   '189': { name: 'Dark Green', hex: '#385840' },
   '203': { name: 'Green', hex: '#507850' },
   '205': { name: 'Emerald', hex: '#2E6840' },
   '210': { name: 'Forest Green', hex: '#2E5838' },
   '211': { name: 'Deep Green', hex: '#284830' },
-  '212': { name: 'Hunter Green', hex: '#1F3828' },
-  '225': { name: 'Grass Green', hex: '#689058' },
+  '212': { name: 'green', hex: '#1F3828' },
+  '225': { name: 'green', hex: '#689058' },
   '228': { name: 'Kelly Green', hex: '#488050' },
   '230': { name: 'Medium Green', hex: '#3E7048' },
   '235': { name: 'Sage', hex: '#B8B8B8' },
@@ -78,7 +78,7 @@ export const THREAD_COLORS: ThreadColorDatabase = {
   '281': { name: 'Mustard', hex: '#9A8B2B' },
   '288': { name: 'Light Yellow', hex: '#F0E888' },
   '290': { name: 'Canary', hex: '#F0D040' },
-  '291': { name: 'Golden Yellow', hex: '#E0B830' },
+  '291': { name: 'yellow', hex: '#E0B830' },
   '298': { name: 'Butter', hex: '#E8C060' },
   '301': { name: 'Cream', hex: '#FFF8DC' },
   '302': { name: 'Peach', hex: '#FFDAB9' },
@@ -94,7 +94,7 @@ export const THREAD_COLORS: ThreadColorDatabase = {
   '316': { name: 'Rust', hex: '#B7410E' },
   '326': { name: 'Burnt Orange', hex: '#D86020' },
   '328': { name: 'Coral', hex: '#E88860' },
-  '329': { name: 'Salmon', hex: '#E89880' },
+  '329': { name: 'orange', hex: '#E89880' },
   '330': { name: 'Terra Cotta', hex: '#E2725B' },
   '332': { name: 'Red Orange', hex: '#FF5733' },
   '335': { name: 'Tomato', hex: '#D84830' },
@@ -102,9 +102,9 @@ export const THREAD_COLORS: ThreadColorDatabase = {
   '341': { name: 'Cherry', hex: '#C03830' },
   '347': { name: 'Adobe', hex: '#C8856B' },
   '352': { name: 'Dark Brown', hex: '#503020' },
-  '355': { name: 'Chestnut', hex: '#704838' },
+  '355': { name: 'light brown', hex: '#704838' },
   '358': { name: 'Chocolate', hex: '#402818' },
-  '360': { name: 'Espresso', hex: '#301810' },
+  '360': { name: 'dark brown', hex: '#301810' },
   '361': { name: 'Khaki', hex: '#C3B091' },
   '363': { name: 'Sand', hex: '#D6BA8B' },
   '365': { name: 'Camel', hex: '#A8764A' },
@@ -117,11 +117,11 @@ export const THREAD_COLORS: ThreadColorDatabase = {
   '379': { name: 'Sienna', hex: '#906850' },
   '380': { name: 'Deep Brown', hex: '#382010' },
   '381': { name: 'Very Dark Brown', hex: '#1A0F0A' },
-  '386': { name: 'Light Grey', hex: '#D8D8D8' },
+  '386': { name: 'off white', hex: '#D8D8D8' },
   '392': { name: 'Grey', hex: '#A8A8A8' },
-  '397': { name: 'Silver', hex: '#C8C8C8' },
-  '399': { name: 'Mid Grey', hex: '#8B8B8B' },
-  '400': { name: 'Dark Grey', hex: '#2B2B2B' },
+  '397': { name: 'light grey', hex: '#C8C8C8' },
+  '399': { name: 'grey', hex: '#8B8B8B' },
+  '400': { name: 'dark grey', hex: '#2B2B2B' },
   '401': { name: 'Graphite', hex: '#1A1A1A' },
   '410': { name: 'Ocean Blue', hex: '#4682B4' },
   '433': { name: 'Cerulean', hex: '#5DADE2' },
@@ -157,7 +157,7 @@ export const THREAD_COLORS: ThreadColorDatabase = {
   '894': { name: 'Blush Pink', hex: '#FFB6C1' },
   '895': { name: 'Shell', hex: '#FFE4E1' },
   '896': { name: 'Wine Red', hex: '#722F37' },
-  '897': { name: 'Cabernet', hex: '#800020' },
+  '897': { name: 'maroon', hex: '#800020' },
   '903': { name: 'Driftwood', hex: '#AF9B7F' },
   '905': { name: 'Umber', hex: '#635147' },
   '921': { name: 'Dusk Blue', hex: '#5F8DA3' },
@@ -170,41 +170,38 @@ export const THREAD_COLORS: ThreadColorDatabase = {
   '1003': { name: 'Flame', hex: '#E25822' },
   '1004': { name: 'Fire', hex: '#DC143C' },
   '1005': { name: 'Garnet', hex: '#8B0000' },
-  '1009': { name: 'Ecru', hex: '#EDEADE' },
+  '1009': { name: 'cream', hex: '#EDEADE' },
   '1089': { name: 'Pool Blue', hex: '#87CEEB' },
   '1096': { name: 'Powder Blue', hex: '#B0E0E6' },
-  '2': { name: 'Off White', hex: '#F5E8E0' },
-  'White': { name: 'White', hex: '#FFFFFF' },
-  'Black': { name: 'Black', hex: '#000000' },
 }
 
 export const BASIC_PALETTE = [
   '22',   // dark red
   '46',   // classic red
-  '225',  // green
-  '212',  // green
-  '291',  // yellow
-  '329',  // orange
   '50',   // light pink
   '57',   // pink
   '68',   // dark pink
-  '149',  // navy
-  '130',  // sky blue
-  '132',  // royal blue
-  '112',  // dark purple
   '98',   // light purple
   '110',  // purple
-  '897',  // maroon
+  '112',  // dark purple
+  '130',  // sky blue
+  '132',  // royal blue
+  '149',  // navy
   '187',  // turquoise
-  '399',  // grey
-  '397',  // light grey
-  '400',  // dark grey
-  '1009', // cream
-  '386',  // off white
-  'White',
-  'Black',
+  '212',  // green
+  '225',  // green
+  '291',  // yellow
+  '329',  // orange
   '355',  // light brown
   '360',  // dark brown
+  '386',  // off white
+  '397',  // light grey
+  '399',  // grey
+  '400',  // dark grey
+  '897',  // maroon
+  '1009', // cream
+  'White',
+  'Black',
 ]
 
 export const LEATHER_COLORS = {
