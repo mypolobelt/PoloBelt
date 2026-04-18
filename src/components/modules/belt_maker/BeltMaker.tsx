@@ -53,6 +53,8 @@ export default function BeltMaker() {
     ])
     const [colorPickerOpen, setColorPickerOpen] = useState(false)
     const [currentColorField, setCurrentColorField] = useState<1 | 2 | 3 | 4 | null>(null)
+    const [selectedPreset, setSelectedPreset] = useState<string | null>(null)
+    const [classicColorCount, setClassicColorCount] = useState<2 | 3 | null>(null)
     const canvasRef = useRef<HTMLCanvasElement>(null!)
 
     const handleStampChange = (file: File | null) => {
@@ -125,35 +127,56 @@ export default function BeltMaker() {
     }
 
     const handlePresetLoad = (presetId: string) => {
+        setSelectedPreset(presetId)
         const preset = DESIGN_PRESETS[presetId]
-        if (preset) {
+        if (!preset) return
+
+        // Special handling for "The Classic" - show image and let user pick 2 or 3 colors
+        if (presetId === 'plk') {
             setDesignName(preset.name)
             setLeatherColor(preset.leather)
             setBuckleFinish(preset.buckle)
-            setThreadColor1('')
-            setThreadColor2('')
-            setThreadColor3('')
-            setStripeColor('')
-            setShowStripeColor(false)
-            if (preset.threads.length > 0) {
-                setThreadColor1(preset.threads[0])
-            }
-            if (preset.threads.length > 1) {
-                setThreadColor2(preset.threads[1])
-            }
-            if (preset.threads.length > 2) {
-                setThreadColor3(preset.threads[2])
-            }
-            if (preset.threads.length > 3) {
-                setStripeColor(preset.threads[3])
-                setShowStripeColor(true)
-            } else {
-                setShowStripeColor(false)
-            }
-            setColorCount(preset.threads.length.toString())
-            setShowColorCountSection(true)
             setCurrentStage(2)
+            return
         }
+
+        // Standard preset loading for other designs
+        setDesignName(preset.name)
+        setLeatherColor(preset.leather)
+        setBuckleFinish(preset.buckle)
+        setThreadColor1('')
+        setThreadColor2('')
+        setThreadColor3('')
+        setStripeColor('')
+        setShowStripeColor(false)
+        if (preset.threads.length > 0) {
+            setThreadColor1(preset.threads[0])
+        }
+        if (preset.threads.length > 1) {
+            setThreadColor2(preset.threads[1])
+        }
+        if (preset.threads.length > 2) {
+            setThreadColor3(preset.threads[2])
+        }
+        if (preset.threads.length > 3) {
+            setStripeColor(preset.threads[3])
+            setShowStripeColor(true)
+        } else {
+            setShowStripeColor(false)
+        }
+        setColorCount(preset.threads.length.toString())
+        setShowColorCountSection(true)
+        setShowThreadColorSection(true)
+        setShowThreadColor3(preset.threads.length >= 3)
+        setCurrentStage(2)
+    }
+
+    const handleClassicColorCount = (count: 2 | 3) => {
+        setClassicColorCount(count)
+        setColorCount(count.toString())
+        setShowColorCountSection(true)
+        setShowThreadColorSection(true)
+        setShowThreadColor3(count === 3)
     }
 
     const openColorPicker = (field: 1 | 2 | 3 | 4) => {
@@ -311,7 +334,7 @@ export default function BeltMaker() {
                 {/* Stage 2: Customize Design */}
                 {currentStage === 2 && (
                     <>
-                        <section className="px-4 sm:px-6 lg:px-8 pb-48">
+                        <section className="px-4 sm:px-6 lg:px-8 lg:pb-48 pb-20">
                             <div className="max-w-4xl mx-auto">
                                 {/* Design Name */}
                                 <div className="bg-white border p-6 rounded-none shadow-lg mb-6">
@@ -327,21 +350,69 @@ export default function BeltMaker() {
                                     />
                                 </div>
 
-                                {/* Number of Colors */}
-                                <div className="bg-white border p-6 rounded-none shadow-lg mb-6">
-                                    <h3 className="text-lg font-serif font-bold text-burgundy mb-4 pb-2 border-b-2 border-gold">
-                                        Number of Thread Colours
-                                    </h3>
-                                    <select
-                                        value={colorCount}
-                                        onChange={(e) => setColorCount(e.target.value)}
-                                        className="w-full px-3 py-2 border-2 border-gray-300 rounded-none font-sans text-sm focus:outline-none focus:border-gold"
-                                    >
-                                        <option value="">-- Select Number of Colors --</option>
-                                        <option value="2">2 Colors</option>
-                                        <option value="3">3 Colors</option>
-                                    </select>
-                                </div>
+                                {/* The Classic Image - Always visible when this preset is selected */}
+                                {selectedPreset === 'plk' && (
+                                    <div className="bg-white border p-6 rounded-none shadow-lg mb-6">
+                                        <h3 className="text-lg font-serif font-bold text-burgundy mb-4 pb-2 border-b-2 border-gold text-center">
+                                            The Classic Design
+                                        </h3>
+                                        <div className="flex justify-center mb-6">
+                                            <div className="relative w-64 h-64 aspect-square">
+                                                <Image
+                                                    src="/assets/belt_design/Classic.jpg"
+                                                    alt="The Classic Design"
+                                                    fill
+                                                    className="object-contain "
+                                                />
+                                            </div>
+                                        </div>
+                                        {!classicColorCount ? (
+                                            <>
+                                                <p className="text-sm text-charcoal mb-4 text-center">
+                                                    Select how many colours you would like for your Classic design
+                                                </p>
+                                                <div className="flex justify-center gap-4">
+                                                    <Button
+                                                        onClick={() => handleClassicColorCount(2)}
+                                                        variant="outline"
+                                                        className="px-8 py-3"
+                                                    >
+                                                        2 Colours
+                                                    </Button>
+                                                    <Button
+                                                        onClick={() => handleClassicColorCount(3)}
+                                                        variant="outline"
+                                                        className="px-8 py-3"
+                                                    >
+                                                        3 Colours
+                                                    </Button>
+                                                </div>
+                                            </>
+                                        ) : (
+                                            <p className="text-sm text-charcoal mb-2 text-center">
+                                                Selected: {classicColorCount} Colours
+                                            </p>
+                                        )}
+                                    </div>
+                                )}
+
+                                {/* Number of Colors - For non-Classic designs or Start From Scratch */}
+                                {selectedPreset !== 'plk' && (
+                                    <div className="bg-white border p-6 rounded-none shadow-lg mb-6">
+                                        <h3 className="text-lg font-serif font-bold text-burgundy mb-4 pb-2 border-b-2 border-gold">
+                                            Number of Thread Colours
+                                        </h3>
+                                        <select
+                                            value={colorCount}
+                                            onChange={(e) => setColorCount(e.target.value)}
+                                            className="w-full px-3 py-2 border-2 border-gray-300 rounded-none font-sans text-sm focus:outline-none focus:border-gold"
+                                        >
+                                            <option value="">-- Select Number of Colors --</option>
+                                            <option value="2">2 Colors</option>
+                                            <option value="3">3 Colors</option>
+                                        </select>
+                                    </div>
+                                )}
 
                                 {/* Thread Colors */}
                                 {showThreadColorSection && (
@@ -365,7 +436,7 @@ export default function BeltMaker() {
                                                     />
                                                     <Button
                                                         onClick={() => openColorPicker(1)}
-                                                        className="px-4 py-2"
+
                                                     >
                                                         Choose
                                                     </Button>
@@ -385,9 +456,7 @@ export default function BeltMaker() {
                                                         className="flex-1 px-3 py-2 border-2 border-gray-300 rounded-none font-sans text-sm focus:outline-none focus:border-gold"
                                                     />
                                                     <Button
-                                                        onClick={() => openColorPicker(2)}
-                                                        className="px-4 py-2"
-                                                    >
+                                                        onClick={() => openColorPicker(2)}                                                    >
                                                         Choose
                                                     </Button>
                                                 </div>
@@ -408,7 +477,6 @@ export default function BeltMaker() {
                                                         />
                                                         <Button
                                                             onClick={() => openColorPicker(3)}
-                                                            className="px-4 py-2"
                                                         >
                                                             Choose
                                                         </Button>
@@ -560,7 +628,7 @@ export default function BeltMaker() {
                                 {/* Navigation */}
                                 <div className="flex justify-between items-center pt-4">
                                     <Button
-                                        onClick={() => setCurrentStage(1)}
+                                        onClick={() => handleResetDesign()}
                                         variant="outline"
                                         className="px-6"
                                     >
@@ -577,18 +645,12 @@ export default function BeltMaker() {
                             </div>
                         </section>
 
-                        {/* Fixed Canvas at Bottom for Stage 2 */}
-                        <div className="fixed bottom-0 left-0 right-0 z-10 bg-white border-t-2 shadow-lg">
-                            <div className="w-full flex justify-center p-2 sm:p-3 overflow-x-auto">
-                                <BeltCanvas gridData={gridData} leatherColor={leatherColor} />
-                            </div>
-                        </div>
                     </>
                 )}
 
                 {/* Stage 3: Sizes & Quantities */}
                 {currentStage === 3 && (
-                    <section className="px-4 sm:px-6 lg:px-8 pb-12">
+                    <section className="px-4 sm:px-6 lg:px-8 lg:pb-48 pb-20">
                         <div className="max-w-4xl mx-auto">
                             <SpecificationSheet
                                 designName={designName}
@@ -608,20 +670,20 @@ export default function BeltMaker() {
                                 />
                             </div>
 
-                            <div className="flex justify-between items-center mt-8">
+                            <div className="flex justify-between items-center mt-4">
                                 <Button
                                     onClick={() => setCurrentStage(2)}
                                     variant="outline"
-                                    className="px-6"
+                                    className=""
                                 >
-                                    ← Back to Customization
+                                    ← Back
                                 </Button>
                                 <Button
                                     onClick={() => setCurrentStage(4)}
                                     disabled={!canProceedToStage4()}
                                     className="px-8"
                                 >
-                                    Continue to Your Details →
+                                    Continue  →
                                 </Button>
                             </div>
                         </div>
@@ -630,7 +692,7 @@ export default function BeltMaker() {
 
                 {/* Stage 4: Customer Details */}
                 {currentStage === 4 && (
-                    <section className="px-4 sm:px-6 lg:px-8 pb-12">
+                    <section className="px-4 sm:px-6 lg:px-8 lg:pb-48 pb-20">
                         <div className="max-w-4xl mx-auto">
                             <SpecificationSheet
                                 designName={designName}
@@ -672,16 +734,25 @@ export default function BeltMaker() {
                                 >
                                     ← Back to Sizes
                                 </Button>
-                                <Button
+                                {/* <Button
                                     onClick={handleResetDesign}
                                     variant="outline"
                                     className="px-6 text-red-600 border-red-600 hover:bg-red-50"
                                 >
                                     Start New Design
-                                </Button>
+                                </Button> */}
                             </div>
                         </div>
                     </section>
+                )}
+
+                {/* Fixed Canvas at Bottom for Stages 2, 3, 4 */}
+                {currentStage >= 2 && currentStage <= 4 && (
+                    <div className="fixed bottom-0 left-0 right-0 z-10 bg-white border-t-2 shadow-lg">
+                        <div className="w-full flex justify-center p-2 sm:p-3 overflow-x-auto">
+                            <BeltCanvas gridData={gridData} leatherColor={leatherColor} />
+                        </div>
+                    </div>
                 )}
 
                 <ColorPickerModal
