@@ -2,14 +2,16 @@
 'use client'
 
 import { BeltCanvas } from '@/components/belt_design/BeltCanvas'
-import { ControlsPanel } from '@/components/belt_design/ControlsPanel'
 import { CustomerForm } from '@/components/belt_design/CustomerForm'
 import { DesignPresets } from '@/components/belt_design/DesignPresets'
 import { OrderForm } from '@/components/belt_design/OrderForm'
 import { SpecificationSheet } from '@/components/belt_design/SpecificationSheet'
+import { ColorPickerModal } from '@/components/belt_design/ColorPickerModal'
+import { Button } from '@/components/ui/button'
 import { DESIGN_PRESETS, THREAD_COLORS } from '@/database/constants'
 import { generateGridDataFromColors } from '@/database/utils'
 import { useState, useRef, useEffect } from 'react'
+import Image from 'next/image'
 
 // Create empty grid pattern - just plain canvas with grid lines
 const DEFAULT_PATTERN = Array(20)
@@ -17,7 +19,7 @@ const DEFAULT_PATTERN = Array(20)
     .map(() =>
         Array(64)
             .fill(null)
-            .map(() => '#F5F5F5') // Light grey grid, no design
+            .map(() => '#F5F5F5')
     )
 
 interface SizeRow {
@@ -26,7 +28,10 @@ interface SizeRow {
     quantity: number
 }
 
+type Stage = 1 | 2 | 3 | 4
+
 export default function BeltMaker() {
+    const [currentStage, setCurrentStage] = useState<Stage>(1)
     const [gridData, setGridData] = useState<string[][]>(DEFAULT_PATTERN)
     const [designName, setDesignName] = useState('')
     const [beltWidth, setBeltWidth] = useState('Standard (3cm)')
@@ -42,9 +47,12 @@ export default function BeltMaker() {
     const [showThreadColor3, setShowThreadColor3] = useState(false)
     const [showStripeColor, setShowStripeColor] = useState(false)
     const [stampImage, setStampImage] = useState<string | null>(null)
+    const [teamColorImage, setTeamColorImage] = useState<string | null>(null)
     const [sizeRows, setSizeRows] = useState<SizeRow[]>([
         { id: '1', size: '', quantity: 1 },
     ])
+    const [colorPickerOpen, setColorPickerOpen] = useState(false)
+    const [currentColorField, setCurrentColorField] = useState<1 | 2 | 3 | 4 | null>(null)
     const canvasRef = useRef<HTMLCanvasElement>(null!)
 
     const handleStampChange = (file: File | null) => {
@@ -59,6 +67,20 @@ export default function BeltMaker() {
 
     const handleStampRemove = () => {
         setStampImage(null)
+    }
+
+    const handleTeamColorImageChange = (file: File | null) => {
+        if (file) {
+            const reader = new FileReader()
+            reader.onload = (e) => {
+                setTeamColorImage(e.target?.result as string)
+            }
+            reader.readAsDataURL(file)
+        }
+    }
+
+    const handleTeamColorImageRemove = () => {
+        setTeamColorImage(null)
     }
 
     const handleAddSizeRow = () => {
@@ -94,6 +116,8 @@ export default function BeltMaker() {
         setShowThreadColor3(false)
         setShowStripeColor(false)
         setStampImage(null)
+        setTeamColorImage(null)
+        setCurrentStage(1)
     }
 
     const handleResetOrder = () => {
@@ -106,15 +130,11 @@ export default function BeltMaker() {
             setDesignName(preset.name)
             setLeatherColor(preset.leather)
             setBuckleFinish(preset.buckle)
-
-            // Clear all thread colors first
             setThreadColor1('')
             setThreadColor2('')
             setThreadColor3('')
             setStripeColor('')
             setShowStripeColor(false)
-
-            // Then set the new ones based on preset
             if (preset.threads.length > 0) {
                 setThreadColor1(preset.threads[0])
             }
@@ -130,10 +150,42 @@ export default function BeltMaker() {
             } else {
                 setShowStripeColor(false)
             }
-
             setColorCount(preset.threads.length.toString())
             setShowColorCountSection(true)
+            setCurrentStage(2)
         }
+    }
+
+    const openColorPicker = (field: 1 | 2 | 3 | 4) => {
+        setCurrentColorField(field)
+        setColorPickerOpen(true)
+    }
+
+    const handleSelectColor = (colorId: string, colorName: string) => {
+        const displayText = `${colorName} ${colorId}`
+        switch (currentColorField) {
+            case 1:
+                setThreadColor1(displayText)
+                break
+            case 2:
+                setThreadColor2(displayText)
+                break
+            case 3:
+                setThreadColor3(displayText)
+                break
+            case 4:
+                setStripeColor(displayText)
+                break
+        }
+        setColorPickerOpen(false)
+    }
+
+    const canProceedToStage3 = () => {
+        return colorCount && threadColor1 && threadColor2
+    }
+
+    const canProceedToStage4 = () => {
+        return sizeRows.some(row => row.size && row.quantity > 0)
     }
 
     useEffect(() => {
@@ -147,24 +199,17 @@ export default function BeltMaker() {
     }, [colorCount])
 
     useEffect(() => {
-        // Only update grid if a color count is actually selected
         if (!colorCount) {
             return
         }
-
         let designType: 'classic-2' | 'classic-3' | 'stripe-2' | 'stripe-3' = 'classic-2'
         const colorCountNum = parseInt(colorCount) || 0
         const hasStripe = !!stripeColor
-
-        // Determine design type based on stripe and color count
         if (hasStripe) {
-            // Stripe design: 3+ colors or colorCount >= 3 means stripe-3, else stripe-2
             designType = colorCountNum >= 3 ? 'stripe-3' : 'stripe-2'
         } else {
-            // Classic design without stripe
             designType = colorCount === '3' ? 'classic-3' : 'classic-2'
         }
-
         const newGridData = generateGridDataFromColors(
             threadColor1,
             threadColor2,
@@ -176,10 +221,50 @@ export default function BeltMaker() {
         setGridData(newGridData)
     }, [threadColor1, threadColor2, threadColor3, stripeColor, colorCount])
 
+    const StageIndicator = () => (
+        <div className="flex justify-center items-center gap-2 sm:gap-4 mb-8">
+            {[1, 2, 3, 4].map((stage) => (
+                <div key={stage} className="flex items-center">
+                    <div className={`w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center font-bold text-sm sm:text-base transition-all ${
+                        currentStage > stage
+                            ? 'bg-primary text-white'
+                            : currentStage === stage
+                                ? 'border border-primary text-primary'
+                                : 'bg-gray-200 text-gray-500'
+                    }`}>
+                        {currentStage > stage ? (
+                            <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                            </svg>
+                        ) : (
+                            stage
+                        )}
+                    </div>
+                    {stage < 4 && (
+                        <div className={`w-8 sm:w-12 h-1 mx-1 sm:mx-2 transition-all ${
+                            currentStage > stage ? 'bg-primary' : 'bg-gray-200'
+                        }`} />
+                    )}
+                </div>
+            ))}
+        </div>
+    )
+
+    const StageLabel = () => {
+        const labels = ['Choose Design', 'Customize', 'Sizes & Quantities', 'Your Details']
+        return (
+            <div className="text-center mb-6">
+                <span className="text-lg sm:text-xl font-serif font-bold text-burgundy">
+                    Stage {currentStage}: {labels[currentStage - 1]}
+                </span>
+            </div>
+        )
+    }
+
     return (
-        <main className="bg-linear-to-br from-white to-gray-100">
-            <div className="w-full mx-auto py-8 sm:py-12 lg:py-8">
-                {/* Header - Responsive */}
+        <main className="bg-linear-to-br from-white to-gray-100 min-h-screen">
+            <div className="w-full mx-auto py-6 sm:py-8 lg:py-6">
+                {/* Header */}
                 <header className="px-4 md:px-6 py-4 lg:px-8 text-center">
                     <h1 className="text-3xl sm:text-4xl lg:text-5xl font-serif font-bold text-burgundy mb-1 sm:mb-2 drop-shadow-sm">
                         Polo Belt Designer
@@ -189,73 +274,332 @@ export default function BeltMaker() {
                     </p>
                 </header>
 
-                {/* Design Presets - Responsive */}
-                <section className="px-4 sm:px-6 lg:px-8 mb-8 sm:mb-10 lg:mb-12">
-                    <DesignPresets onLoadPreset={handlePresetLoad} />
-                </section>
+                {/* Stage Indicator */}
+                <div className="px-4 sm:px-6 lg:px-8 mt-6">
+                    <StageIndicator />
+                    <StageLabel />
+                </div>
 
-                {/* Main Content - Responsive Grid */}
-                <div className="px-4 sm:px-6 lg:px-8 pb-12 md::pb-30 lg:pb-34">
-                    <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 sm:gap-8 lg:gap-8">
-                        {/* Left Panel - Controls */}
-                        <div className="lg:col-span-1">
-                            <div className="sticky top-20 sm:top-24 max-h-[calc(100vh-5rem)] overflow-y-auto">
-                                <ControlsPanel
-                                    designName={designName}
-                                    onDesignNameChange={setDesignName}
-                                    beltWidth={beltWidth}
-                                    onBeltWidthChange={setBeltWidth}
-                                    leatherColor={leatherColor}
-                                    onLeatherColorChange={setLeatherColor}
-                                    buckleFinish={buckleFinish}
-                                    onBuckleFinishChange={setBuckleFinish}
-                                    colorCount={colorCount}
-                                    onColorCountChange={setColorCount}
-                                    threadColor1={threadColor1}
-                                    onThreadColor1Change={setThreadColor1}
-                                    threadColor2={threadColor2}
-                                    onThreadColor2Change={setThreadColor2}
-                                    threadColor3={threadColor3}
-                                    onThreadColor3Change={setThreadColor3}
-                                    stripeColor={stripeColor}
-                                    onStripeColorChange={setStripeColor}
-                                    showColorCountSection={showColorCountSection}
-                                    showThreadColorSection={showThreadColorSection}
-                                    showThreadColor3={showThreadColor3}
-                                    showStripeColor={showStripeColor}
-                                    stampImage={stampImage}
-                                    onStampChange={handleStampChange}
-                                    onStampRemove={handleStampRemove}
-                                />
+                {/* Stage 1: Choose Design */}
+                {currentStage === 1 && (
+                    <section className="px-4 sm:px-6 lg:px-8">
+                        <div className="max-w-6xl mx-auto">
+                            <div className="bg-white border p-6 rounded-none shadow-lg">
+                                <h3 className="text-xl font-serif font-bold text-burgundy mb-4 pb-2 border-b-2 border-gold text-center">
+                                    Choose Your Design
+                                </h3>
+                                <p className="text-sm text-charcoal mb-6 text-center">
+                                    Select a preset design to get started, or start from scratch
+                                </p>
+                                <DesignPresets onLoadPreset={handlePresetLoad} />
+                            </div>
+                            <div className="mt-6 text-center">
+                                <Button
+                                    onClick={() => {
+                                        setShowColorCountSection(true)
+                                        setCurrentStage(2)
+                                    }}
+                                    className="px-8 py-3"
+                                >
+                                    Start From Scratch →
+                                </Button>
                             </div>
                         </div>
+                    </section>
+                )}
 
-                        {/* Right Panel - Everything (Visible on all screens) */}
-                        <div className="col-span-1 lg:col-span-3">
-                            {/* Belt Canvas - Fixed at bottom */}
-                            <div className="fixed bottom-0 left-0 right-0 z-10 bg-white border-t-2 shadow-lg h-auto">
-                                <div className="w-full flex justify-center overflow-auto">
-                                    <BeltCanvas
-                                        gridData={gridData}
-                                        leatherColor={leatherColor}
+                {/* Stage 2: Customize Design */}
+                {currentStage === 2 && (
+                    <>
+                        <section className="px-4 sm:px-6 lg:px-8 pb-48">
+                            <div className="max-w-4xl mx-auto">
+                                {/* Design Name */}
+                                <div className="bg-white border p-6 rounded-none shadow-lg mb-6">
+                                    <h3 className="text-lg font-serif font-bold text-burgundy mb-4 pb-2 border-b-2 border-gold">
+                                        Design Name
+                                    </h3>
+                                    <input
+                                        type="text"
+                                        value={designName}
+                                        onChange={(e) => setDesignName(e.target.value)}
+                                        placeholder="Enter a name for your design"
+                                        className="w-full px-3 py-2 border-2 border-gray-300 rounded-none font-sans text-sm focus:outline-none focus:border-gold"
                                     />
                                 </div>
-                            </div>
 
-                            {/* Specification Sheet */}
+                                {/* Number of Colors */}
+                                <div className="bg-white border p-6 rounded-none shadow-lg mb-6">
+                                    <h3 className="text-lg font-serif font-bold text-burgundy mb-4 pb-2 border-b-2 border-gold">
+                                        Number of Thread Colours
+                                    </h3>
+                                    <select
+                                        value={colorCount}
+                                        onChange={(e) => setColorCount(e.target.value)}
+                                        className="w-full px-3 py-2 border-2 border-gray-300 rounded-none font-sans text-sm focus:outline-none focus:border-gold"
+                                    >
+                                        <option value="">-- Select Number of Colors --</option>
+                                        <option value="2">2 Colors</option>
+                                        <option value="3">3 Colors</option>
+                                    </select>
+                                </div>
+
+                                {/* Thread Colors */}
+                                {showThreadColorSection && (
+                                    <div className="bg-white border p-6 rounded-none shadow-lg mb-6">
+                                        <h3 className="text-lg font-serif font-bold text-burgundy mb-4 pb-2 border-b-2 border-gold">
+                                            Choose Thread Colours
+                                        </h3>
+
+                                        <div className="space-y-4">
+                                            <div>
+                                                <label className="block text-xs font-semibold text-charcoal uppercase tracking-wider mb-2">
+                                                    Thread Colour 1
+                                                </label>
+                                                <div className="flex gap-2">
+                                                    <input
+                                                        type="text"
+                                                        value={threadColor1}
+                                                        readOnly
+                                                        placeholder="Select a color"
+                                                        className="flex-1 px-3 py-2 border-2 border-gray-300 rounded-none font-sans text-sm focus:outline-none focus:border-gold"
+                                                    />
+                                                    <Button
+                                                        onClick={() => openColorPicker(1)}
+                                                        className="px-4 py-2"
+                                                    >
+                                                        Choose
+                                                    </Button>
+                                                </div>
+                                            </div>
+
+                                            <div>
+                                                <label className="block text-xs font-semibold text-charcoal uppercase tracking-wider mb-2">
+                                                    Thread Colour 2
+                                                </label>
+                                                <div className="flex gap-2">
+                                                    <input
+                                                        type="text"
+                                                        value={threadColor2}
+                                                        readOnly
+                                                        placeholder="Select a color"
+                                                        className="flex-1 px-3 py-2 border-2 border-gray-300 rounded-none font-sans text-sm focus:outline-none focus:border-gold"
+                                                    />
+                                                    <Button
+                                                        onClick={() => openColorPicker(2)}
+                                                        className="px-4 py-2"
+                                                    >
+                                                        Choose
+                                                    </Button>
+                                                </div>
+                                            </div>
+
+                                            {showThreadColor3 && (
+                                                <div>
+                                                    <label className="block text-xs font-semibold text-charcoal uppercase tracking-wider mb-2">
+                                                        Thread Colour 3
+                                                    </label>
+                                                    <div className="flex gap-2">
+                                                        <input
+                                                            type="text"
+                                                            value={threadColor3}
+                                                            readOnly
+                                                            placeholder="Select a color"
+                                                            className="flex-1 px-3 py-2 border-2 border-gray-300 rounded-none font-sans text-sm focus:outline-none focus:border-gold"
+                                                        />
+                                                        <Button
+                                                            onClick={() => openColorPicker(3)}
+                                                            className="px-4 py-2"
+                                                        >
+                                                            Choose
+                                                        </Button>
+                                                    </div>
+                                                </div>
+                                            )}
+
+                                            {showStripeColor && (
+                                                <div>
+                                                    <label className="block text-xs font-semibold text-charcoal uppercase tracking-wider mb-2">
+                                                        Stripe Colour
+                                                    </label>
+                                                    <div className="flex gap-2">
+                                                        <input
+                                                            type="text"
+                                                            value={stripeColor}
+                                                            readOnly
+                                                            placeholder="Select a color"
+                                                            className="flex-1 px-3 py-2 border-2 border-gray-300 rounded-none font-sans text-sm focus:outline-none focus:border-gold"
+                                                        />
+                                                        <Button
+                                                            onClick={() => openColorPicker(4)}
+                                                            className="px-4 py-2"
+                                                        >
+                                                            Choose
+                                                        </Button>
+                                                    </div>
+                                                </div>
+                                            )}
+                                        </div>
+                                    </div>
+                                )}
+
+                                {/* Additional Specifications */}
+                                <div className="bg-white border p-6 rounded-none shadow-lg mb-6">
+                                    <h3 className="text-lg font-serif font-bold text-burgundy mb-4 pb-2 border-b-2 border-gold">
+                                        Belt Specifications
+                                    </h3>
+
+                                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                                        <div>
+                                            <label className="block text-xs font-semibold text-charcoal uppercase tracking-wider mb-2">
+                                                Belt Width
+                                            </label>
+                                            <select
+                                                value={beltWidth}
+                                                onChange={(e) => setBeltWidth(e.target.value)}
+                                                className="w-full px-3 py-2 border-2 border-gray-300 rounded-none font-sans text-sm focus:outline-none focus:border-gold"
+                                            >
+                                                <option value="Standard (3cm)">Standard (3cm)</option>
+                                                <option value="Slim (2.5cm)">Slim (2.5cm)</option>
+                                            </select>
+                                        </div>
+
+                                        <div>
+                                            <label className="block text-xs font-semibold text-charcoal uppercase tracking-wider mb-2">
+                                                Leather Colour
+                                            </label>
+                                            <select
+                                                value={leatherColor}
+                                                onChange={(e) => setLeatherColor(e.target.value)}
+                                                className="w-full px-3 py-2 border-2 border-gray-300 rounded-none font-sans text-sm focus:outline-none focus:border-gold"
+                                            >
+                                                <option value="Brown">Brown</option>
+                                                <option value="Black">Black</option>
+                                                <option value="Tan">Tan</option>
+                                            </select>
+                                        </div>
+
+                                        <div>
+                                            <label className="block text-xs font-semibold text-charcoal uppercase tracking-wider mb-2">
+                                                Buckle Finish
+                                            </label>
+                                            <select
+                                                value={buckleFinish}
+                                                onChange={(e) => setBuckleFinish(e.target.value)}
+                                                className="w-full px-3 py-2 border-2 border-gray-300 rounded-none font-sans text-sm focus:outline-none focus:border-gold"
+                                            >
+                                                <option value="Brass">Brass</option>
+                                                <option value="Silver">Silver</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* Logo Upload */}
+                                <div className="bg-white border p-6 rounded-none shadow-lg mb-6">
+                                    <h3 className="text-lg font-serif font-bold text-burgundy mb-4 pb-2 border-b-2 border-gold">
+                                        Custom Logo / Stamp
+                                    </h3>
+                                    <input
+                                        type="file"
+                                        accept="image/*"
+                                        onChange={(e) => handleStampChange(e.target.files?.[0] || null)}
+                                        className="w-full px-2 py-2 border-2 border-gray-300 rounded-none text-sm"
+                                    />
+                                    {stampImage && (
+                                        <div className="mt-3">
+                                            <Image
+                                                src={stampImage}
+                                                alt="Logo preview"
+                                                height={1000}
+                                                width={1000}
+                                                className="max-w-12 max-h-12"
+                                            />
+                                            <Button
+                                                onClick={handleStampRemove}
+                                                className="mt-2 px-3 py-1 bg-red-600 text-white text-xs"
+                                            >
+                                                Remove
+                                            </Button>
+                                        </div>
+                                    )}
+                                </div>
+
+                                {/* Team Colors Upload */}
+                                <div className="bg-white border p-6 rounded-none shadow-lg mb-6">
+                                    <h3 className="text-lg font-serif font-bold text-burgundy mb-4 pb-2 border-b-2 border-gold">
+                                        Upload Team Colours
+                                    </h3>
+                                    <p className="text-xs text-charcoal mb-3">
+                                        Upload an image of your team colours and we will match them
+                                    </p>
+                                    <input
+                                        type="file"
+                                        accept="image/*"
+                                        onChange={(e) => handleTeamColorImageChange(e.target.files?.[0] || null)}
+                                        className="w-full px-2 py-2 border-2 border-gray-300 rounded-none text-sm"
+                                    />
+                                    {teamColorImage && (
+                                        <div className="mt-3">
+                                            <Image
+                                                src={teamColorImage}
+                                                alt="Team colors"
+                                                className="max-w-12 max-h-12"
+                                                height={1000}
+                                                width={1000}
+                                            />
+                                            <Button
+                                                onClick={handleTeamColorImageRemove}
+                                                className="mt-2 px-3 py-1 bg-red-600 text-white text-xs"
+                                            >
+                                                Remove
+                                            </Button>
+                                        </div>
+                                    )}
+                                </div>
+
+                                {/* Navigation */}
+                                <div className="flex justify-between items-center pt-4">
+                                    <Button
+                                        onClick={() => setCurrentStage(1)}
+                                        variant="outline"
+                                        className="px-6"
+                                    >
+                                        ← Back to Designs
+                                    </Button>
+                                    <Button
+                                        onClick={() => setCurrentStage(3)}
+                                        disabled={!canProceedToStage3()}
+                                        className="px-8"
+                                    >
+                                        Continue to Sizes →
+                                    </Button>
+                                </div>
+                            </div>
+                        </section>
+
+                        {/* Fixed Canvas at Bottom for Stage 2 */}
+                        <div className="fixed bottom-0 left-0 right-0 z-10 bg-white border-t-2 shadow-lg">
+                            <div className="w-full flex justify-center p-2 sm:p-3 overflow-x-auto">
+                                <BeltCanvas gridData={gridData} leatherColor={leatherColor} />
+                            </div>
+                        </div>
+                    </>
+                )}
+
+                {/* Stage 3: Sizes & Quantities */}
+                {currentStage === 3 && (
+                    <section className="px-4 sm:px-6 lg:px-8 pb-12">
+                        <div className="max-w-4xl mx-auto">
                             <SpecificationSheet
                                 designName={designName}
-                                threadColors={[threadColor1, threadColor2, threadColor3, stripeColor].filter(
-                                    (c) => c
-                                )}
+                                threadColors={[threadColor1, threadColor2, threadColor3, stripeColor].filter((c) => c)}
                                 beltWidth={beltWidth}
                                 leatherColor={leatherColor}
                                 buckleFinish={buckleFinish}
                                 hasStamp={!!stampImage}
                             />
 
-                            {/* Order Form */}
-                            <div className="pt-4 sm:pt-6">
+                            <div className="mt-6">
                                 <OrderForm
                                     sizeRows={sizeRows}
                                     onAddSize={handleAddSizeRow}
@@ -264,8 +608,40 @@ export default function BeltMaker() {
                                 />
                             </div>
 
-                            {/* Customer Form */}
-                            <div className="pt-4 sm:pt-6 md:mb-25 xl:mb-0 lg:mb-0 hidden lg:block md:block">
+                            <div className="flex justify-between items-center mt-8">
+                                <Button
+                                    onClick={() => setCurrentStage(2)}
+                                    variant="outline"
+                                    className="px-6"
+                                >
+                                    ← Back to Customization
+                                </Button>
+                                <Button
+                                    onClick={() => setCurrentStage(4)}
+                                    disabled={!canProceedToStage4()}
+                                    className="px-8"
+                                >
+                                    Continue to Your Details →
+                                </Button>
+                            </div>
+                        </div>
+                    </section>
+                )}
+
+                {/* Stage 4: Customer Details */}
+                {currentStage === 4 && (
+                    <section className="px-4 sm:px-6 lg:px-8 pb-12">
+                        <div className="max-w-4xl mx-auto">
+                            <SpecificationSheet
+                                designName={designName}
+                                threadColors={[threadColor1, threadColor2, threadColor3, stripeColor].filter((c) => c)}
+                                beltWidth={beltWidth}
+                                leatherColor={leatherColor}
+                                buckleFinish={buckleFinish}
+                                hasStamp={!!stampImage}
+                            />
+
+                            <div className="mt-6">
                                 <CustomerForm
                                     canvasRef={canvasRef}
                                     stampImage={stampImage}
@@ -287,32 +663,32 @@ export default function BeltMaker() {
                                     onResetOrder={handleResetOrder}
                                 />
                             </div>
+
+                            <div className="flex justify-between items-center mt-8">
+                                <Button
+                                    onClick={() => setCurrentStage(3)}
+                                    variant="outline"
+                                    className="px-6"
+                                >
+                                    ← Back to Sizes
+                                </Button>
+                                <Button
+                                    onClick={handleResetDesign}
+                                    variant="outline"
+                                    className="px-6 text-red-600 border-red-600 hover:bg-red-50"
+                                >
+                                    Start New Design
+                                </Button>
+                            </div>
                         </div>
-                    </div>
-                </div>
-                {/* Customer Form - Mobile only */}
-                <div className="lg:hidden md:hidden xl:hidden px-4 sm:px-6 mb-18 sm:mb-10">
-                    <CustomerForm
-                        canvasRef={canvasRef}
-                        stampImage={stampImage}
-                        designDetails={{
-                            designName,
-                            threadColors: [threadColor1, threadColor2, threadColor3, stripeColor].filter(c => c),
-                            beltWidth,
-                            leatherColor,
-                            buckleFinish,
-                            hasStamp: !!stampImage,
-                        }}
-                        sizeOrders={sizeRows
-                            .filter(row => row.size)
-                            .map(row => ({
-                                size: row.size,
-                                quantity: row.quantity,
-                            }))}
-                        onResetDesign={handleResetDesign}
-                        onResetOrder={handleResetOrder}
-                    />
-                </div>
+                    </section>
+                )}
+
+                <ColorPickerModal
+                    isOpen={colorPickerOpen}
+                    onClose={() => setColorPickerOpen(false)}
+                    onSelectColor={handleSelectColor}
+                />
             </div>
         </main>
     )
