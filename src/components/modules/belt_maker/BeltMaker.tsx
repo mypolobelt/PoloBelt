@@ -350,54 +350,43 @@ export default function BeltMaker() {
                                     />
                                 </div>
 
-                                {/* The Classic Image - Always visible when this preset is selected */}
-                                {selectedPreset === 'plk' && (
+                                {/* Number of Colors - Special handling for The Classic */}
+                                {selectedPreset === 'plk' && !classicColorCount ? (
                                     <div className="bg-white border p-6 rounded-none shadow-lg mb-6">
                                         <h3 className="text-lg font-serif font-bold text-burgundy mb-4 pb-2 border-b-2 border-gold text-center">
                                             The Classic Design
                                         </h3>
                                         <div className="flex justify-center mb-6">
-                                            <div className="relative w-64 h-64 aspect-square">
+                                            <div className="relative w-64 h-64">
                                                 <Image
                                                     src="/assets/belt_design/Classic.jpg"
                                                     alt="The Classic Design"
                                                     fill
-                                                    className="object-contain "
+                                                    className="object-contain"
                                                 />
                                             </div>
                                         </div>
-                                        {!classicColorCount ? (
-                                            <>
-                                                <p className="text-sm text-charcoal mb-4 text-center">
-                                                    Select how many colours you would like for your Classic design
-                                                </p>
-                                                <div className="flex justify-center gap-4">
-                                                    <Button
-                                                        onClick={() => handleClassicColorCount(2)}
-                                                        variant="outline"
-                                                        className="px-8 py-3"
-                                                    >
-                                                        2 Colours
-                                                    </Button>
-                                                    <Button
-                                                        onClick={() => handleClassicColorCount(3)}
-                                                        variant="outline"
-                                                        className="px-8 py-3"
-                                                    >
-                                                        3 Colours
-                                                    </Button>
-                                                </div>
-                                            </>
-                                        ) : (
-                                            <p className="text-sm text-charcoal mb-2 text-center">
-                                                Selected: {classicColorCount} Colours
-                                            </p>
-                                        )}
+                                        <p className="text-sm text-charcoal mb-4 text-center">
+                                            Select how many colours you would like for your Classic design
+                                        </p>
+                                        <div className="flex justify-center gap-4">
+                                            <Button
+                                                onClick={() => handleClassicColorCount(2)}
+                                                variant="outline"
+                                                className="px-8 py-3"
+                                            >
+                                                2 Colours
+                                            </Button>
+                                            <Button
+                                                onClick={() => handleClassicColorCount(3)}
+                                                variant="outline"
+                                                className="px-8 py-3"
+                                            >
+                                                3 Colours
+                                            </Button>
+                                        </div>
                                     </div>
-                                )}
-
-                                {/* Number of Colors - For non-Classic designs or Start From Scratch */}
-                                {selectedPreset !== 'plk' && (
+                                ) : (
                                     <div className="bg-white border p-6 rounded-none shadow-lg mb-6">
                                         <h3 className="text-lg font-serif font-bold text-burgundy mb-4 pb-2 border-b-2 border-gold">
                                             Number of Thread Colours
@@ -499,7 +488,6 @@ export default function BeltMaker() {
                                                         />
                                                         <Button
                                                             onClick={() => openColorPicker(4)}
-                                                            className="px-4 py-2"
                                                         >
                                                             Choose
                                                         </Button>
@@ -628,7 +616,7 @@ export default function BeltMaker() {
                                 {/* Navigation */}
                                 <div className="flex justify-between items-center pt-4">
                                     <Button
-                                        onClick={() => handleResetDesign()}
+                                        onClick={() => setCurrentStage(1)}
                                         variant="outline"
                                         className="px-6"
                                     >
