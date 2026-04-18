@@ -308,7 +308,7 @@ export default function BeltMaker() {
                     <section className="px-4 sm:px-6 lg:px-8">
                         <div className="max-w-6xl mx-auto">
                             <div className="bg-white border p-6 rounded-none shadow-lg">
-                                <h3 className="text-xl font-serif font-bold text-burgundy mb-4 pb-2 border-b-2 border-gold text-center">
+                                <h3 className="text-xl font-serif font-bold text-burgundy pb-2 text-center">
                                     Choose Your Design
                                 </h3>
                                 <p className="text-sm text-charcoal mb-6 text-center">

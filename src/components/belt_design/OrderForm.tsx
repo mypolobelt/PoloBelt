@@ -2,7 +2,8 @@
 
 import { BELT_SIZES } from '@/database/constants'
 import { Button } from '../ui/button'
-import Link from 'next/link'
+import Image from 'next/image'
+import { useState } from 'react'
 
 interface SizeRow {
   id: string
@@ -23,6 +24,8 @@ export function OrderForm({
   onUpdateSize,
   onRemoveSize,
 }: OrderFormProps) {
+  const [showSizingModal, setShowSizingModal] = useState(false)
+
   return (
     <div className="bg-white p-4 sm:p-5 md:p-6 lg:p-7 rounded-none shadow-lg">
       <h3 className="text-lg sm:text-lg md:text-xl lg:text-2xl font-serif font-bold text-burgundy mb-3 sm:mb-4 pb-2 border-b-2 border-gold">
@@ -32,9 +35,12 @@ export function OrderForm({
         <p className="text-xs sm:text-sm md:text-sm lg:text-base text-charcoal mb-3 sm:mb-4">
           Add the sizes and quantities you need
         </p>
-        <Link href="sizing" className=" text-xs sm:text-sm md:text-sm lg:text-base text-blue-500 mb-3 sm:mb-4">
+        <button
+          onClick={() => setShowSizingModal(true)}
+          className="text-xs sm:text-sm md:text-sm lg:text-base text-blue-500 mb-3 sm:mb-4 hover:underline"
+        >
           See Our Sizing Guide
-        </Link>
+        </button>
       </div>
 
       <div className="space-y-2 sm:space-y-3">
@@ -82,6 +88,56 @@ export function OrderForm({
       >
         + Add Another Size
       </Button>
+
+      {/* Sizing Guide Modal */}
+      {showSizingModal && (
+        <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-none shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="sticky top-0 bg-white border-b-2 border-gold p-4 flex justify-between items-center">
+              <h2 className="text-xl font-serif font-bold text-burgundy">
+                Sizing Guide
+              </h2>
+              <button
+                onClick={() => setShowSizingModal(false)}
+                className="text-2xl text-charcoal hover:text-burgundy"
+              >
+                ×
+              </button>
+            </div>
+            <div className="p-6 space-y-8">
+              <div>
+                <h3 className="text-lg font-serif font-bold text-burgundy mb-4 text-center">
+                  Sizing Guide
+                </h3>
+                <Image
+                  src="/assets/Sizing_Guide.webp"
+                  alt="Sizing Guide"
+                  width={1000}
+                  height={600}
+                  className="w-full h-auto"
+                />
+              </div>
+              <div className="border-t-2 border-gray-200 pt-8">
+                <h3 className="text-lg font-serif font-bold text-burgundy mb-4 text-center">
+                  Belt & Collar Sizing Tables
+                </h3>
+                <Image
+                  src="/assets/Size_Table.webp"
+                  alt="Size Table"
+                  width={1000}
+                  height={600}
+                  className="w-full h-auto"
+                />
+              </div>
+            </div>
+            <div className="sticky bottom-0 bg-white border-t-2 border-gold p-4 flex justify-center">
+              <Button onClick={() => setShowSizingModal(false)}>
+                Close
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
