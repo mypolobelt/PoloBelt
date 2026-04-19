@@ -11,6 +11,7 @@ export function DesignPresets({ onLoadPreset }: DesignPresetsProps) {
   const presets = [
     { id: 'plk', name: 'The Classic', image: '/assets/belt_design/Classic.jpg' },
     { id: 'mxyeo', name: 'Classic + Stripe', image: '/assets/belt_design/Classic+Stripe.jpg' },
+    { id: 'classic_3stripe', name: 'Classic + 3 Stripe', image: '/assets/belt_design/Classic+3Stripe.jpg' },
     { id: 'Sunset_Elegance', name: 'Sunset Elegance' },
     { id: 'Ocean_Breeze', name: 'Ocean Breeze' },
     { id: 'Forest_Walk', name: 'Forest Walk' },

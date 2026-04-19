@@ -230,6 +230,15 @@ export const DESIGN_PRESETS: DesignPresets = {
     // colors: ['#C03830', '#488050', '#FFFFFF', '#988070', '#552B06'],
     pattern: null,
   },
+  classic_3stripe: {
+    name: 'Classic + 3 Stripe',
+    threads: ['Blue 132', 'White white', 'Blue 132'],
+    leather: 'Black',
+    buckle: 'Silver',
+    stamp: '',
+    colors: ['#3060A0', '#FFFFFF', '#3060A0', '#1A1A1A'],
+    pattern: null,
+  },
   Sunset_Elegance: {
     name: 'Sunset Elegance',
     threads: ['Blue 132', 'White White'],

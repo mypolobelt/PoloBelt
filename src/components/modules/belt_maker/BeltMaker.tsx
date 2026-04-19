@@ -52,9 +52,12 @@ export default function BeltMaker() {
         { id: '1', size: '', quantity: 1 },
     ])
     const [colorPickerOpen, setColorPickerOpen] = useState(false)
-    const [currentColorField, setCurrentColorField] = useState<1 | 2 | 3 | 4 | null>(null)
+    const [currentColorField, setCurrentColorField] = useState<1 | 2 | 3 | 4 | 5 | 6 | null>(null)
     const [selectedPreset, setSelectedPreset] = useState<string | null>(null)
     const [classicColorCount, setClassicColorCount] = useState<2 | 3 | null>(null)
+    const [classic3StripeColorCount, setClassic3StripeColorCount] = useState<1 | 2 | null>(null)
+    const [outerStripeColor, setOuterStripeColor] = useState('')
+    const [innerStripeColor, setInnerStripeColor] = useState('')
     const canvasRef = useRef<HTMLCanvasElement>(null!)
 
     const handleStampChange = (file: File | null) => {
@@ -119,6 +122,9 @@ export default function BeltMaker() {
         setShowStripeColor(false)
         setStampImage(null)
         setTeamColorImage(null)
+        setClassic3StripeColorCount(null)
+        setOuterStripeColor('')
+        setInnerStripeColor('')
         setCurrentStage(1)
     }
 
@@ -136,6 +142,18 @@ export default function BeltMaker() {
             setDesignName(preset.name)
             setLeatherColor(preset.leather)
             setBuckleFinish(preset.buckle)
+            setCurrentStage(2)
+            return
+        }
+
+        // Special handling for "Classic & 3 Stripe" - show image and let user pick 1 or 2 main colors + outer/inner stripes
+        if (presetId === 'classic_3stripe') {
+            setDesignName(preset.name)
+            setLeatherColor(preset.leather)
+            setBuckleFinish(preset.buckle)
+            setClassic3StripeColorCount(null)
+            setOuterStripeColor('')
+            setInnerStripeColor('')
             setCurrentStage(2)
             return
         }
@@ -179,7 +197,15 @@ export default function BeltMaker() {
         setShowThreadColor3(count === 3)
     }
 
-    const openColorPicker = (field: 1 | 2 | 3 | 4) => {
+    const handleClassic3StripeColorCount = (count: 1 | 2) => {
+        setClassic3StripeColorCount(count)
+        setColorCount(count.toString())
+        setShowColorCountSection(true)
+        setShowThreadColorSection(true)
+        setShowThreadColor3(count === 2)
+    }
+
+    const openColorPicker = (field: 1 | 2 | 3 | 4 | 5 | 6) => {
         setCurrentColorField(field)
         setColorPickerOpen(true)
     }
@@ -198,6 +224,12 @@ export default function BeltMaker() {
                 break
             case 4:
                 setStripeColor(displayText)
+                break
+            case 5:
+                setOuterStripeColor(displayText)
+                break
+            case 6:
+                setInnerStripeColor(displayText)
                 break
         }
         setColorPickerOpen(false)
@@ -386,6 +418,41 @@ export default function BeltMaker() {
                                             </Button>
                                         </div>
                                     </div>
+                                ) : selectedPreset === 'classic_3stripe' && !classic3StripeColorCount ? (
+                                    <div className="bg-white border p-6 rounded-none shadow-lg mb-6">
+                                        <h3 className="text-lg font-serif font-bold text-burgundy mb-4 pb-2 border-b-2 border-gold text-center">
+                                            Classic + 3 Stripe Design
+                                        </h3>
+                                        <div className="flex justify-center mb-6">
+                                            <div className="relative w-64 h-64">
+                                                <Image
+                                                    src="/assets/belt_design/Classic+3Stripe.jpg"
+                                                    alt="Classic + 3 Stripe Design"
+                                                    fill
+                                                    className="object-contain"
+                                                />
+                                            </div>
+                                        </div>
+                                        <p className="text-sm text-charcoal mb-4 text-center">
+                                            Select how many main colours you would like for your design
+                                        </p>
+                                        <div className="flex justify-center gap-4">
+                                            <Button
+                                                onClick={() => handleClassic3StripeColorCount(1)}
+                                                variant="outline"
+                                                className="px-8 py-3"
+                                            >
+                                                1 Main Colour
+                                            </Button>
+                                            <Button
+                                                onClick={() => handleClassic3StripeColorCount(2)}
+                                                variant="outline"
+                                                className="px-8 py-3"
+                                            >
+                                                2 Main Colours
+                                            </Button>
+                                        </div>
+                                    </div>
                                 ) : (
                                     <div className="bg-white border p-6 rounded-none shadow-lg mb-6">
                                         <h3 className="text-lg font-serif font-bold text-burgundy mb-4 pb-2 border-b-2 border-gold">
@@ -493,6 +560,50 @@ export default function BeltMaker() {
                                                         </Button>
                                                     </div>
                                                 </div>
+                                            )}
+
+                                            {/* Outer and Inner Stripe Colors for Classic 3 Stripe */}
+                                            {selectedPreset === 'classic_3stripe' && classic3StripeColorCount && (
+                                                <>
+                                                    <div>
+                                                        <label className="block text-xs font-semibold text-charcoal uppercase tracking-wider mb-2">
+                                                            Outer Stripe Colour
+                                                        </label>
+                                                        <div className="flex gap-2">
+                                                            <input
+                                                                type="text"
+                                                                value={outerStripeColor}
+                                                                readOnly
+                                                                placeholder="Select outer stripe color"
+                                                                className="flex-1 px-3 py-2 border-2 border-gray-300 rounded-none font-sans text-sm focus:outline-none focus:border-gold"
+                                                            />
+                                                            <Button
+                                                                onClick={() => openColorPicker(5)}
+                                                            >
+                                                                Choose
+                                                            </Button>
+                                                        </div>
+                                                    </div>
+                                                    <div>
+                                                        <label className="block text-xs font-semibold text-charcoal uppercase tracking-wider mb-2">
+                                                            Inner Stripe Colour
+                                                        </label>
+                                                        <div className="flex gap-2">
+                                                            <input
+                                                                type="text"
+                                                                value={innerStripeColor}
+                                                                readOnly
+                                                                placeholder="Select inner stripe color"
+                                                                className="flex-1 px-3 py-2 border-2 border-gray-300 rounded-none font-sans text-sm focus:outline-none focus:border-gold"
+                                                            />
+                                                            <Button
+                                                                onClick={() => openColorPicker(6)}
+                                                            >
+                                                                Choose
+                                                            </Button>
+                                                        </div>
+                                                    </div>
+                                                </>
                                             )}
                                         </div>
                                     </div>
