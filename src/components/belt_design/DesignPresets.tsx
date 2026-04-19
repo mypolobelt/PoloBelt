@@ -1,5 +1,6 @@
 'use client'
 
+import Image from "next/image"
 import { Button } from "../ui/button"
 
 interface DesignPresetsProps {
@@ -8,8 +9,8 @@ interface DesignPresetsProps {
 
 export function DesignPresets({ onLoadPreset }: DesignPresetsProps) {
   const presets = [
-    { id: 'plk', name: 'The Classic' },
-    { id: 'mxyeo', name: 'Classic + Stripe' },
+    { id: 'plk', name: 'The Classic', image: '/assets/belt_design/Classic.jpg' },
+    { id: 'mxyeo', name: 'Classic + Stripe', image: '/assets/belt_design/Classic+Stripe.jpg' },
     { id: 'Sunset_Elegance', name: 'Sunset Elegance' },
     { id: 'Ocean_Breeze', name: 'Ocean Breeze' },
     { id: 'Forest_Walk', name: 'Forest Walk' },
@@ -27,21 +28,33 @@ export function DesignPresets({ onLoadPreset }: DesignPresetsProps) {
   ]
 
   return (
-    <div className="bg-white border p-6 rounded-none shadow-lg">
-      <h3 className="text-xl font-serif font-bold text-burgundy mb-4 pb-2 border-b-2 border-gold">
-        Load Design
-      </h3>
-      <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-4 gap-3">
-        {presets.map((preset) => (
+    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+      {presets.map((preset) => (
+        preset.image ? (
+          <button
+            key={preset.id}
+            onClick={() => onLoadPreset(preset.id)}
+            className="relative aspect-square border-2 border-gray-300 rounded-none hover:border-gold hover:shadow-xl transition-all overflow-hidden group"
+          >
+            <Image
+              src={preset.image}
+              alt={preset.name}
+              fill
+              className="object-cover"
+              sizes="(max-width: 768px) 50vw, 300px"
+            />
+            <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors" />
+          </button>
+        ) : (
           <Button
             key={preset.id}
             onClick={() => onLoadPreset(preset.id)}
-            className=" border-gray-300 rounded-none hover:border-gold hover:-translate-y-1 hover:shadow-lg transition-all text-center"
+            className="h-full min-h-10 border-gray-300 rounded-none hover:border-gold hover:-translate-y-1 hover:shadow-lg transition-all text-center"
           >
             <div className="text-xs font-semibold text-charcoal">{preset.name}</div>
           </Button>
-        ))}
-      </div>
+        )
+      ))}
     </div>
   )
 }
