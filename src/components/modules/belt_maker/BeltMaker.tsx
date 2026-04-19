@@ -279,10 +279,11 @@ export default function BeltMaker() {
             threadColor3,
             effectiveStripeColor,
             THREAD_COLORS,
-            designType
+            designType,
+            innerStripeColor
         )
         setGridData(newGridData)
-    }, [threadColor1, threadColor2, threadColor3, stripeColor, outerStripeColor, colorCount, selectedPreset, classic3StripeColorCount])
+    }, [threadColor1, threadColor2, threadColor3, stripeColor, outerStripeColor, innerStripeColor, colorCount, selectedPreset, classic3StripeColorCount])
 
     const StageIndicator = () => (
         <div className="flex justify-center items-center gap-2 sm:gap-4 mb-8">

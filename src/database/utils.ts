@@ -51,7 +51,8 @@ export const generateGridDataFromColors = (
   color3: string = '',
   color4: string = '',
   threadColors: Record<string, { name: string; hex: string }> = {},
-  designType: 'classic-2' | 'classic-3' | 'stripe-2' | 'stripe-3' = 'classic-2'
+  designType: 'classic-2' | 'classic-3' | 'stripe-2' | 'stripe-3' = 'classic-2',
+  color5: string = ''  // color5 is the inner stripe colour for 3-stripe designs
 ): string[][] => {
   const getColorHex = (colorText: string): string | null => {
     if (!colorText) return null
@@ -63,7 +64,8 @@ export const generateGridDataFromColors = (
   const color1Hex = getColorHex(color1)
   const color2Hex = getColorHex(color2)
   const color3Hex = getColorHex(color3)
-  const stripeHex = getColorHex(color4)   // color4 is the stripe colour
+  const stripeHex = getColorHex(color4)   // color4 is the outer stripe colour
+  const innerStripeHex = getColorHex(color5)  // color5 is the inner stripe colour
 
   // Pick the matching base pattern
   let basePattern: string[][]
@@ -97,7 +99,8 @@ export const generateGridDataFromColors = (
     color1Hex,
     color2Hex,
     color3Hex,
-    isStripe ? stripeHex : null
+    isStripe ? stripeHex : null,
+    isStripe ? innerStripeHex : null
   )
 }
 
