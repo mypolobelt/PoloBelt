@@ -259,22 +259,30 @@ export default function BeltMaker() {
         }
         let designType: 'classic-2' | 'classic-3' | 'stripe-2' | 'stripe-3' = 'classic-2'
         const colorCountNum = parseInt(colorCount) || 0
-        const hasStripe = !!stripeColor
-        if (hasStripe) {
+        
+        // For Classic 3 Stripe, use outerStripeColor as the stripe color
+        const effectiveStripeColor = selectedPreset === 'classic_3stripe' ? outerStripeColor : stripeColor
+        const hasStripe = !!effectiveStripeColor
+        
+        if (selectedPreset === 'classic_3stripe') {
+            // For 3-stripe: use stripe-2 for 1 main color, stripe-3 for 2 main colors
+            designType = classic3StripeColorCount === 2 ? 'stripe-3' : 'stripe-2'
+        } else if (hasStripe) {
             designType = colorCountNum >= 3 ? 'stripe-3' : 'stripe-2'
         } else {
             designType = colorCount === '3' ? 'classic-3' : 'classic-2'
         }
+        
         const newGridData = generateGridDataFromColors(
             threadColor1,
             threadColor2,
             threadColor3,
-            stripeColor,
+            effectiveStripeColor,
             THREAD_COLORS,
             designType
         )
         setGridData(newGridData)
-    }, [threadColor1, threadColor2, threadColor3, stripeColor, colorCount])
+    }, [threadColor1, threadColor2, threadColor3, stripeColor, outerStripeColor, colorCount, selectedPreset, classic3StripeColorCount])
 
     const StageIndicator = () => (
         <div className="flex justify-center items-center gap-2 sm:gap-4 mb-8">
