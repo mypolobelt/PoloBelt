@@ -594,22 +594,6 @@ export default function BeltMaker() {
 
         }
 
-        if (colorCount === '3' && !threadColor3) {
-
-            setGridData(DEFAULT_PATTERN)
-
-            return
-
-        }
-
-        if (colorCount === '4' && (!threadColor3 || !stripeColor)) {
-
-            setGridData(DEFAULT_PATTERN)
-
-            return
-
-        }
-
         let designType: 'classic-2' | 'classic-3' | 'stripe-2' | 'stripe-3' = 'classic-2'
 
         const colorCountNum = parseInt(colorCount) || 0
