@@ -46,9 +46,14 @@ export const renderBeltCanvas = (
 
   const rows = gridData.length;
   const cols = gridData[0]?.length || 64;
-
-  const cellWidth = canvas.width / cols;
-  const cellHeight = canvas.height / rows;
+  // Snap all tile edges to integer pixels to avoid hairline seams
+  // when the canvas is scaled in CSS.
+  const colEdges = Array.from({ length: cols + 1 }, (_, i) =>
+    Math.round((i * canvas.width) / cols)
+  );
+  const rowEdges = Array.from({ length: rows + 1 }, (_, i) =>
+    Math.round((i * canvas.height) / rows)
+  );
 
   const leatherColourMap: Record<string, string> = {
     Brown: '#552B06',
@@ -63,8 +68,10 @@ export const renderBeltCanvas = (
   for (let r = 0; r < rows; r++) {
     for (let c = 0; c < cols; c++) {
       let color = gridData[r][c];
-      const x = c * cellWidth;
-      const y = r * cellHeight;
+      const x = colEdges[c];
+      const y = rowEdges[r];
+      const cellWidth = colEdges[c + 1] - x;
+      const cellHeight = rowEdges[r + 1] - y;
 
       // Replace leather placeholder with selected leather color
       if (color === '#552B06') {
