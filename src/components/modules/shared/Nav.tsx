@@ -14,7 +14,7 @@ import {
     SheetTitle,
     SheetTrigger,
 } from "@/components/ui/sheet"
-import { UserRound, Menu } from "lucide-react";
+import { Menu } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 
@@ -39,14 +39,35 @@ const Nav = () => {
                         </NavigationMenuItem>
                         <NavigationMenuItem>
                             <NavigationMenuLink asChild>
-                                <Link href="/about" className="px-2 sm:px-3 py-2 text-sm sm:text-base text-white hover:text-white/80 transition-colors">
-                                    About Us
+                                <Link href="/belt-maker" className="px-2 sm:px-3 py-2 text-sm sm:text-base text-white hover:text-white/80 transition-colors">
+                                    Custom Design Tool
+                                </Link>
+                            </NavigationMenuLink>
+                        </NavigationMenuItem>
+                        <NavigationMenuItem>
+                            <NavigationMenuLink asChild>
+                                <Link href="https://www.etsy.com/shop/MyPoloBelt" target="_blank" className="px-2 sm:px-3 py-2 text-sm sm:text-base text-white hover:text-white/80 transition-colors">
+                                    In Stock Now
+                                </Link>
+                            </NavigationMenuLink>
+                        </NavigationMenuItem>
+                        <NavigationMenuItem>
+                            <NavigationMenuLink asChild>
+                                <Link href="/pricing" className="px-2 sm:px-3 py-2 text-sm sm:text-base text-white hover:text-white/80 transition-colors">
+                                    Pricing
+                                </Link>
+                            </NavigationMenuLink>
+                        </NavigationMenuItem>
+                        <NavigationMenuItem>
+                            <NavigationMenuLink asChild>
+                                <Link href="/sizing" className="px-2 sm:px-3 py-2 text-sm sm:text-base text-white hover:text-white/80 transition-colors">
+                                    Sizing
                                 </Link>
                             </NavigationMenuLink>
                         </NavigationMenuItem>
                         <NavigationMenuItem>
                             <NavigationMenuTrigger className="text-sm sm:text-base text-white">
-                                What We Offer
+                                Gallery
                             </NavigationMenuTrigger>
                             <NavigationMenuContent>
                                 <ul className="flex flex-col min-w-50 bg-[#0f1526] gap-1">
@@ -79,15 +100,8 @@ const Nav = () => {
                         </NavigationMenuItem>
                         <NavigationMenuItem>
                             <NavigationMenuLink asChild>
-                                <Link href="/ordering-process" className="px-2 sm:px-3 py-2 text-sm sm:text-base text-white hover:text-white/80 transition-colors">
-                                    Ordering Process
-                                </Link>
-                            </NavigationMenuLink>
-                        </NavigationMenuItem>
-                        <NavigationMenuItem>
-                            <NavigationMenuLink asChild>
-                                <Link href="/sizing" className="px-2 sm:px-3 py-2 text-sm sm:text-base text-white hover:text-white/80 transition-colors">
-                                    Sizing
+                                <Link href="/about" className="px-2 sm:px-3 py-2 text-sm sm:text-base text-white hover:text-white/80 transition-colors">
+                                    About Us
                                 </Link>
                             </NavigationMenuLink>
                         </NavigationMenuItem>
@@ -95,20 +109,6 @@ const Nav = () => {
                             <NavigationMenuLink asChild>
                                 <Link href="/contact" className="px-2 sm:px-3 py-2 text-sm sm:text-base text-white hover:text-white/80 transition-colors">
                                     Contact Us
-                                </Link>
-                            </NavigationMenuLink>
-                        </NavigationMenuItem>
-                        <NavigationMenuItem>
-                            <NavigationMenuLink asChild>
-                                <Link href="/pricing" className="px-2 sm:px-3 py-2 text-sm sm:text-base text-white hover:text-white/80 transition-colors">
-                                    Pricing
-                                </Link>
-                            </NavigationMenuLink>
-                        </NavigationMenuItem>
-                        <NavigationMenuItem>
-                            <NavigationMenuLink asChild>
-                                <Link href="/belt-maker" className="px-2 sm:px-3 py-2 text-sm sm:text-base text-white hover:text-white/80 transition-colors">
-                                    Custom Design Tool
                                 </Link>
                             </NavigationMenuLink>
                         </NavigationMenuItem>
@@ -120,8 +120,8 @@ const Nav = () => {
                     <a href="mailto:sales@mypolobelt.com" className="text-white text-sm sm:text-base lg:text-lg hover:text-white/80 transition-colors truncate">
                         sales@mypolobelt.com
                     </a>
-                    <div className="h-5 w-[0.5px] bg-white" />
-                    <NavigationMenu viewport={false}>
+                    {/* <div className="h-5 w-[0.5px] bg-white" /> */}
+                    {/* <NavigationMenu viewport={false}>
                         <NavigationMenuList>
                             <NavigationMenuItem>
                                 <NavigationMenuTrigger className="bg-transparent hover:bg-transparent p-0">
@@ -149,13 +149,10 @@ const Nav = () => {
                                 </NavigationMenuContent>
                             </NavigationMenuItem>
                         </NavigationMenuList>
-                    </NavigationMenu>
+                    </NavigationMenu> */}
                 </div>
                 {/* Mobile Header */}
                 <div className="lg:flex md:flex flex xl:hidden items-center justify-between w-full gap-10">
-                    <a href="mailto:sales@mypolobelt.com" className="text-white text-md hover:text-white/80 transition-colors truncate">
-                        sales@mypolobelt.com
-                    </a>
                     <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
                         <SheetTrigger asChild>
                             <button className="text-white p-1 sm:p-2 hover:bg-white/10 rounded-md transition-colors" aria-label="Toggle menu">
@@ -179,11 +176,38 @@ const Nav = () => {
                                     </li>
                                     <li>
                                         <Link
-                                            href="/about"
+                                            href="/belt-maker"
                                             className="block px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base text-white hover:bg-white/10 rounded-md transition-colors"
                                             onClick={closeSheet}
                                         >
-                                            About Us
+                                            Custom Design Tool
+                                        </Link>
+                                    </li>
+                                    <li>
+                                        <Link
+                                            href="https://www.etsy.com/shop/MyPoloBelt" target="_blank"
+                                            className="block px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base text-white hover:bg-white/10 rounded-md transition-colors"
+                                            onClick={closeSheet}
+                                        >
+                                            In Stock Now
+                                        </Link>
+                                    </li>
+                                    <li>
+                                        <Link
+                                            href="/pricing"
+                                            className="block px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base text-white hover:bg-white/10 rounded-md transition-colors"
+                                            onClick={closeSheet}
+                                        >
+                                            Pricing
+                                        </Link>
+                                    </li>
+                                    <li>
+                                        <Link
+                                            href="/sizing"
+                                            className="block px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base text-white hover:bg-white/10 rounded-md transition-colors"
+                                            onClick={closeSheet}
+                                        >
+                                            Sizing
                                         </Link>
                                     </li>
                                     <li>
@@ -191,7 +215,7 @@ const Nav = () => {
                                             onClick={() => setMobileOfferOpen(!mobileOfferOpen)}
                                             className="w-full text-left px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base text-white hover:bg-white/10 rounded-md flex items-center justify-between transition-colors"
                                         >
-                                            What We Offer
+                                            Gallery
                                             <span className={`transform transition-transform duration-200 text-xs ${mobileOfferOpen ? 'rotate-180' : ''}`}>
                                                 ▼
                                             </span>
@@ -230,20 +254,11 @@ const Nav = () => {
                                     </li>
                                     <li>
                                         <Link
-                                            href="/ordering-process"
+                                            href="/about"
                                             className="block px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base text-white hover:bg-white/10 rounded-md transition-colors"
                                             onClick={closeSheet}
                                         >
-                                            Ordering Process
-                                        </Link>
-                                    </li>
-                                    <li>
-                                        <Link
-                                            href="/sizing"
-                                            className="block px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base text-white hover:bg-white/10 rounded-md transition-colors"
-                                            onClick={closeSheet}
-                                        >
-                                            Sizing
+                                            About Us
                                         </Link>
                                     </li>
                                     <li>
@@ -255,25 +270,7 @@ const Nav = () => {
                                             Contact Us
                                         </Link>
                                     </li>
-                                    <li>
-                                        <Link
-                                            href="/pricing"
-                                            className="block px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base text-white hover:bg-white/10 rounded-md transition-colors"
-                                            onClick={closeSheet}
-                                        >
-                                            Pricing
-                                        </Link>
-                                    </li>
-                                    <li>
-                                        <Link
-                                            href="/belt-maker"
-                                            className="block px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base text-white hover:bg-white/10 rounded-md transition-colors"
-                                            onClick={closeSheet}
-                                        >
-                                            Custom Design Tool
-                                        </Link>
-                                    </li>
-                                    <li className="border-t border-white/10 mt-4 pt-4">
+                                    {/* <li className="border-t border-white/10 mt-4 pt-4">
                                         <Link
                                             href="/signin"
                                             className="block px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base text-white hover:bg-white/10 rounded-md transition-colors"
@@ -290,11 +287,14 @@ const Nav = () => {
                                         >
                                             My Account
                                         </Link>
-                                    </li>
+                                    </li> */}
                                 </ul>
                             </nav>
                         </SheetContent>
                     </Sheet>
+                    <a href="mailto:sales@mypolobelt.com" className="text-white text-md hover:text-white/80 transition-colors truncate">
+                        sales@mypolobelt.com
+                    </a>
                 </div>
             </div>
         </div>

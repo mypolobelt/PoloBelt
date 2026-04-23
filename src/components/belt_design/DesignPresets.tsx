@@ -41,7 +41,7 @@ export function DesignPresets({ onLoadPreset }: DesignPresetsProps) {
               src={preset.image}
               alt={preset.name}
               fill
-              className="object-cover"
+              className="object-cover transition-transform duration-300 ease-out group-hover:scale-105"
               sizes="(max-width: 768px) 50vw, 300px"
             />
             <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors" />

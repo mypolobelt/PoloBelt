@@ -122,6 +122,8 @@ export default function BeltMaker() {
         setShowStripeColor(false)
         setStampImage(null)
         setTeamColorImage(null)
+        setSelectedPreset(null)
+        setClassicColorCount(null)
         setClassic3StripeColorCount(null)
         setOuterStripeColor('')
         setInnerStripeColor('')
@@ -130,6 +132,11 @@ export default function BeltMaker() {
 
     const handleResetOrder = () => {
         setSizeRows([{ id: '1', size: '', quantity: 1 }])
+    }
+
+    const handleBackToDesignSelection = () => {
+        handleResetDesign()
+        handleResetOrder()
     }
 
     const handlePresetLoad = (presetId: string) => {
@@ -259,11 +266,11 @@ export default function BeltMaker() {
         }
         let designType: 'classic-2' | 'classic-3' | 'stripe-2' | 'stripe-3' = 'classic-2'
         const colorCountNum = parseInt(colorCount) || 0
-        
+
         // For Classic 3 Stripe, use outerStripeColor as the stripe color
         const effectiveStripeColor = selectedPreset === 'classic_3stripe' ? outerStripeColor : stripeColor
         const hasStripe = !!effectiveStripeColor
-        
+
         if (selectedPreset === 'classic_3stripe') {
             // For 3-stripe: use stripe-2 for 1 main color, stripe-3 for 2 main colors
             designType = classic3StripeColorCount === 2 ? 'stripe-3' : 'stripe-2'
@@ -272,7 +279,7 @@ export default function BeltMaker() {
         } else {
             designType = colorCount === '3' ? 'classic-3' : 'classic-2'
         }
-        
+
         const newGridData = generateGridDataFromColors(
             threadColor1,
             threadColor2,
@@ -285,17 +292,16 @@ export default function BeltMaker() {
         setGridData(newGridData)
     }, [threadColor1, threadColor2, threadColor3, stripeColor, outerStripeColor, innerStripeColor, colorCount, selectedPreset, classic3StripeColorCount])
 
-    const StageIndicator = () => (
+    const stageIndicator = (
         <div className="flex justify-center items-center gap-2 sm:gap-4 mb-8">
             {[1, 2, 3, 4].map((stage) => (
                 <div key={stage} className="flex items-center">
-                    <div className={`w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center font-bold text-sm sm:text-base transition-all ${
-                        currentStage > stage
+                    <div className={`w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center font-bold text-sm sm:text-base transition-all ${currentStage > stage
                             ? 'bg-primary text-white'
                             : currentStage === stage
                                 ? 'border border-primary text-primary'
                                 : 'bg-gray-200 text-gray-500'
-                    }`}>
+                        }`}>
                         {currentStage > stage ? (
                             <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
@@ -305,43 +311,48 @@ export default function BeltMaker() {
                         )}
                     </div>
                     {stage < 4 && (
-                        <div className={`w-8 sm:w-12 h-1 mx-1 sm:mx-2 transition-all ${
-                            currentStage > stage ? 'bg-primary' : 'bg-gray-200'
-                        }`} />
+                        <div className={`w-8 sm:w-12 h-1 mx-1 sm:mx-2 transition-all ${currentStage > stage ? 'bg-primary' : 'bg-gray-200'
+                            }`} />
                     )}
                 </div>
             ))}
         </div>
     )
 
-    const StageLabel = () => {
-        const labels = ['Choose Design', 'Customize', 'Sizes & Quantities', 'Your Details']
-        return (
-            <div className="text-center mb-6">
-                <span className="text-lg sm:text-xl font-serif font-bold text-burgundy">
-                    Stage {currentStage}: {labels[currentStage - 1]}
-                </span>
-            </div>
-        )
-    }
+    const labels = ['Choose Design', 'Customize', 'Sizes & Quantities', 'Your Details']
+    const stageLabel = (
+        <div className="text-center mb-6">
+            <span className="text-lg sm:text-xl font-serif font-bold text-burgundy">
+                Stage {currentStage}: {labels[currentStage - 1]}
+            </span>
+        </div>
+    )
 
     return (
         <main className="bg-linear-to-br from-white to-gray-100 min-h-screen">
             <div className="w-full mx-auto py-6 sm:py-8 lg:py-6">
                 {/* Header */}
                 <header className="px-4 md:px-6 py-4 lg:px-8 text-center">
-                    <h1 className="text-3xl sm:text-4xl lg:text-5xl font-serif font-bold text-burgundy mb-1 sm:mb-2 drop-shadow-sm">
-                        Polo Belt Designer
+                    <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-1 sm:mb-2 drop-shadow-sm">
+                        Custom Design Tool
                     </h1>
-                    <p className="text-xs sm:text-sm uppercase tracking-widest text-sage">
-                        Custom Argentinian Polo Belts
-                    </p>
                 </header>
 
                 {/* Stage Indicator */}
                 <div className="px-4 sm:px-6 lg:px-8 mt-6">
-                    <StageIndicator />
-                    <StageLabel />
+                    {currentStage > 1 && (
+                        <div className="max-w-6xl mx-auto mb-4">
+                            <Button
+                                onClick={handleBackToDesignSelection}
+                                variant="outline"
+                                className="px-6"
+                            >
+                                ← Back to Design Selection
+                            </Button>
+                        </div>
+                    )}
+                    {stageIndicator}
+                    {stageLabel}
                 </div>
 
                 {/* Stage 1: Choose Design */}
@@ -349,24 +360,14 @@ export default function BeltMaker() {
                     <section className="px-4 sm:px-6 lg:px-8">
                         <div className="max-w-6xl mx-auto">
                             <div className="bg-white border p-6 rounded-none shadow-lg">
-                                <h3 className="text-xl font-serif font-bold text-burgundy pb-2 text-center">
-                                    Choose Your Design
-                                </h3>
-                                <p className="text-sm text-charcoal mb-6 text-center">
-                                    Select a preset design to get started, or start from scratch
-                                </p>
                                 <DesignPresets onLoadPreset={handlePresetLoad} />
                             </div>
-                            <div className="mt-6 text-center">
-                                <Button
-                                    onClick={() => {
-                                        setShowColorCountSection(true)
-                                        setCurrentStage(2)
-                                    }}
-                                    className="px-8 py-3"
-                                >
-                                    Start From Scratch →
-                                </Button>
+                            <div className="mt-4 text-center text-sm text-charcoal">
+                                Can&apos;t find the design you want?{' '}
+                                <a href="mailto:sales@mypolobelt.com" className="text-primary underline hover:text-primary/80">
+                                    Email
+                                </a>{' '}
+                                us!
                             </div>
                         </div>
                     </section>
@@ -701,7 +702,7 @@ export default function BeltMaker() {
                                 </div>
 
                                 {/* Team Colors Upload */}
-                                <div className="bg-white border p-6 rounded-none shadow-lg mb-6">
+                                <div className="bg-white border p-6 rounded-none shadow-lg mb-3">
                                     <h3 className="text-lg font-serif font-bold text-burgundy mb-4 pb-2 border-b-2 border-gold">
                                         Upload Team Colours
                                     </h3>
@@ -734,7 +735,7 @@ export default function BeltMaker() {
                                 </div>
 
                                 {/* Navigation */}
-                                <div className="flex justify-between items-center pt-4">
+                                <div className="flex justify-between items-center mt-2">
                                     <Button
                                         onClick={() => setCurrentStage(1)}
                                         variant="outline"
@@ -778,7 +779,7 @@ export default function BeltMaker() {
                                 />
                             </div>
 
-                            <div className="flex justify-between items-center mt-4">
+                            <div className="flex justify-between items-center mt-2">
                                 <Button
                                     onClick={() => setCurrentStage(2)}
                                     variant="outline"
@@ -834,7 +835,7 @@ export default function BeltMaker() {
                                 />
                             </div>
 
-                            <div className="flex justify-between items-center mt-8">
+                            <div className="flex justify-between items-center mt-2">
                                 <Button
                                     onClick={() => setCurrentStage(3)}
                                     variant="outline"
