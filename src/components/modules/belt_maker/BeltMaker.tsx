@@ -114,7 +114,7 @@ export default function BeltMaker() {
 
     const [classicColorCount, setClassicColorCount] = useState<2 | 3 | 4 | null>(null)
 
-    const [classic3StripeColorCount, setClassic3StripeColorCount] = useState<1 | 2 | null>(null)
+    const [classic3StripeColorCount, setClassic3StripeColorCount] = useState<2 | 3 | null>(null)
 
     const [outerStripeColor, setOuterStripeColor] = useState('')
 
@@ -374,7 +374,7 @@ export default function BeltMaker() {
 
             setThreadColor3('')
 
-            setClassic3StripeColorCount(2)
+            setClassic3StripeColorCount(3)
 
             setOuterStripeColor(preset.threads[0] || '')
 
@@ -444,7 +444,7 @@ export default function BeltMaker() {
 
 
 
-    const handleClassic3StripeColorCount = (count: 1 | 2) => {
+    const handleClassic3StripeColorCount = (count: 2 | 3) => {
 
         setClassic3StripeColorCount(count)
 
@@ -452,13 +452,7 @@ export default function BeltMaker() {
 
         setShowThreadColorSection(true)
 
-        setShowThreadColor3(count === 2)
-
-        if (count === 1) {
-
-            setThreadColor2('')
-
-        }
+        setShowThreadColor3(count === 3)
 
     }
 
@@ -528,11 +522,9 @@ export default function BeltMaker() {
 
         if (selectedPreset === 'classic_3stripe') {
 
-            const hasRequiredMainColours = classic3StripeColorCount === 1
-
-                ? !!threadColor1
-
-                : !!threadColor1 && !!threadColor2
+            const hasRequiredMainColours = classic3StripeColorCount === 2
+                ? !!threadColor1 && !!threadColor2
+                : !!threadColor1 && !!threadColor2 && !!threadColor3
 
             return !!colorCount && hasRequiredMainColours && !!outerStripeColor && !!innerStripeColor
 
@@ -592,7 +584,7 @@ export default function BeltMaker() {
 
 
 
-        const needsSecondMainColour = !(selectedPreset === 'classic_3stripe' && classic3StripeColorCount === 1)
+        const needsSecondMainColour = !(selectedPreset === 'classic_3stripe' && classic3StripeColorCount === 2)
 
         if (!threadColor1 || (needsSecondMainColour && !threadColor2)) {
 
@@ -631,11 +623,8 @@ export default function BeltMaker() {
         const hasStripe = !!effectiveStripeColor
 
         const effectiveThreadColor2 =
-
-            selectedPreset === 'classic_3stripe' && classic3StripeColorCount === 1
-
-                ? threadColor1
-
+            selectedPreset === 'classic_3stripe' && classic3StripeColorCount === 2
+                ? threadColor2
                 : threadColor2
 
 
@@ -698,13 +687,13 @@ export default function BeltMaker() {
 
                     <div className={`w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center font-bold text-sm sm:text-base transition-all ${currentStage > stage
 
-                            ? 'bg-primary text-white'
+                        ? 'bg-primary text-white'
 
-                            : currentStage === stage
+                        : currentStage === stage
 
-                                ? 'border border-primary text-primary'
+                            ? 'border border-primary text-primary'
 
-                                : 'bg-gray-200 text-gray-500'
+                            : 'bg-gray-200 text-gray-500'
 
                         }`}>
 
@@ -742,7 +731,7 @@ export default function BeltMaker() {
 
 
 
-        const labels = ['Choose Design', 'Customise', 'Sizes & Quantities', 'Your Details']
+    const labels = ['Choose Design', 'Customise', 'Sizes & Quantities', 'Your Details']
 
     const stageLabel = (
 
@@ -974,20 +963,6 @@ export default function BeltMaker() {
 
                                             <Button
 
-                                                onClick={() => handleClassic3StripeColorCount(1)}
-
-                                                variant="outline"
-
-                                                className="px-8 py-3"
-
-                                            >
-
-                                                1 Main Colour
-
-                                            </Button>
-
-                                            <Button
-
                                                 onClick={() => handleClassic3StripeColorCount(2)}
 
                                                 variant="outline"
@@ -996,7 +971,21 @@ export default function BeltMaker() {
 
                                             >
 
-                                                2 Main Colours
+                                                2 Colours
+
+                                            </Button>
+
+                                            <Button
+
+                                                onClick={() => handleClassic3StripeColorCount(3)}
+
+                                                variant="outline"
+
+                                                className="px-8 py-3"
+
+                                            >
+
+                                                3 Colours
 
                                             </Button>
 
@@ -1030,7 +1019,7 @@ export default function BeltMaker() {
 
                                             <option value="3">3 Colours</option>
 
-                                            <option value="4">4 Colours</option>
+                                            {selectedPreset === 'plk' && <option value="4">4 Colours</option>}
 
                                         </select>
 
