@@ -23,6 +23,8 @@ export interface DesignPresets {
 
 export interface SizeOrder {
   size: string
+  width?: string
+  stamped?: 'Yes' | 'No'
   quantity: number
 }
 

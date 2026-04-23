@@ -8,13 +8,21 @@ import { useState } from 'react'
 interface SizeRow {
   id: string
   size: string
+  width: 'Standard (3cm)' | 'Slim (2.5cm)'
+  stamped: 'Yes' | 'No'
   quantity: number
 }
 
 interface OrderFormProps {
   sizeRows: SizeRow[]
   onAddSize: () => void
-  onUpdateSize: (id: string, size: string, quantity: number) => void
+  onUpdateSize: (
+    id: string,
+    size: string,
+    width: 'Standard (3cm)' | 'Slim (2.5cm)',
+    stamped: 'Yes' | 'No',
+    quantity: number
+  ) => void
   onRemoveSize: (id: string) => void
 }
 
@@ -33,7 +41,7 @@ export function OrderForm({
       </h3>
       <div className='flex justify-between gap-5'>
         <p className="text-xs sm:text-sm md:text-sm lg:text-base text-charcoal mb-3 sm:mb-4">
-          Add the sizes and quantities you need
+          Add each size, width, stamp option and quantity you need
         </p>
         <button
           onClick={() => setShowSizingModal(true)}
@@ -49,7 +57,7 @@ export function OrderForm({
             <select
               value={row.size}
               onChange={(e) =>
-                onUpdateSize(row.id, e.target.value, row.quantity)
+                onUpdateSize(row.id, e.target.value, row.width, row.stamped, row.quantity)
               }
               className="flex-1 px-3 py-2 sm:py-2 border-2 border-gray-300 rounded-none font-sans text-xs sm:text-sm focus:outline-none focus:border-gold"
             >
@@ -60,13 +68,56 @@ export function OrderForm({
                 </option>
               ))}
             </select>
+            <select
+              value={row.width}
+              onChange={(e) =>
+                onUpdateSize(
+                  row.id,
+                  row.size,
+                  e.target.value as 'Standard (3cm)' | 'Slim (2.5cm)',
+                  row.stamped,
+                  row.quantity
+                )
+              }
+              className="w-full sm:w-40 px-3 py-2 sm:py-2 border-2 border-gray-300 rounded-none font-sans text-xs sm:text-sm focus:outline-none focus:border-gold"
+            >
+              <option value="Standard (3cm)">Wide (3cm)</option>
+              <option value="Slim (2.5cm)">Slim (2.5cm)</option>
+            </select>
+            <select
+              value={row.stamped}
+              onChange={(e) =>
+                onUpdateSize(
+                  row.id,
+                  row.size,
+                  row.width,
+                  e.target.value as 'Yes' | 'No',
+                  row.quantity
+                )
+              }
+              className="w-full sm:w-28 px-3 py-2 sm:py-2 border-2 border-gray-300 rounded-none font-sans text-xs sm:text-sm focus:outline-none focus:border-gold"
+            >
+              <option value="No">Stamped: No</option>
+              <option value="Yes">Stamped: Yes</option>
+            </select>
             <input
               type="number"
-              min="1"
+              min="0"
               value={row.quantity}
               onChange={(e) =>
-                onUpdateSize(row.id, row.size, parseInt(e.target.value) || 1)
+                onUpdateSize(
+                  row.id,
+                  row.size,
+                  row.width,
+                  row.stamped,
+                  e.target.value === '' ? 0 : Math.max(0, parseInt(e.target.value) || 0)
+                )
               }
+              onBlur={() => {
+                if (!row.quantity || row.quantity < 1) {
+                  onUpdateSize(row.id, row.size, row.width, row.stamped, 1)
+                }
+              }}
               placeholder="Qty"
               className="w-full sm:w-24 px-3 py-2 border-2 border-gray-300 rounded-none font-sans text-xs sm:text-sm text-center focus:outline-none focus:border-gold"
             />

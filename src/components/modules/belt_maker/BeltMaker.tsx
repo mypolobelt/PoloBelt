@@ -19,12 +19,14 @@ const DEFAULT_PATTERN = Array(20)
     .map(() =>
         Array(64)
             .fill(null)
-            .map(() => '#F5F5F5')
+            .map(() => '#D3D3D3')
     )
 
 interface SizeRow {
     id: string
     size: string
+    width: 'Standard (3cm)' | 'Slim (2.5cm)'
+    stamped: 'Yes' | 'No'
     quantity: number
 }
 
@@ -34,7 +36,7 @@ export default function BeltMaker() {
     const [currentStage, setCurrentStage] = useState<Stage>(1)
     const [gridData, setGridData] = useState<string[][]>(DEFAULT_PATTERN)
     const [designName, setDesignName] = useState('')
-    const [beltWidth, setBeltWidth] = useState('Standard (3cm)')
+    const [beltWidth] = useState('Per size selection')
     const [leatherColor, setLeatherColor] = useState('Brown')
     const [buckleFinish, setBuckleFinish] = useState('Brass')
     const [colorCount, setColorCount] = useState('')
@@ -42,19 +44,18 @@ export default function BeltMaker() {
     const [threadColor2, setThreadColor2] = useState('')
     const [threadColor3, setThreadColor3] = useState('')
     const [stripeColor, setStripeColor] = useState('')
-    const [showColorCountSection, setShowColorCountSection] = useState(false)
     const [showThreadColorSection, setShowThreadColorSection] = useState(false)
     const [showThreadColor3, setShowThreadColor3] = useState(false)
     const [showStripeColor, setShowStripeColor] = useState(false)
     const [stampImage, setStampImage] = useState<string | null>(null)
     const [teamColorImage, setTeamColorImage] = useState<string | null>(null)
     const [sizeRows, setSizeRows] = useState<SizeRow[]>([
-        { id: '1', size: '', quantity: 1 },
+        { id: '1', size: '', width: 'Standard (3cm)', stamped: 'No', quantity: 1 },
     ])
     const [colorPickerOpen, setColorPickerOpen] = useState(false)
     const [currentColorField, setCurrentColorField] = useState<1 | 2 | 3 | 4 | 5 | 6 | null>(null)
     const [selectedPreset, setSelectedPreset] = useState<string | null>(null)
-    const [classicColorCount, setClassicColorCount] = useState<2 | 3 | null>(null)
+    const [classicColorCount, setClassicColorCount] = useState<2 | 3 | 4 | null>(null)
     const [classic3StripeColorCount, setClassic3StripeColorCount] = useState<1 | 2 | null>(null)
     const [outerStripeColor, setOuterStripeColor] = useState('')
     const [innerStripeColor, setInnerStripeColor] = useState('')
@@ -88,14 +89,31 @@ export default function BeltMaker() {
         setTeamColorImage(null)
     }
 
-    const handleAddSizeRow = () => {
-        const newId = (Math.max(...sizeRows.map((r) => parseInt(r.id)), 0) + 1).toString()
-        setSizeRows([...sizeRows, { id: newId, size: '', quantity: 1 }])
+    const scrollToTop = () => {
+        if (typeof window !== 'undefined') {
+            window.scrollTo({ top: 0, behavior: 'smooth' })
+        }
     }
 
-    const handleUpdateSizeRow = (id: string, size: string, quantity: number) => {
+    const goToStage = (stage: Stage) => {
+        setCurrentStage(stage)
+        scrollToTop()
+    }
+
+    const handleAddSizeRow = () => {
+        const newId = (Math.max(...sizeRows.map((r) => parseInt(r.id)), 0) + 1).toString()
+        setSizeRows([...sizeRows, { id: newId, size: '', width: 'Standard (3cm)', stamped: 'No', quantity: 1 }])
+    }
+
+    const handleUpdateSizeRow = (
+        id: string,
+        size: string,
+        width: 'Standard (3cm)' | 'Slim (2.5cm)',
+        stamped: 'Yes' | 'No',
+        quantity: number
+    ) => {
         setSizeRows(
-            sizeRows.map((row) => (row.id === id ? { ...row, size, quantity } : row))
+            sizeRows.map((row) => (row.id === id ? { ...row, size, width, stamped, quantity } : row))
         )
     }
 
@@ -108,7 +126,6 @@ export default function BeltMaker() {
     const handleResetDesign = () => {
         setGridData(DEFAULT_PATTERN)
         setDesignName('')
-        setBeltWidth('Standard (3cm)')
         setLeatherColor('Brown')
         setBuckleFinish('Brass')
         setColorCount('')
@@ -116,7 +133,6 @@ export default function BeltMaker() {
         setThreadColor2('')
         setThreadColor3('')
         setStripeColor('')
-        setShowColorCountSection(false)
         setShowThreadColorSection(false)
         setShowThreadColor3(false)
         setShowStripeColor(false)
@@ -127,11 +143,11 @@ export default function BeltMaker() {
         setClassic3StripeColorCount(null)
         setOuterStripeColor('')
         setInnerStripeColor('')
-        setCurrentStage(1)
+        goToStage(1)
     }
 
     const handleResetOrder = () => {
-        setSizeRows([{ id: '1', size: '', quantity: 1 }])
+        setSizeRows([{ id: '1', size: '', width: 'Standard (3cm)', stamped: 'No', quantity: 1 }])
     }
 
     const handleBackToDesignSelection = () => {
@@ -140,76 +156,63 @@ export default function BeltMaker() {
     }
 
     const handlePresetLoad = (presetId: string) => {
+        setGridData(DEFAULT_PATTERN)
         setSelectedPreset(presetId)
         const preset = DESIGN_PRESETS[presetId]
         if (!preset) return
 
         // Special handling for "The Classic" - show image and let user pick 2 or 3 colors
         if (presetId === 'plk') {
-            setDesignName(preset.name)
+            setDesignName('')
             setLeatherColor(preset.leather)
             setBuckleFinish(preset.buckle)
-            setCurrentStage(2)
+            goToStage(2)
             return
         }
 
         // Special handling for "Classic & 3 Stripe" - show image and let user pick 1 or 2 main colors + outer/inner stripes
         if (presetId === 'classic_3stripe') {
-            setDesignName(preset.name)
+            setDesignName('')
             setLeatherColor(preset.leather)
             setBuckleFinish(preset.buckle)
             setClassic3StripeColorCount(null)
             setOuterStripeColor('')
             setInnerStripeColor('')
-            setCurrentStage(2)
+            goToStage(2)
             return
         }
 
         // Standard preset loading for other designs
-        setDesignName(preset.name)
+        setDesignName('')
         setLeatherColor(preset.leather)
         setBuckleFinish(preset.buckle)
         setThreadColor1('')
         setThreadColor2('')
         setThreadColor3('')
         setStripeColor('')
-        setShowStripeColor(false)
-        if (preset.threads.length > 0) {
-            setThreadColor1(preset.threads[0])
-        }
-        if (preset.threads.length > 1) {
-            setThreadColor2(preset.threads[1])
-        }
-        if (preset.threads.length > 2) {
-            setThreadColor3(preset.threads[2])
-        }
-        if (preset.threads.length > 3) {
-            setStripeColor(preset.threads[3])
-            setShowStripeColor(true)
-        } else {
-            setShowStripeColor(false)
-        }
+        setShowStripeColor(preset.threads.length > 3)
         setColorCount(preset.threads.length.toString())
-        setShowColorCountSection(true)
         setShowThreadColorSection(true)
         setShowThreadColor3(preset.threads.length >= 3)
-        setCurrentStage(2)
+        goToStage(2)
     }
 
-    const handleClassicColorCount = (count: 2 | 3) => {
+    const handleClassicColorCount = (count: 2 | 3 | 4) => {
         setClassicColorCount(count)
         setColorCount(count.toString())
-        setShowColorCountSection(true)
         setShowThreadColorSection(true)
-        setShowThreadColor3(count === 3)
+        setShowThreadColor3(count >= 3)
+        setShowStripeColor(count === 4)
     }
 
     const handleClassic3StripeColorCount = (count: 1 | 2) => {
         setClassic3StripeColorCount(count)
         setColorCount(count.toString())
-        setShowColorCountSection(true)
         setShowThreadColorSection(true)
         setShowThreadColor3(count === 2)
+        if (count === 1) {
+            setThreadColor2('')
+        }
     }
 
     const openColorPicker = (field: 1 | 2 | 3 | 4 | 5 | 6) => {
@@ -243,7 +246,16 @@ export default function BeltMaker() {
     }
 
     const canProceedToStage3 = () => {
-        return colorCount && threadColor1 && threadColor2
+        if (selectedPreset === 'classic_3stripe') {
+            const hasRequiredMainColours = classic3StripeColorCount === 1
+                ? !!threadColor1
+                : !!threadColor1 && !!threadColor2
+            return !!colorCount && hasRequiredMainColours && !!outerStripeColor && !!innerStripeColor
+        }
+        if (colorCount === '4') {
+            return !!threadColor1 && !!threadColor2 && !!threadColor3 && !!stripeColor
+        }
+        return !!colorCount && !!threadColor1 && !!threadColor2
     }
 
     const canProceedToStage4 = () => {
@@ -251,9 +263,10 @@ export default function BeltMaker() {
     }
 
     useEffect(() => {
-        if (colorCount === '2' || colorCount === '3') {
+        if (colorCount === '2' || colorCount === '3' || colorCount === '4') {
             setShowThreadColorSection(true)
-            setShowThreadColor3(colorCount === '3')
+            setShowThreadColor3(colorCount === '3' || colorCount === '4')
+            setShowStripeColor(colorCount === '4')
         } else {
             setShowThreadColorSection(false)
             setShowThreadColor3(false)
@@ -262,6 +275,21 @@ export default function BeltMaker() {
 
     useEffect(() => {
         if (!colorCount) {
+            setGridData(DEFAULT_PATTERN)
+            return
+        }
+
+        const needsSecondMainColour = !(selectedPreset === 'classic_3stripe' && classic3StripeColorCount === 1)
+        if (!threadColor1 || (needsSecondMainColour && !threadColor2)) {
+            setGridData(DEFAULT_PATTERN)
+            return
+        }
+        if (colorCount === '3' && !threadColor3) {
+            setGridData(DEFAULT_PATTERN)
+            return
+        }
+        if (colorCount === '4' && (!threadColor3 || !stripeColor)) {
+            setGridData(DEFAULT_PATTERN)
             return
         }
         let designType: 'classic-2' | 'classic-3' | 'stripe-2' | 'stripe-3' = 'classic-2'
@@ -270,10 +298,17 @@ export default function BeltMaker() {
         // For Classic 3 Stripe, use outerStripeColor as the stripe color
         const effectiveStripeColor = selectedPreset === 'classic_3stripe' ? outerStripeColor : stripeColor
         const hasStripe = !!effectiveStripeColor
+        const effectiveThreadColor2 =
+            selectedPreset === 'classic_3stripe' && classic3StripeColorCount === 1
+                ? threadColor1
+                : threadColor2
 
         if (selectedPreset === 'classic_3stripe') {
-            // For 3-stripe: use stripe-2 for 1 main color, stripe-3 for 2 main colors
-            designType = classic3StripeColorCount === 2 ? 'stripe-3' : 'stripe-2'
+            if (!outerStripeColor || !innerStripeColor) {
+                setGridData(DEFAULT_PATTERN)
+                return
+            }
+            designType = 'stripe-3'
         } else if (hasStripe) {
             designType = colorCountNum >= 3 ? 'stripe-3' : 'stripe-2'
         } else {
@@ -282,7 +317,7 @@ export default function BeltMaker() {
 
         const newGridData = generateGridDataFromColors(
             threadColor1,
-            threadColor2,
+            effectiveThreadColor2,
             threadColor3,
             effectiveStripeColor,
             THREAD_COLORS,
@@ -319,7 +354,7 @@ export default function BeltMaker() {
         </div>
     )
 
-    const labels = ['Choose Design', 'Customize', 'Sizes & Quantities', 'Your Details']
+        const labels = ['Choose Design', 'Customise', 'Sizes & Quantities', 'Your Details']
     const stageLabel = (
         <div className="text-center mb-6">
             <span className="text-lg sm:text-xl font-serif font-bold text-burgundy">
@@ -398,16 +433,6 @@ export default function BeltMaker() {
                                         <h3 className="text-lg font-serif font-bold text-burgundy mb-4 pb-2 border-b-2 border-gold text-center">
                                             The Classic Design
                                         </h3>
-                                        <div className="flex justify-center mb-6">
-                                            <div className="relative w-64 h-64">
-                                                <Image
-                                                    src="/assets/belt_design/Classic.jpg"
-                                                    alt="The Classic Design"
-                                                    fill
-                                                    className="object-contain"
-                                                />
-                                            </div>
-                                        </div>
                                         <p className="text-sm text-charcoal mb-4 text-center">
                                             Select how many colours you would like for your Classic design
                                         </p>
@@ -426,6 +451,13 @@ export default function BeltMaker() {
                                             >
                                                 3 Colours
                                             </Button>
+                                            <Button
+                                                onClick={() => handleClassicColorCount(4)}
+                                                variant="outline"
+                                                className="px-8 py-3"
+                                            >
+                                                4 Colours
+                                            </Button>
                                         </div>
                                     </div>
                                 ) : selectedPreset === 'classic_3stripe' && !classic3StripeColorCount ? (
@@ -433,16 +465,6 @@ export default function BeltMaker() {
                                         <h3 className="text-lg font-serif font-bold text-burgundy mb-4 pb-2 border-b-2 border-gold text-center">
                                             Classic + 3 Stripe Design
                                         </h3>
-                                        <div className="flex justify-center mb-6">
-                                            <div className="relative w-64 h-64">
-                                                <Image
-                                                    src="/assets/belt_design/Classic+3Stripe.jpg"
-                                                    alt="Classic + 3 Stripe Design"
-                                                    fill
-                                                    className="object-contain"
-                                                />
-                                            </div>
-                                        </div>
                                         <p className="text-sm text-charcoal mb-4 text-center">
                                             Select how many main colours you would like for your design
                                         </p>
@@ -473,9 +495,10 @@ export default function BeltMaker() {
                                             onChange={(e) => setColorCount(e.target.value)}
                                             className="w-full px-3 py-2 border-2 border-gray-300 rounded-none font-sans text-sm focus:outline-none focus:border-gold"
                                         >
-                                            <option value="">-- Select Number of Colors --</option>
-                                            <option value="2">2 Colors</option>
-                                            <option value="3">3 Colors</option>
+                                            <option value="">-- Select Number of Colours --</option>
+                                            <option value="2">2 Colours</option>
+                                            <option value="3">3 Colours</option>
+                                            <option value="4">4 Colours</option>
                                         </select>
                                     </div>
                                 )}
@@ -509,24 +532,26 @@ export default function BeltMaker() {
                                                 </div>
                                             </div>
 
-                                            <div>
-                                                <label className="block text-xs font-semibold text-charcoal uppercase tracking-wider mb-2">
-                                                    Thread Colour 2
-                                                </label>
-                                                <div className="flex gap-2">
-                                                    <input
-                                                        type="text"
-                                                        value={threadColor2}
-                                                        readOnly
-                                                        placeholder="Select a color"
-                                                        className="flex-1 px-3 py-2 border-2 border-gray-300 rounded-none font-sans text-sm focus:outline-none focus:border-gold"
-                                                    />
-                                                    <Button
-                                                        onClick={() => openColorPicker(2)}                                                    >
-                                                        Choose
-                                                    </Button>
+                                            {(selectedPreset !== 'classic_3stripe' || classic3StripeColorCount === 2) && (
+                                                <div>
+                                                    <label className="block text-xs font-semibold text-charcoal uppercase tracking-wider mb-2">
+                                                        Thread Colour 2
+                                                    </label>
+                                                    <div className="flex gap-2">
+                                                        <input
+                                                            type="text"
+                                                            value={threadColor2}
+                                                            readOnly
+                                                            placeholder="Select a color"
+                                                            className="flex-1 px-3 py-2 border-2 border-gray-300 rounded-none font-sans text-sm focus:outline-none focus:border-gold"
+                                                        />
+                                                        <Button
+                                                            onClick={() => openColorPicker(2)}                                                    >
+                                                            Choose
+                                                        </Button>
+                                                    </div>
                                                 </div>
-                                            </div>
+                                            )}
 
                                             {showThreadColor3 && (
                                                 <div>
@@ -628,20 +653,6 @@ export default function BeltMaker() {
                                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                                         <div>
                                             <label className="block text-xs font-semibold text-charcoal uppercase tracking-wider mb-2">
-                                                Belt Width
-                                            </label>
-                                            <select
-                                                value={beltWidth}
-                                                onChange={(e) => setBeltWidth(e.target.value)}
-                                                className="w-full px-3 py-2 border-2 border-gray-300 rounded-none font-sans text-sm focus:outline-none focus:border-gold"
-                                            >
-                                                <option value="Standard (3cm)">Standard (3cm)</option>
-                                                <option value="Slim (2.5cm)">Slim (2.5cm)</option>
-                                            </select>
-                                        </div>
-
-                                        <div>
-                                            <label className="block text-xs font-semibold text-charcoal uppercase tracking-wider mb-2">
                                                 Leather Colour
                                             </label>
                                             <select
@@ -707,7 +718,7 @@ export default function BeltMaker() {
                                         Upload Team Colours
                                     </h3>
                                     <p className="text-xs text-charcoal mb-3">
-                                        Upload an image of your team colours and we will match them
+                                        Upload an image of your team colours and we will endeavour to match them
                                     </p>
                                     <input
                                         type="file"
@@ -737,14 +748,14 @@ export default function BeltMaker() {
                                 {/* Navigation */}
                                 <div className="flex justify-between items-center mt-2">
                                     <Button
-                                        onClick={() => setCurrentStage(1)}
+                                        onClick={handleBackToDesignSelection}
                                         variant="outline"
                                         className="px-6"
                                     >
                                         ← Back to Designs
                                     </Button>
                                     <Button
-                                        onClick={() => setCurrentStage(3)}
+                                        onClick={() => goToStage(3)}
                                         disabled={!canProceedToStage3()}
                                         className="px-8"
                                     >
@@ -781,14 +792,14 @@ export default function BeltMaker() {
 
                             <div className="flex justify-between items-center mt-2">
                                 <Button
-                                    onClick={() => setCurrentStage(2)}
+                                    onClick={() => goToStage(2)}
                                     variant="outline"
                                     className=""
                                 >
                                     ← Back
                                 </Button>
                                 <Button
-                                    onClick={() => setCurrentStage(4)}
+                                    onClick={() => goToStage(4)}
                                     disabled={!canProceedToStage4()}
                                     className="px-8"
                                 >
@@ -825,9 +836,11 @@ export default function BeltMaker() {
                                         hasStamp: !!stampImage,
                                     }}
                                     sizeOrders={sizeRows
-                                        .filter(row => row.size)
+                                        .filter(row => row.size && row.quantity > 0)
                                         .map(row => ({
                                             size: row.size,
+                                            width: row.width,
+                                            stamped: row.stamped,
                                             quantity: row.quantity,
                                         }))}
                                     onResetDesign={handleResetDesign}
@@ -837,7 +850,7 @@ export default function BeltMaker() {
 
                             <div className="flex justify-between items-center mt-2">
                                 <Button
-                                    onClick={() => setCurrentStage(3)}
+                                    onClick={() => goToStage(3)}
                                     variant="outline"
                                     className="px-6"
                                 >

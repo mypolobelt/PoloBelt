@@ -23,6 +23,8 @@ interface OrderData {
   }
   orderQuantities: Array<{
     size: string
+    width?: string
+    stamped?: 'Yes' | 'No'
     quantity: number
   }>
   timestamp: string
@@ -108,7 +110,10 @@ function buildOrderEmail(data: OrderData): string {
     .join('')
 
   const orderItemsList = data.orderQuantities
-    .map((item) => `<li>${item.size}: ${item.quantity} belt(s)</li>`)
+    .map(
+      (item) =>
+        `<li>${item.size} | ${item.width || 'Width not specified'} | Stamped: ${item.stamped || 'No'} | Qty: ${item.quantity}</li>`
+    )
     .join('')
 
   const orderId = generateOrderId()

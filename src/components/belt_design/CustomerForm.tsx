@@ -8,6 +8,8 @@ import { countries } from '@/database/countries'
 
 interface SizeOrder {
   size: string
+  width: string
+  stamped: 'Yes' | 'No'
   quantity: number
 }
 
