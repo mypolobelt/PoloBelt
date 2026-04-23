@@ -161,35 +161,51 @@ export default function BeltMaker() {
         const preset = DESIGN_PRESETS[presetId]
         if (!preset) return
 
-        // Special handling for "The Classic" - show image and let user pick 2 or 3 colors
+        // Special handling for "The Classic" - load default colors but let user change count
         if (presetId === 'plk') {
             setDesignName('')
             setLeatherColor(preset.leather)
             setBuckleFinish(preset.buckle)
+            setThreadColor1(preset.threads[0] || '')
+            setThreadColor2(preset.threads[1] || '')
+            setThreadColor3('')
+            setStripeColor('')
+            setColorCount('2')
+            setShowStripeColor(false)
+            setShowThreadColorSection(true)
+            setShowThreadColor3(false)
             goToStage(2)
             return
         }
 
-        // Special handling for "Classic & 3 Stripe" - show image and let user pick 1 or 2 main colors + outer/inner stripes
+        // Special handling for "Classic & 3 Stripe" - load default colors but let user customize
         if (presetId === 'classic_3stripe') {
             setDesignName('')
             setLeatherColor(preset.leather)
             setBuckleFinish(preset.buckle)
-            setClassic3StripeColorCount(null)
-            setOuterStripeColor('')
-            setInnerStripeColor('')
+            setThreadColor1(preset.threads[0] || '')
+            setThreadColor2(preset.threads[1] || '')
+            setThreadColor3('')
+            setClassic3StripeColorCount(2)
+            setOuterStripeColor(preset.threads[0] || '')
+            setInnerStripeColor(preset.threads[1] || '')
+            setStripeColor('')
+            setColorCount('2')
+            setShowStripeColor(false)
+            setShowThreadColorSection(true)
+            setShowThreadColor3(false)
             goToStage(2)
             return
         }
 
-        // Standard preset loading for other designs
+        // Standard preset loading for other designs - use preset's default colors
         setDesignName('')
         setLeatherColor(preset.leather)
         setBuckleFinish(preset.buckle)
-        setThreadColor1('')
-        setThreadColor2('')
-        setThreadColor3('')
-        setStripeColor('')
+        setThreadColor1(preset.threads[0] || '')
+        setThreadColor2(preset.threads[1] || '')
+        setThreadColor3(preset.threads[2] || '')
+        setStripeColor(preset.threads[3] || '')
         setShowStripeColor(preset.threads.length > 3)
         setColorCount(preset.threads.length.toString())
         setShowThreadColorSection(true)
