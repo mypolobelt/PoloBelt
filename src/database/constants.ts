@@ -381,3 +381,7 @@ export const BELT_SIZES = [
   '115cm',
   '120cm',
 ]
+
+export const COLLAR_SIZES = ['S', 'M', 'L', 'XL', 'XXL']
+
+export const DOG_LEAD_SIZE = ['One Size']
