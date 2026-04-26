@@ -166,6 +166,22 @@ export default function BeltMaker() {
             return
 
         }
+        // Special handling for "Classic + Stripe" - load 2 main colors + stripe
+        if (presetId === 'mxyeo') {
+            setDesignName('')
+            setLeatherColor(preset.leather)
+            setBuckleFinish(preset.buckle)
+            setThreadColor1(preset.threads[0] || '')
+            setThreadColor2(preset.threads[1] || '')
+            setThreadColor3('')
+            setStripeColor(preset.threads[3] || '')
+            setColorCount('2')
+            setShowStripeColor(true)
+            setShowThreadColorSection(true)
+            setShowThreadColor3(false)
+            goToStage(2)
+            return
+        }
         // Special handling for "Classic & 3 Stripe" - load default colors but let user customize
 
         if (presetId === 'classic_3stripe') {
@@ -261,12 +277,13 @@ export default function BeltMaker() {
         if (colorCount === '2' || colorCount === '3' || colorCount === '4') {
             setShowThreadColorSection(true)
             setShowThreadColor3(colorCount === '3' || colorCount === '4')
-            setShowStripeColor(colorCount === '4')
+            setShowStripeColor(colorCount === '4' || !!stripeColor)
         } else {
             setShowThreadColorSection(false)
             setShowThreadColor3(false)
+            setShowStripeColor(!!stripeColor)
         }
-    }, [colorCount])
+    }, [colorCount, stripeColor])
     useEffect(() => {
         if (!colorCount) {
             setGridData(DEFAULT_PATTERN)
@@ -548,7 +565,7 @@ export default function BeltMaker() {
                                             {showStripeColor && (
                                                 <div>
                                                     <label className="block text-xs font-semibold text-charcoal uppercase tracking-wider mb-2">
-                                                        Thread Colour 4
+                                                        {colorCount === '4' ? 'Thread Colour 4' : 'Stripe Colour'}
                                                     </label>
                                                     <div className="flex gap-2">
                                                         <input

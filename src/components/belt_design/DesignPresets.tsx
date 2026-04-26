@@ -10,7 +10,7 @@ interface DesignPresetsProps {
 export function DesignPresets({ onLoadPreset }: DesignPresetsProps) {
   const presets = [
     { id: 'plk', name: 'The Classic', image: '/assets/belt_design/Classic.jpg' },
-    { id: 'mxyeo', name: 'Classic + Stripe', image: '/assets/belt_design/Classic+Stripe.jpg' },
+    { id: 'mxyeo', name: 'Classic + Stripe', image: '/assets/belt_design/ClassicStripe.jpg' },
     { id: 'Classic_2Stripe', name: 'Classic 2Stripe', image: '/assets/belt_design/Classic+2Stripe.jpg' },
     { id: 'classic_3stripe', name: 'Classic + 3 Stripe', image: '/assets/belt_design/Classic+3Stripe.jpg' },
     { id: 'Dot_Stripe', name: 'Dot Stripe', image: '/assets/belt_design/Dot+Stripe.jpg' },

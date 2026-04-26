@@ -222,12 +222,11 @@ export const DESIGN_PRESETS: DesignPresets = {
   },
   mxyeo: {
     name: 'The Classic + Stripe',
-    threads: ['Cherry Red 19', 'Green 228', 'White white', 'Tan 368'],
+    threads: ['Blue 132', 'Red 46', '', 'Gold Yellow 280'],
     leather: 'Brown',
     buckle: 'Brass',
     stamp: '',
-    colors: ["#307026", "#552B06", "#AE7E5C", "#850007", "#F5F2F7"],
-    // colors: ['#C03830', '#488050', '#FFFFFF', '#988070', '#552B06'],
+    colors: ['#3060A0', '#D84838', '#C0A840', '#552B06'],
     pattern: null,
   },
   classic_3stripe: {
