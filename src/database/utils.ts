@@ -1,6 +1,7 @@
 import {
   PLK_PATTERN_2COLOR,
   PLK_PATTERN_3COLOR,
+  PLK_PATTERN_4COLOR,
   STRIPE_PATTERN_2COLOR,
   STRIPE_PATTERN_3COLOR,
   applyColorsToPattern,
@@ -51,7 +52,7 @@ export const generateGridDataFromColors = (
   color3: string = '',
   color4: string = '',
   threadColors: Record<string, { name: string; hex: string }> = {},
-  designType: 'classic-2' | 'classic-3' | 'stripe-2' | 'stripe-3' = 'classic-2',
+  designType: 'classic-2' | 'classic-3' | 'classic-4' | 'stripe-2' | 'stripe-3' = 'classic-2',
   color5: string = ''  // color5 is the inner stripe colour for 3-stripe designs
 ): string[][] => {
   const getColorHex = (colorText: string): string | null => {
@@ -72,6 +73,9 @@ export const generateGridDataFromColors = (
   switch (designType) {
     case 'classic-3':
       basePattern = PLK_PATTERN_3COLOR
+      break
+    case 'classic-4':
+      basePattern = PLK_PATTERN_4COLOR
       break
     case 'stripe-2':
       basePattern = STRIPE_PATTERN_2COLOR
@@ -99,8 +103,9 @@ export const generateGridDataFromColors = (
     color1Hex,
     color2Hex,
     color3Hex,
-    isStripe ? stripeHex : null,
-    isStripe ? innerStripeHex : null
+    isStripe ? stripeHex : (designType === 'classic-4' ? stripeHex : null),
+    isStripe ? innerStripeHex : null,
+    designType === 'classic-4'
   )
 }
 

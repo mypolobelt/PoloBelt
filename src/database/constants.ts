@@ -239,7 +239,7 @@ export const DESIGN_PRESETS: DesignPresets = {
     colors: ['#3060A0', '#FFFFFF', '#3060A0', '#1A1A1A'],
     pattern: null,
   },
-  Sunset_Elegance: {
+  Double_Leather: {
     name: 'Sunset Elegance',
     threads: ['Blue 132', 'White White'],
     leather: 'Brown',
@@ -248,7 +248,7 @@ export const DESIGN_PRESETS: DesignPresets = {
     colors: ['#3060A0', '#FFFFFF', '#552B06'],
     pattern: null,
   },
-  Ocean_Breeze: {
+  Classic_2Stripe: {
     name: 'Ocean Breeze',
     threads: ['Green 228', 'Yellow 290'],
     leather: 'Brown',
@@ -257,7 +257,7 @@ export const DESIGN_PRESETS: DesignPresets = {
     colors: ['#488050', '#F0D040', '#552B06'],
     pattern: null,
   },
-  Forest_Walk: {
+  Dot_Stripe: {
     name: 'Forest Walk',
     threads: ['Black 381', 'Red 46', 'White White'],
     leather: 'Black',
@@ -266,7 +266,7 @@ export const DESIGN_PRESETS: DesignPresets = {
     colors: ['#1A0F0A', '#CC2222', '#FFFFFF', '#552B06'],
     pattern: null,
   },
-  Royal_Purple: {
+  Edge_Dot_Stripe: {
     name: 'Royal Purple',
     threads: ['Navy 132', 'White White'],
     leather: 'Brown',
@@ -275,7 +275,7 @@ export const DESIGN_PRESETS: DesignPresets = {
     colors: ['#3060A0', '#FFFFFF', '#552B06'],
     pattern: null,
   },
-  Ruby_Gold: {
+  Middle_Stripe: {
     name: 'Ruby & Gold',
     threads: ['Red 46', 'Yellow 290'],
     leather: 'Brown',
@@ -284,7 +284,7 @@ export const DESIGN_PRESETS: DesignPresets = {
     colors: ['#CC2222', '#F0D040', '#552B06'],
     pattern: null,
   },
-  Emerald_Ivory: {
+  Stripe_2: {
     name: 'Emerald & Ivory',
     threads: ['Green 228', 'White White'],
     leather: 'Brown',
@@ -293,7 +293,7 @@ export const DESIGN_PRESETS: DesignPresets = {
     colors: ['#488050', '#FFFFFF', '#552B06'],
     pattern: null,
   },
-  Grape_Ivory: {
+  Main2_Stripe2: {
     name: 'Grape & Ivory',
     threads: ['Purple 89', 'White White'],
     leather: 'Brown',
