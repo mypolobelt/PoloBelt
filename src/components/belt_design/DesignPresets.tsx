@@ -19,13 +19,13 @@ export function DesignPresets({ onLoadPreset }: DesignPresetsProps) {
     { id: 'Stripe_2', name: '2Stripe', image: '/assets/belt_design/2Stripe.jpg' },
     { id: 'Main2_Stripe2', name: '2Main 2Stripe', image: '/assets/belt_design/Main2+Stripe2.jpg' },
     { id: 'Double_Leather', name: 'Double Leather', image: '/assets/belt_design/leather.jpg' },
-    { id: 'Tangerine_Azure', name: 'Tangerine & Azure' },
-    { id: 'Crimson_Aurum', name: 'Crimson & Aurum' },
-    { id: 'Turquoise_Ivory', name: 'Turquoise & Ivory' },
-    { id: 'Rose_Azure', name: 'Rose & Azure' },
-    { id: 'Chestnut_Vanilla', name: 'Chestnut & Vanilla' },
-    { id: 'Forest_Sunshine', name: 'Forest & Sunshine' },
-    { id: 'Wine_Pearl', name: 'Wine & Pearl' },
+    // { id: 'Tangerine_Azure', name: 'Tangerine & Azure' },
+    // { id: 'Crimson_Aurum', name: 'Crimson & Aurum' },
+    // { id: 'Turquoise_Ivory', name: 'Turquoise & Ivory' },
+    // { id: 'Rose_Azure', name: 'Rose & Azure' },
+    // { id: 'Chestnut_Vanilla', name: 'Chestnut & Vanilla' },
+    // { id: 'Forest_Sunshine', name: 'Forest & Sunshine' },
+    // { id: 'Wine_Pearl', name: 'Wine & Pearl' },
   ]
 
   return (

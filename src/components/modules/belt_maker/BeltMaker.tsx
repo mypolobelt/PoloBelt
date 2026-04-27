@@ -217,13 +217,13 @@ export default function BeltMaker() {
         setShowThreadColor3(preset.threads.length >= 3)
         goToStage(2)
     }
-    const handleClassicColorCount = (count: 2 | 3 | 4) => {
-        setClassicColorCount(count)
-        setColorCount(count.toString())
-        setShowThreadColorSection(true)
-        setShowThreadColor3(count >= 3)
-        setShowStripeColor(count === 4)
-    }
+    // const handleClassicColorCount = (count: 2 | 3 | 4) => {
+    //     setClassicColorCount(count)
+    //     setColorCount(count.toString())
+    //     setShowThreadColorSection(true)
+    //     setShowThreadColor3(count >= 3)
+    //     setShowStripeColor(count === 4)
+    // }
     const handleClassic3StripeColorCount = (count: 2 | 3) => {
         setClassic3StripeColorCount(count)
         setColorCount(count.toString())
@@ -429,28 +429,21 @@ export default function BeltMaker() {
                                         <p className="text-sm text-charcoal mb-4 text-center">
                                             Select how many colours you would like for your Classic design
                                         </p>
-                                        <div className="flex justify-center gap-4">
-                                            <Button
-                                                onClick={() => handleClassicColorCount(2)}
-                                                variant="outline"
-                                                className="px-8 py-3"
+                                        <div className="bg-white border p-6 rounded-none shadow-lg mb-6">
+                                            <h3 className="text-lg font-serif font-bold text-burgundy mb-4 pb-2 border-b-2 border-gold">
+                                                Number of Thread Colours
+                                            </h3>
+                                            <select
+                                                value={colorCount}
+                                                onChange={(e) => setColorCount(e.target.value)}
+                                                className="w-full px-3 py-2 border-2 border-gray-300 rounded-none font-sans text-sm focus:outline-none focus:border-gold"
                                             >
-                                                2 Colours
-                                            </Button>
-                                            <Button
-                                                onClick={() => handleClassicColorCount(3)}
-                                                variant="outline"
-                                                className="px-8 py-3"
-                                            >
-                                                3 Colours
-                                            </Button>
-                                            <Button
-                                                onClick={() => handleClassicColorCount(4)}
-                                                variant="outline"
-                                                className="px-8 py-3"
-                                            >
-                                                4 Colours
-                                            </Button>
+                                                <option value="">-- Select Number of Colours --</option>
+                                                <option value="2">2 Colours</option>
+                                                <option value="3">3 Colours</option>
+                                                <option value="4">4 Colours</option>
+                                                {/* {selectedPreset === 'plk' && <option value="4">4 Colours</option>} */}
+                                            </select>
                                         </div>
                                     </div>
                                 ) : selectedPreset === 'classic_3stripe' && !classic3StripeColorCount ? (
