@@ -4,6 +4,7 @@ import {
   PLK_PATTERN_4COLOR,
   STRIPE_PATTERN_2COLOR,
   STRIPE_PATTERN_3COLOR,
+  CLASSIC_2STRIPE_PATTERN,
   applyColorsToPattern,
 } from './canvas'
 
@@ -32,28 +33,22 @@ export const extractColorIdFromText = (text: string): string | null => {
   return parts[parts.length - 1] || null
 }
 
-/**
- * Build the grid that gets passed to BeltCanvas / renderBeltCanvas.
- *
- * designType controls which base pattern is used:
- *   'classic-2'  →  PLK 2-colour
- *   'classic-3'  →  PLK 3-colour
- *   'stripe-2'   →  Stripe 2-colour
- *   'stripe-3'   →  Stripe 3-colour
- *
- * color1 / color2 / color3 / color4 are the "Name ID" strings as returned by
- * the colour picker (e.g. "Mid Grey 399").  color4 is the stripe colour.
- *
- * threadColors is the THREAD_COLORS database from constants.ts.
- */
+export type DesignType =
+  | 'classic-2'
+  | 'classic-3'
+  | 'classic-4'
+  | 'stripe-2'
+  | 'stripe-3'
+  | 'classic-2stripe'
+
 export const generateGridDataFromColors = (
   color1: string,
   color2: string,
   color3: string = '',
-  color4: string = '',
+  color4: string = '',        // Stripe 1 (or classic color3/4)
   threadColors: Record<string, { name: string; hex: string }> = {},
-  designType: 'classic-2' | 'classic-3' | 'classic-4' | 'stripe-2' | 'stripe-3' = 'classic-2',
-  color5: string = ''  // color5 is the inner stripe colour for 3-stripe designs
+  designType: DesignType = 'classic-2',
+  color5: string = ''         // Stripe 2 (only for classic-2stripe)
 ): string[][] => {
   const getColorHex = (colorText: string): string | null => {
     if (!colorText) return null
@@ -65,10 +60,9 @@ export const generateGridDataFromColors = (
   const color1Hex = getColorHex(color1)
   const color2Hex = getColorHex(color2)
   const color3Hex = getColorHex(color3)
-  const stripeHex = getColorHex(color4)   // color4 is the outer stripe colour
-  const innerStripeHex = getColorHex(color5)  // color5 is the inner stripe colour
+  const stripe1Hex = getColorHex(color4)   // stripe 1
+  const stripe2Hex = getColorHex(color5)   // stripe 2 (only classic-2stripe)
 
-  // Pick the matching base pattern
   let basePattern: string[][]
   switch (designType) {
     case 'classic-3':
@@ -83,29 +77,29 @@ export const generateGridDataFromColors = (
     case 'stripe-3':
       basePattern = STRIPE_PATTERN_3COLOR
       break
+    case 'classic-2stripe':
+      basePattern = CLASSIC_2STRIPE_PATTERN
+      break
     case 'classic-2':
     default:
       basePattern = PLK_PATTERN_2COLOR
   }
 
-  // If no colours have been chosen yet, return the base pattern as-is
-  // (the canvas will show the placeholder grey/red shades).
-  if (!color1Hex && !color2Hex && !color3Hex && !stripeHex) {
+  if (!color1Hex && !color2Hex && !color3Hex && !stripe1Hex && !stripe2Hex) {
     return basePattern.map((row) => [...row])
   }
 
-  // For stripe patterns the stripe colour is color4 / stripeHex
-  // For classic patterns there is no stripe; color3 maps to the 3rd thread.
-  const isStripe = designType === 'stripe-2' || designType === 'stripe-3'
+  // const isStripe = designType === 'stripe-2' || designType === 'stripe-3'
 
   return applyColorsToPattern(
     basePattern,
     color1Hex,
     color2Hex,
     color3Hex,
-    isStripe ? stripeHex : (designType === 'classic-4' ? stripeHex : null),
-    isStripe ? innerStripeHex : null,
-    designType === 'classic-4'
+    stripe1Hex,
+    designType === 'classic-2stripe' ? stripe2Hex : null,
+    designType === 'classic-4',
+    designType
   )
 }
 

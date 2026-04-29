@@ -360,6 +360,62 @@ export default function BeltMaker() {
             </span>
         </div>
     )
+
+    const PRICING = {
+        Belt: [
+            { min: 1, max: 1, price: 50 },
+            { min: 2, max: 9, price: 45 },
+            { min: 10, max: 30, price: 40 },
+            { min: 31, max: 49, price: 37.5 },
+            { min: 50, max: Infinity, price: 35 },
+        ],
+        Collar: [
+            { min: 1, max: 1, price: 35 },
+            { min: 2, max: 9, price: 31 },
+            { min: 10, max: 30, price: 28 },
+            { min: 31, max: 49, price: 25 },
+            { min: 50, max: Infinity, price: 23.5 },
+        ],
+        'Dog Lead': [
+            { min: 1, max: 1, price: 40 },
+            { min: 2, max: 9, price: 36 },
+            { min: 10, max: 30, price: 32 },
+            { min: 31, max: 49, price: 28 },
+            { min: 50, max: Infinity, price: 26.5 },
+        ],
+    }
+    const getUnitPrice = (productType: ProductType, quantity: number) => {
+        const tiers = PRICING[productType]
+
+        const tier = tiers.find(t => quantity >= t.min && quantity <= t.max)
+        return tier ? tier.price : 0
+    }
+    const calculatePricing = () => {
+        let subtotal = 0
+
+        sizeRows.forEach(row => {
+            if (!row.size || row.quantity <= 0) return
+
+            const unitPrice = getUnitPrice(row.productType, row.quantity)
+            subtotal += unitPrice * row.quantity
+        })
+
+        // Logo fee logic
+        const hasStamp = !!stampImage
+        const totalQuantity = sizeRows.reduce((sum, row) => sum + row.quantity, 0)
+
+        let logoFee = 0
+        if (hasStamp && totalQuantity >= 30) {
+            logoFee = 25 // per design (you have 1 design here)
+        }
+
+        return {
+            subtotal,
+            logoFee,
+            total: subtotal + logoFee,
+        }
+    }
+    const pricing = calculatePricing()
     return (
         <main className="bg-linear-to-br from-white to-gray-100 min-h-screen">
             <div className="w-full mx-auto py-6 sm:py-8 lg:py-6">
@@ -759,6 +815,25 @@ export default function BeltMaker() {
                                     onUpdateSize={handleUpdateSizeRow}
                                     onRemoveSize={handleRemoveSizeRow}
                                 />
+                            </div>
+                            <div className="bg-white border p-4 mt-6 shadow-md">
+                                <h3 className="font-bold mb-2">Pricing Summary</h3>
+
+                                <div className="text-sm space-y-1">
+                                    <div>Subtotal: £{pricing.subtotal.toFixed(2)}</div>
+
+                                    {pricing.logoFee > 0 && (
+                                        <div>Logo Setup: £{pricing.logoFee.toFixed(2)}</div>
+                                    )}
+
+                                    <div className="font-bold text-lg">
+                                        Total: £{pricing.total.toFixed(2)}
+                                    </div>
+
+                                    <p className="text-xs text-gray-500">
+                                        * Delivery not included
+                                    </p>
+                                </div>
                             </div>
                             <div className="flex justify-between items-center mt-2">
                                 <Button
