@@ -60,4 +60,4 @@ export interface InvoiceRequest {
   timestamp: string
 }
 
-export type DesignType = 'classic-2' | 'classic-3' | 'classic-4' | 'stripe-2' | 'stripe-3'
+export type DesignType = 'classic-2' | 'classic-3' | 'classic-4' | 'stripe-2' | 'stripe-3' | 'classic-2stripe'

@@ -4,7 +4,6 @@ import {
   PLK_PATTERN_4COLOR,
   STRIPE_PATTERN_2COLOR,
   STRIPE_PATTERN_3COLOR,
-  CLASSIC_2STRIPE_PATTERN,
   applyColorsToPattern,
 } from './canvas'
 
@@ -76,9 +75,6 @@ export const generateGridDataFromColors = (
       break
     case 'stripe-3':
       basePattern = STRIPE_PATTERN_3COLOR
-      break
-    case 'classic-2stripe':
-      basePattern = CLASSIC_2STRIPE_PATTERN
       break
     case 'classic-2':
     default:

@@ -56,7 +56,7 @@ export default function BeltMaker() {
     const [currentColorField, setCurrentColorField] = useState<1 | 2 | 3 | 4 | 5 | 6 | null>(null)
     const [selectedPreset, setSelectedPreset] = useState<string | null>(null)
     const [classicColorCount, setClassicColorCount] = useState<2 | 3 | 4 | null>(null)
-    const [classic3StripeColorCount, setClassic3StripeColorCount] = useState<2 | 3 | null>(null)
+    const [classic2StripeColorCount, setClassic2StripeColorCount] = useState<2 | 3 | null>(null)
     const [outerStripeColor, setOuterStripeColor] = useState('')
     const [innerStripeColor, setInnerStripeColor] = useState('')
     const canvasRef = useRef<HTMLCanvasElement>(null!)
@@ -131,7 +131,7 @@ export default function BeltMaker() {
         setTeamColorImage(null)
         setSelectedPreset(null)
         setClassicColorCount(null)
-        setClassic3StripeColorCount(null)
+        setClassic2StripeColorCount(null)
         setOuterStripeColor('')
         setInnerStripeColor('')
         goToStage(1)
@@ -182,16 +182,16 @@ export default function BeltMaker() {
             goToStage(2)
             return
         }
-        // Special handling for "Classic & 3 Stripe" - load default colors but let user customize
+        // Special handling for "Classic & 2 Stripe" - load default colors but let user customize
 
-        if (presetId === 'classic_3stripe') {
+        if (presetId === 'Classic_2Stripe') {
             setDesignName('')
             setLeatherColor(preset.leather)
             setBuckleFinish(preset.buckle)
             setThreadColor1(preset.threads[0] || '')
             setThreadColor2(preset.threads[1] || '')
             setThreadColor3('')
-            setClassic3StripeColorCount(3)
+            setClassic2StripeColorCount(3)
             setOuterStripeColor(preset.threads[0] || '')
             setInnerStripeColor(preset.threads[1] || '')
             setStripeColor('')
@@ -224,8 +224,8 @@ export default function BeltMaker() {
     //     setShowThreadColor3(count >= 3)
     //     setShowStripeColor(count === 4)
     // }
-    const handleClassic3StripeColorCount = (count: 2 | 3) => {
-        setClassic3StripeColorCount(count)
+    const handleClassic2StripeColorCount = (count: 2 | 3) => {
+        setClassic2StripeColorCount(count)
         setColorCount(count.toString())
         setShowThreadColorSection(true)
         setShowThreadColor3(count === 3)
@@ -259,8 +259,8 @@ export default function BeltMaker() {
         setColorPickerOpen(false)
     }
     const canProceedToStage3 = () => {
-        if (selectedPreset === 'classic_3stripe') {
-            const hasRequiredMainColours = classic3StripeColorCount === 2
+        if (selectedPreset === 'Classic_2Stripe') {
+            const hasRequiredMainColours = classic2StripeColorCount === 2
                 ? !!threadColor1 && !!threadColor2
                 : !!threadColor1 && !!threadColor2 && !!threadColor3
             return !!colorCount && hasRequiredMainColours && !!outerStripeColor && !!innerStripeColor
@@ -289,25 +289,25 @@ export default function BeltMaker() {
             setGridData(DEFAULT_PATTERN)
             return
         }
-        const needsSecondMainColour = !(selectedPreset === 'classic_3stripe' && classic3StripeColorCount === 2)
+        const needsSecondMainColour = !(selectedPreset === 'Classic_2Stripe' && classic2StripeColorCount === 2)
         if (!threadColor1 || (needsSecondMainColour && !threadColor2)) {
             setGridData(DEFAULT_PATTERN)
             return
         }
-        let designType: 'classic-2' | 'classic-3' | 'classic-4' | 'stripe-2' | 'stripe-3' = 'classic-2'
+        let designType: 'classic-2' | 'classic-3' | 'classic-4' | 'stripe-2' | 'stripe-3' | 'classic-2stripe' = 'classic-2'
         const colorCountNum = parseInt(colorCount) || 0
-        const effectiveStripeColor = selectedPreset === 'classic_3stripe' ? outerStripeColor : stripeColor
+        const effectiveStripeColor = selectedPreset === 'Classic_2Stripe' ? outerStripeColor : stripeColor
         const hasStripe = !!effectiveStripeColor
         const effectiveThreadColor2 =
-            selectedPreset === 'classic_3stripe' && classic3StripeColorCount === 2
+            selectedPreset === 'Classic_2Stripe' && classic2StripeColorCount === 2
                 ? threadColor2
                 : threadColor2
-        if (selectedPreset === 'classic_3stripe') {
+        if (selectedPreset === 'Classic_2Stripe') {
             if (!outerStripeColor || !innerStripeColor) {
                 setGridData(DEFAULT_PATTERN)
                 return
             }
-            designType = 'stripe-3'
+            designType = 'classic-2stripe'
         } else if (colorCountNum === 4) {
             designType = 'classic-4'
         } else if (hasStripe) {
@@ -325,7 +325,7 @@ export default function BeltMaker() {
             innerStripeColor
         )
         setGridData(newGridData)
-    }, [threadColor1, threadColor2, threadColor3, stripeColor, outerStripeColor, innerStripeColor, colorCount, selectedPreset, classic3StripeColorCount])
+    }, [threadColor1, threadColor2, threadColor3, stripeColor, outerStripeColor, innerStripeColor, colorCount, selectedPreset, classic2StripeColorCount])
     const stageIndicator = (
         <div className="flex justify-center items-center gap-2 sm:gap-4 mb-8">
             {[1, 2, 3, 4].map((stage) => (
@@ -502,24 +502,24 @@ export default function BeltMaker() {
                                             </select>
                                         </div>
                                     </div>
-                                ) : selectedPreset === 'classic_3stripe' && !classic3StripeColorCount ? (
+                                ) : selectedPreset === 'Classic_2Stripe' && !classic2StripeColorCount ? (
                                     <div className="bg-white border p-6 rounded-none shadow-lg mb-6">
                                         <h3 className="text-lg font-serif font-bold text-burgundy mb-4 pb-2 border-b-2 border-gold text-center">
-                                            Classic + 3 Stripe Design
+                                            Classic + 2 Stripe Design
                                         </h3>
                                         <p className="text-sm text-charcoal mb-4 text-center">
                                             Select how many main colours you would like for your design
                                         </p>
                                         <div className="flex justify-center gap-4">
                                             <Button
-                                                onClick={() => handleClassic3StripeColorCount(2)}
+                                                onClick={() => handleClassic2StripeColorCount(2)}
                                                 variant="outline"
                                                 className="px-8 py-3"
                                             >
                                                 2 Colours
                                             </Button>
                                             <Button
-                                                onClick={() => handleClassic3StripeColorCount(3)}
+                                                onClick={() => handleClassic2StripeColorCount(3)}
                                                 variant="outline"
                                                 className="px-8 py-3"
                                             >
@@ -570,7 +570,7 @@ export default function BeltMaker() {
                                                     </Button>
                                                 </div>
                                             </div>
-                                            {(selectedPreset !== 'classic_3stripe' || classic3StripeColorCount === 2) && (
+                                            {(selectedPreset !== 'Classic_2Stripe' || classic2StripeColorCount === 2) && (
                                                 <div>
                                                     <label className="block text-xs font-semibold text-charcoal uppercase tracking-wider mb-2">
                                                         Thread Colour 2
@@ -632,8 +632,8 @@ export default function BeltMaker() {
                                                     </div>
                                                 </div>
                                             )}
-                                            {/* Outer and Inner Stripe Colors for Classic 3 Stripe */}
-                                            {selectedPreset === 'classic_3stripe' && classic3StripeColorCount && (
+                                            {/* Outer and Inner Stripe Colors for Classic 2 Stripe */}
+                                            {selectedPreset === 'Classic_2Stripe' && classic2StripeColorCount && (
                                                 <>
                                                     <div>
                                                         <label className="block text-xs font-semibold text-charcoal uppercase tracking-wider mb-2">
