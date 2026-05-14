@@ -10,7 +10,7 @@ export default function Footer() {
     const pathname = usePathname()
     
     // Hide footer on belt-maker route
-    if (pathname.includes('belt-maker')) {
+    if (pathname.includes('custom-design-tool')) {
         return null
     }
     const containerVariants = {
