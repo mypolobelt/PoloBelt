@@ -5,6 +5,15 @@ import {
   STRIPE_PATTERN_2COLOR,
   STRIPE_PATTERN_3COLOR,
   CLASSIC_2STRIPE_PATTERN_COLOR,
+  CHAIN_PATTERN,
+  AZTEC_PATTERN,
+  TRIPLE_STRIPE_PATTERN,
+  DIAMOND_STRIPE_PATTERN,
+  STRIPEY_PATTERN,
+  DIAMONDS_PATTERN,
+  ALT_BLOCK_PATTERN,
+  CLASSIC_STRIPE_PATTERN,
+  CLASSIC_DOUBLE_STRIPE_PATTERN,
   applyColorsToPattern,
 } from './canvas'
 
@@ -40,6 +49,15 @@ export type DesignType =
   | 'stripe-2'
   | 'stripe-3'
   | 'classic-2stripe'
+  | 'classicstripe-3'
+  | 'classicdoublestripe-4'
+  | 'chain-3'
+  | 'aztec-2'
+  | 'triplestripe-4'
+  | 'diamondstripe-2'
+  | 'stripey-2'
+  | 'diamonds-2'
+  | 'altblock-4'
 
 export const generateGridDataFromColors = (
   color1: string,
@@ -79,6 +97,33 @@ export const generateGridDataFromColors = (
       break
     case 'classic-2stripe':
       basePattern = CLASSIC_2STRIPE_PATTERN_COLOR
+      break
+    case 'classicstripe-3':
+      basePattern = CLASSIC_STRIPE_PATTERN
+      break
+    case 'classicdoublestripe-4':
+      basePattern = CLASSIC_DOUBLE_STRIPE_PATTERN
+      break
+    case 'chain-3':
+      basePattern = CHAIN_PATTERN
+      break
+    case 'aztec-2':
+      basePattern = AZTEC_PATTERN
+      break
+    case 'triplestripe-4':
+      basePattern = TRIPLE_STRIPE_PATTERN
+      break
+    case 'diamondstripe-2':
+      basePattern = DIAMOND_STRIPE_PATTERN
+      break
+    case 'stripey-2':
+      basePattern = STRIPEY_PATTERN
+      break
+    case 'diamonds-2':
+      basePattern = DIAMONDS_PATTERN
+      break
+    case 'altblock-4':
+      basePattern = ALT_BLOCK_PATTERN
       break
     case 'classic-2':
     default:

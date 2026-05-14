@@ -277,11 +277,11 @@ export function CustomerForm({
             </div>
           </div>
         </div>
-
+        <p className='text-xs'>Once submitted your order will be verified and an invoice emailed to you by one of our team</p>
         <Button
           type="submit"
           disabled={isLoading}
-          className="w-full mt-4 sm:mt-5 py-2 sm:py-3 uppercase tracking-wide disabled:opacity-50 transition-all text-xs sm:text-sm"
+          className="w-full mt-2 py-2 sm:py-3 uppercase tracking-wide disabled:opacity-50 transition-all text-xs sm:text-sm"
         >
           {isLoading ? 'Sending...' : 'Request Invoice'}
         </Button>

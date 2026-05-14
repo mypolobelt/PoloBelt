@@ -294,7 +294,7 @@ export default function BeltMaker() {
             setGridData(DEFAULT_PATTERN)
             return
         }
-        let designType: 'classic-2' | 'classic-3' | 'classic-4' | 'stripe-2' | 'stripe-3' | 'classic-2stripe' = 'classic-2'
+        let designType: import('@/database/utils').DesignType = 'classic-2'
         const colorCountNum = parseInt(colorCount) || 0
         const effectiveStripeColor = selectedPreset === 'Classic_2Stripe' ? outerStripeColor : stripeColor
         const hasStripe = !!effectiveStripeColor
@@ -302,12 +302,27 @@ export default function BeltMaker() {
             selectedPreset === 'Classic_2Stripe' && classic2StripeColorCount === 2
                 ? threadColor2
                 : threadColor2
+        // Map presets to their specific design types
+        const presetTypeMap: Record<string, import('@/database/utils').DesignType> = {
+            'classicstripe': 'classicstripe-3',
+            'classicdoublestripe': 'classicdoublestripe-4',
+            'chain': 'chain-3',
+            'aztec': 'aztec-2',
+            'triplestripe': 'triplestripe-4',
+            'diamondstripe': 'diamondstripe-2',
+            'stripey': 'stripey-2',
+            'diamonds': 'diamonds-2',
+            'altblock': 'altblock-4',
+        }
+
         if (selectedPreset === 'Classic_2Stripe') {
             if (!outerStripeColor || !innerStripeColor) {
                 setGridData(DEFAULT_PATTERN)
                 return
             }
             designType = 'classic-2stripe'
+        } else if (selectedPreset && presetTypeMap[selectedPreset]) {
+            designType = presetTypeMap[selectedPreset]
         } else if (colorCountNum === 4) {
             designType = 'classic-4'
         } else if (hasStripe) {
