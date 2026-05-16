@@ -39,7 +39,10 @@ const Nav = () => {
                         </NavigationMenuItem>
                         <NavigationMenuItem>
                             <NavigationMenuLink asChild>
-                                <Link href="/custom-design-tool" className="px-2 sm:px-3 py-2 text-sm sm:text-base text-white hover:text-white/80 transition-colors">
+                                <Link
+                                    href="/custom-design-tool"
+                                    className="px-4 py-2 text-sm sm:text-base text-white font-semibold rounded-md border-b border-orange-600 transition-all duration-300  shadow-xl shadow-orange-600/20"
+                                >
                                     Custom Design Tool
                                 </Link>
                             </NavigationMenuLink>
