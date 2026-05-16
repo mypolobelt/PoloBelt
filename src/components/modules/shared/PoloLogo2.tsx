@@ -34,7 +34,7 @@ const PoloLogo2 = () => {
 
                     {/* Brand Name */}
                     <motion.h1
-                        className="text-2xl sm:text-3xl md:text-4xl font-serif tracking-wide text-gray-800"
+                        className="text-2xl sm:text-3xl md:text-4xl   tracking-wide text-gray-800"
                         initial={{ opacity: 0, x: 10 }}
                         whileInView={{ opacity: 1, x: 0 }}
                         viewport={{ once: false }}

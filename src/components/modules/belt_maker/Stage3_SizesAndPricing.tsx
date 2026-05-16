@@ -210,10 +210,10 @@ export const Stage3SizesAndPricing = ({
                 <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
                     <div className="bg-white rounded-none shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
                         <div className="sticky top-0 bg-white border-b-2 border-gold p-4 flex justify-between items-center">
-                            <h2 className="text-xl font-serif font-bold text-burgundy">Pricing Policy</h2>
+                            <h2 className="text-xl   font-bold  ">Pricing Policy</h2>
                             <button
                                 onClick={() => setShowPricingModal(false)}
-                                className="text-2xl text-charcoal hover:text-burgundy"
+                                className="text-2xl text-charcoal hover: "
                             >
                                 ×
                             </button>
@@ -226,7 +226,7 @@ export const Stage3SizesAndPricing = ({
 
                             {(Object.entries(PRICING) as [ProductType, typeof PRICING.Belt][]).map(([product, tiers]) => (
                                 <div key={product}>
-                                    <h3 className="text-base font-serif font-bold text-burgundy mb-3 pb-1 border-b border-gold">
+                                    <h3 className="text-base   font-bold   mb-3 pb-1 border-b border-gold">
                                         {product}
                                     </h3>
                                     <table className="w-full text-sm">

@@ -45,6 +45,16 @@ export const Stage4CustomerDetails = ({
     return (
         <section className="px-4 sm:px-6 lg:px-8 lg:pb-48 pb-20">
             <div className="max-w-4xl mx-auto">
+                {/* Prominent Design Name Header */}
+                <div className="bg-white border-t-4 border-gold p-4 mb-6 shadow-md rounded-none">
+                    <h2 className="text-2xl   font-bold">
+                        {designName ? `Design Name : ${designName}` : 'Untitled Design'}
+                    </h2>
+                    <p className="text-sm text-charcoal mt-1">
+                        Your custom design details are shown below.
+                    </p>
+                </div>
+
                 <SpecificationSheet
                     designName={designName}
                     threadColors={threadColors}
@@ -54,6 +64,7 @@ export const Stage4CustomerDetails = ({
                     hasStamp={hasStamp}
                     stampImage={stampImage}
                 />
+
                 <div className="mt-6">
                     <CustomerForm
                         canvasRef={canvasRef}
@@ -71,6 +82,7 @@ export const Stage4CustomerDetails = ({
                         onResetOrder={onResetOrder}
                     />
                 </div>
+
                 <div className="flex justify-between items-center mt-2">
                     <Button onClick={onBack} variant="outline" className="px-6">
                         ← Back to Sizes

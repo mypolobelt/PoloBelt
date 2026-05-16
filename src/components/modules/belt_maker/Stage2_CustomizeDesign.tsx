@@ -130,7 +130,7 @@ export const Stage2CustomizeDesign = ({
             <div className="max-w-4xl mx-auto">
                 {/* Design Name */}
                 <div className="bg-white border p-6 rounded-none shadow-lg mb-6">
-                    <h3 className="text-lg font-serif font-bold text-burgundy mb-4 pb-2 border-b-2 border-gold">
+                    <h3 className="text-lg   font-bold   mb-4 pb-2 border-b-2 border-gold">
                         Design Name
                     </h3>
                     <input
@@ -145,14 +145,14 @@ export const Stage2CustomizeDesign = ({
                 {/* Color Count Selection */}
                 {selectedPreset === 'plk' && !classicColorCount ? (
                     <div className="bg-white border p-6 rounded-none shadow-lg mb-6">
-                        <h3 className="text-lg font-serif font-bold text-burgundy mb-4 pb-2 border-b-2 border-gold text-center">
+                        <h3 className="text-lg   font-bold   mb-4 pb-2 border-b-2 border-gold text-center">
                             The Classic Design
                         </h3>
                         <p className="text-sm text-charcoal mb-4 text-center">
                             Select how many colours you would like for your Classic design
                         </p>
                         <div className="bg-white border p-6 rounded-none shadow-lg mb-6">
-                            <h3 className="text-lg font-serif font-bold text-burgundy mb-4 pb-2 border-b-2 border-gold">
+                            <h3 className="text-lg   font-bold   mb-4 pb-2 border-b-2 border-gold">
                                 Number of Thread Colours
                             </h3>
                             <select
@@ -169,7 +169,7 @@ export const Stage2CustomizeDesign = ({
                     </div>
                 ) : selectedPreset === 'Classic_2Stripe' && !classic2StripeColorCount ? (
                     <div className="bg-white border p-6 rounded-none shadow-lg mb-6">
-                        <h3 className="text-lg font-serif font-bold text-burgundy mb-4 pb-2 border-b-2 border-gold text-center">
+                        <h3 className="text-lg   font-bold   mb-4 pb-2 border-b-2 border-gold text-center">
                             Classic + 2 Stripe Design
                         </h3>
                         <p className="text-sm text-charcoal mb-4 text-center">
@@ -186,7 +186,7 @@ export const Stage2CustomizeDesign = ({
                     </div>
                 ) : (
                     <div className="bg-white border p-6 rounded-none shadow-lg mb-6">
-                        <h3 className="text-lg font-serif font-bold text-burgundy mb-4 pb-2 border-b-2 border-gold">
+                        <h3 className="text-lg   font-bold   mb-4 pb-2 border-b-2 border-gold">
                             Number of Thread Colours
                         </h3>
                         <select
@@ -205,7 +205,7 @@ export const Stage2CustomizeDesign = ({
                 {/* Thread Colors */}
                 {showThreadColorSection && (
                     <div className="bg-white border p-6 rounded-none shadow-lg mb-6">
-                        <h3 className="text-lg font-serif font-bold text-burgundy mb-4 pb-2 border-b-2 border-gold">
+                        <h3 className="text-lg   font-bold   mb-4 pb-2 border-b-2 border-gold">
                             Choose Thread Colours
                         </h3>
                         <div className="space-y-4">
@@ -255,7 +255,7 @@ export const Stage2CustomizeDesign = ({
 
                 {/* Belt Specifications */}
                 <div className="bg-white border p-6 rounded-none shadow-lg mb-6">
-                    <h3 className="text-lg font-serif font-bold text-burgundy mb-4 pb-2 border-b-2 border-gold">
+                    <h3 className="text-lg   font-bold   mb-4 pb-2 border-b-2 border-gold">
                         Belt Specifications
                     </h3>
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -291,7 +291,7 @@ export const Stage2CustomizeDesign = ({
 
                 {/* Logo Upload */}
                 <div className="bg-white border p-6 rounded-none shadow-lg mb-6">
-                    <h3 className="text-lg font-serif font-bold text-burgundy mb-4 pb-2 border-b-2 border-gold">
+                    <h3 className="text-lg   font-bold   mb-4 pb-2 border-b-2 border-gold">
                         Custom Logo / Stamp
                     </h3>
                     <input
@@ -312,7 +312,7 @@ export const Stage2CustomizeDesign = ({
 
                 {/* Team Colors Upload */}
                 <div className="bg-white border p-6 rounded-none shadow-lg mb-3">
-                    <h3 className="text-lg font-serif font-bold text-burgundy mb-4 pb-2 border-b-2 border-gold">
+                    <h3 className="text-lg   font-bold   mb-4 pb-2 border-b-2 border-gold">
                         Upload Team Colours
                     </h3>
                     <p className="text-xs text-charcoal mb-3">

@@ -101,7 +101,7 @@ export function ControlsPanel({
       <aside className="bg-white border p-4 sm:p-5 md:p-6 lg:p-2 rounded-none shadow-lg h-fit sticky top-16 sm:top-20 md:top-24 overflow-y-auto max-h-[calc(100vh-6rem)] sm:max-h-none">
         {/* Design Presets */}
         <div className="mb-4 sm:mb-5 md:mb-6">
-          <h3 className="text-base sm:text-lg md:text-xl lg:text-2xl font-serif font-bold text-burgundy mb-2 sm:mb-3 pb-2 border-b-2 border-gold">
+          <h3 className="text-base sm:text-lg md:text-xl lg:text-2xl font-bold   mb-2 sm:mb-3 pb-2 border-b-2 border-gold">
             Design Name
           </h3>
           <input
@@ -116,7 +116,7 @@ export function ControlsPanel({
         {/* Color Count Selection */}
         {showColorCountSection && (
           <div className="mb-4 sm:mb-5 md:mb-6">
-            <h3 className="text-base sm:text-lg md:text-xl lg:text-2xl font-serif font-bold text-burgundy mb-2 sm:mb-3 pb-2 border-b-2 border-gold">
+            <h3 className="text-base sm:text-lg md:text-xl lg:text-2xl   font-bold   mb-2 sm:mb-3 pb-2 border-b-2 border-gold">
               Number of Thread Colours
             </h3>
             <select
@@ -134,7 +134,7 @@ export function ControlsPanel({
         {/* Thread Colors */}
         {showThreadColorSection && (
           <div className="mb-4 sm:mb-5 md:mb-6">
-            <h3 className="text-base sm:text-lg md:text-xl lg:text-2xl font-serif font-bold text-burgundy mb-2 sm:mb-3 pb-2 border-b-2 border-gold">
+            <h3 className="text-base sm:text-lg md:text-xl lg:text-2xl   font-bold   mb-2 sm:mb-3 pb-2 border-b-2 border-gold">
               Thread Colours
             </h3>
 
@@ -230,7 +230,7 @@ export function ControlsPanel({
 
         {/* Additional Specifications */}
         <div className="mb-4 sm:mb-5 md:mb-6">
-          <h3 className="text-base sm:text-lg md:text-xl lg:text-2xl font-serif font-bold text-burgundy mb-2 sm:mb-3 pb-2 border-b-2 border-gold">
+          <h3 className="text-base sm:text-lg md:text-xl lg:text-2xl   font-bold   mb-2 sm:mb-3 pb-2 border-b-2 border-gold">
             Additional Specifications
           </h3>
 

@@ -18,7 +18,7 @@ const PoloLogo = () => {
                     />
 
                     {/* Brand Name */}
-                    <h1 className="text-xl md:text-4xl font-serif tracking-wide text-gray-800">
+                    <h1 className="text-xl md:text-4xl   tracking-wide text-gray-800">
                         My Polo Belt
                     </h1>
 

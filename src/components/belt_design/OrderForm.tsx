@@ -46,7 +46,7 @@ const getSizesForProductType = (productType: ProductType): string[] => {
   }
 }
 
-const labelClass = "block text-[10px] font-bold text-burgundy uppercase tracking-widest mb-1"
+const labelClass = "block text-[10px] font-bold   uppercase tracking-widest mb-1"
 const selectClass = "w-full px-3 py-2 border-2 border-gray-200 bg-white rounded-none font-sans text-sm focus:outline-none focus:border-gold transition-colors"
 const disabledSelectClass = "w-full px-3 py-2 border-2 border-gray-100 bg-gray-50 rounded-none font-sans text-sm text-gray-400 cursor-not-allowed"
 
@@ -104,7 +104,7 @@ export function OrderForm({
     <div className="bg-white rounded-none shadow-lg overflow-hidden">
       {/* Header */}
       <div className="px-5 py-4 border-b-2 border-gold flex items-center justify-between">
-        <h3 className="text-xl font-serif font-bold text-burgundy">
+        <h3 className="text-xl   font-bold  ">
           Order Quantities
         </h3>
         <button
@@ -139,7 +139,7 @@ export function OrderForm({
               {/* Mobile: stacked card */}
               <div className="lg:hidden">
                 <div className="flex items-center justify-between mb-3">
-                  <span className="text-xs font-bold text-burgundy uppercase tracking-widest">
+                  <span className="text-xs font-bold   uppercase tracking-widest">
                     Item {index + 1}
                   </span>
                   {sizeRows.length > 1 && (
@@ -207,7 +207,7 @@ export function OrderForm({
                     <div className="flex items-center gap-2">
                       <button
                         onClick={() => onUpdateSize(row.id, row.productType, row.size, row.width, row.stamped, Math.max(1, row.quantity - 1))}
-                        className="w-9 h-9 border-2 border-gray-200 text-gray-600 hover:border-gold hover:text-burgundy font-bold text-lg flex items-center justify-center transition-colors"
+                        className="w-9 h-9 border-2 border-gray-200 text-gray-600 hover:border-gold hover:  font-bold text-lg flex items-center justify-center transition-colors"
                       >
                         −
                       </button>
@@ -223,7 +223,7 @@ export function OrderForm({
                       />
                       <button
                         onClick={() => onUpdateSize(row.id, row.productType, row.size, row.width, row.stamped, row.quantity + 1)}
-                        className="w-9 h-9 border-2 border-gray-200 text-gray-600 hover:border-gold hover:text-burgundy font-bold text-lg flex items-center justify-center transition-colors"
+                        className="w-9 h-9 border-2 border-gray-200 text-gray-600 hover:border-gold hover:  font-bold text-lg flex items-center justify-center transition-colors"
                       >
                         +
                       </button>
@@ -280,7 +280,7 @@ export function OrderForm({
                 <div className="flex items-center border-2 border-gray-200 focus-within:border-gold transition-colors">
                   <button
                     onClick={() => onUpdateSize(row.id, row.productType, row.size, row.width, row.stamped, Math.max(1, row.quantity - 1))}
-                    className="w-7 h-9 text-gray-500 hover:text-burgundy font-bold text-base flex items-center justify-center"
+                    className="w-7 h-9 text-gray-500 hover:  font-bold text-base flex items-center justify-center"
                   >
                     −
                   </button>
@@ -296,7 +296,7 @@ export function OrderForm({
                   />
                   <button
                     onClick={() => onUpdateSize(row.id, row.productType, row.size, row.width, row.stamped, row.quantity + 1)}
-                    className="w-7 h-9 text-gray-500 hover:text-burgundy font-bold text-base flex items-center justify-center"
+                    className="w-7 h-9 text-gray-500 hover:  font-bold text-base flex items-center justify-center"
                   >
                     +
                   </button>
@@ -324,7 +324,7 @@ export function OrderForm({
       <div className="px-5 py-4 border-t border-gray-100 bg-gray-50">
         <button
           onClick={onAddSize}
-          className="flex items-center gap-2 text-sm font-semibold text-burgundy hover:text-gold transition-colors"
+          className="flex items-center gap-2 text-sm font-semibold   hover:text-gold transition-colors"
         >
           <span className="w-6 h-6 border-2 border-current flex items-center justify-center text-base leading-none">+</span>
           Add Another Item
@@ -336,21 +336,21 @@ export function OrderForm({
         <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-none shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
             <div className="sticky top-0 bg-white border-b-2 border-gold p-4 flex justify-between items-center">
-              <h2 className="text-xl font-serif font-bold text-burgundy">Sizing Guide</h2>
+              <h2 className="text-xl   font-bold  ">Sizing Guide</h2>
               <button
                 onClick={() => setShowSizingModal(false)}
-                className="text-2xl text-charcoal hover:text-burgundy"
+                className="text-2xl text-charcoal hover: "
               >
                 ×
               </button>
             </div>
             <div className="p-6 space-y-8">
               <div>
-                <h3 className="text-lg font-serif font-bold text-burgundy mb-4 text-center">Sizing Guide</h3>
+                <h3 className="text-lg   font-bold   mb-4 text-center">Sizing Guide</h3>
                 <Image src="/assets/Sizing_Guide.webp" alt="Sizing Guide" width={1000} height={600} className="w-full h-auto" />
               </div>
               <div className="border-t-2 border-gray-200 pt-8">
-                <h3 className="text-lg font-serif font-bold text-burgundy mb-4 text-center">Belt & Collar Sizing Tables</h3>
+                <h3 className="text-lg   font-bold   mb-4 text-center">Belt & Collar Sizing Tables</h3>
                 <Image src="/assets/Size_Table.webp" alt="Size Table" width={1000} height={600} className="w-full h-auto" />
               </div>
             </div>

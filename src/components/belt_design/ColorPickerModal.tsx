@@ -35,7 +35,7 @@ export function ColorPickerModal({
     >
       <div className="bg-white rounded-none p-8 max-w-5xl w-full max-h-[80vh] md:max-h-[70vh] overflow-y-auto relative z-50 shadow-2xl" style={{ WebkitOverflowScrolling: 'touch' }}>
         <div className="flex justify-between items-center mb-6 pb-4 border-b-2 border-gold">
-          <h3 className="text-2xl font-serif font-bold text-burgundy">
+          <h3 className="text-2xl font-bold  ">
             Choose Thread Colour
           </h3>
           <button
