@@ -1,5 +1,7 @@
 'use client'
 
+import Image from 'next/image'
+
 interface SpecificationSheetProps {
   designName: string
   threadColors: string[]
@@ -7,6 +9,7 @@ interface SpecificationSheetProps {
   leatherColor: string
   buckleFinish: string
   hasStamp: boolean
+  stampImage?: string | null
 }
 
 export function SpecificationSheet({
@@ -15,6 +18,7 @@ export function SpecificationSheet({
   leatherColor,
   buckleFinish,
   hasStamp,
+  stampImage,
 }: SpecificationSheetProps) {
   return (
     <div className="bg-cream p-4 sm:p-5 md:p-6 lg:p-8 rounded-none border-l-4 border-[#0f1526] shadow-lg">
@@ -49,9 +53,23 @@ export function SpecificationSheet({
           <h4 className="text-xs sm:text-xs md:text-sm font-bold text-burgundy uppercase tracking-wider mb-2 sm:mb-3">
             Stamp
           </h4>
-          <p className="text-xs sm:text-sm text-charcoal">
-            {hasStamp ? 'Custom Logo' : 'None'}
-          </p>
+          {hasStamp ? (
+            <div className="flex flex-col gap-2">
+              {stampImage ? (
+                <Image
+                  src={stampImage}
+                  alt="Custom stamp logo"
+                  width={48}
+                  height={48}
+                  className="w-12 h-12 object-contain border border-gray-200 bg-white"
+                />
+              ) : (
+                <p className="text-xs sm:text-sm text-charcoal">Custom Logo</p>
+              )}
+            </div>
+          ) : (
+            <p className="text-xs sm:text-sm text-charcoal">None</p>
+          )}
         </div>
       </div>
     </div>

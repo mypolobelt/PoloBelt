@@ -52,6 +52,7 @@ export const Stage4CustomerDetails = ({
                     leatherColor={leatherColor}
                     buckleFinish={buckleFinish}
                     hasStamp={hasStamp}
+                    stampImage={stampImage}
                 />
                 <div className="mt-6">
                     <CustomerForm

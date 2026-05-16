@@ -155,6 +155,8 @@ export const useBeltDesign = () => {
     const newId = (
       Math.max(...sizeRows.map((r) => parseInt(r.id)), 0) + 1
     ).toString();
+    // Default stamped to Yes if a logo has been uploaded; slim belts default to No
+    const defaultStamped: "Yes" | "No" = stampImage ? "Yes" : "No";
     setSizeRows([
       ...sizeRows,
       {
@@ -162,7 +164,7 @@ export const useBeltDesign = () => {
         productType: "Belt",
         size: "",
         width: "Standard (3cm)",
-        stamped: "No",
+        stamped: defaultStamped,
         quantity: 1,
       },
     ]);
@@ -177,17 +179,46 @@ export const useBeltDesign = () => {
     quantity: number,
   ) => {
     setSizeRows(
-      sizeRows.map((row) =>
-        row.id === id
-          ? { ...row, productType, size, width, stamped, quantity }
-          : row,
-      ),
+      sizeRows.map((row) => {
+        if (row.id !== id) return row;
+
+        // Slim belts always default to No for stamped
+        const resolvedStamped: "Yes" | "No" =
+          width === "Slim (2.5cm)" && row.width !== "Slim (2.5cm)"
+            ? "No"
+            : stamped;
+
+        return {
+          ...row,
+          productType,
+          size,
+          width,
+          stamped: resolvedStamped,
+          quantity,
+        };
+      }),
     );
   };
 
   const handleRemoveSizeRow = (id: string) => {
     if (sizeRows.length > 1) {
       setSizeRows(sizeRows.filter((row) => row.id !== id));
+    }
+  };
+
+  // When a stamp image is uploaded, update existing Standard rows to stamped: Yes.
+  // This is called from Stage2 alongside setStampImage.
+  const handleSetStampImage = (image: string | null) => {
+    setStampImage(image);
+    if (image) {
+      setSizeRows((rows) =>
+        rows.map((row) =>
+          row.width === "Standard (3cm)" ? { ...row, stamped: "Yes" } : row,
+        ),
+      );
+    } else {
+      // Logo removed — reset all to No
+      setSizeRows((rows) => rows.map((row) => ({ ...row, stamped: "No" })));
     }
   };
 
@@ -348,7 +379,7 @@ export const useBeltDesign = () => {
     setThreadColor2,
     setThreadColor3,
     setStripeColor,
-    setStampImage,
+    setStampImage: handleSetStampImage,
     setTeamColorImage,
     setOuterStripeColor,
     setInnerStripeColor,
