@@ -344,7 +344,7 @@ export const applyColorsToPattern = (
   const isStripePattern = stripe1Hex !== null && !isClassic4;
   const is2Stripe = designType === 'classic-2stripe';
   const stripe2Hex = stripe2HexIn ?? null;
-
+  
   // 4-color non-stripe designs that use #CCCCCC=T3 and #999999=T4
   const is4ColorBlock = designType === 'classicdoublestripe-4'
     || designType === 'triplestripe-4'
