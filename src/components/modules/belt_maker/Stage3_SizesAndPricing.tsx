@@ -86,23 +86,26 @@ export const Stage3SizesAndPricing = ({
 
     const calculatePricing = () => {
         const lineItems: LineItem[] = []
-
-        type GroupKey = string
-        const groups: Record<GroupKey, { productType: ProductType; width: string; quantity: number }> = {}
+        const groups: Record<string, { productType: ProductType; quantity: number; widths: Set<string> }> = {}
 
         sizeRows.forEach(row => {
             if (!row.size || row.quantity <= 0) return
-            const key: GroupKey = `${row.productType}__${row.width}`
+            const key = row.productType
             if (!groups[key]) {
-                groups[key] = { productType: row.productType, width: row.width, quantity: 0 }
+                groups[key] = { productType: row.productType, quantity: 0, widths: new Set() }
             }
             groups[key].quantity += row.quantity
+            groups[key].widths.add(row.width)
         })
 
         Object.values(groups).forEach(g => {
             const unitPrice = getUnitPrice(g.productType, g.quantity)
+            // Show "Standard & Slim" when both widths are present, otherwise the single width name
+            const widthLabel = g.widths.size > 1
+                ? 'Standard & Slim'
+                : Array.from(g.widths)[0] ?? ''
             lineItems.push({
-                label: `${g.quantity} × ${g.productType} (${g.width})`,
+                label: `${g.quantity} × ${g.productType} (${widthLabel}) @ £${unitPrice.toFixed(2)} each`,
                 amount: unitPrice * g.quantity,
             })
         })
@@ -149,7 +152,7 @@ export const Stage3SizesAndPricing = ({
     return (
         <section className="px-4 sm:px-6 lg:px-8 lg:pb-48 pb-20">
             <div className="max-w-4xl mx-auto">
-                <Button onClick={onBack} variant="outline" className="px-6 mb-4">← Back to Customise</Button>
+                <Button onClick={onBack} variant="outline" className="px-2 mb-4">← Back to Customise</Button>
                 <SpecificationSheet
                     designName={designName}
                     threadColors={threadColors}
@@ -202,7 +205,7 @@ export const Stage3SizesAndPricing = ({
                 </div>
                 <div className="flex justify-between items-center mt-2">
                     <Button onClick={onBack} variant="outline">← Back to Customise</Button>
-                    <Button onClick={onContinue} disabled={!canProceed} className="px-8">Continue to Your Details →</Button>
+                    <Button onClick={onContinue} disabled={!canProceed} className="px-2">Continue to Your Details →</Button>
                 </div>
             </div>
 
@@ -211,10 +214,10 @@ export const Stage3SizesAndPricing = ({
                 <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
                     <div className="bg-white rounded-none shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
                         <div className="sticky top-0 bg-white border-b-2 border-gold p-4 flex justify-between items-center">
-                            <h2 className="text-xl   font-bold  ">Pricing Policy</h2>
+                            <h2 className="text-xl font-bold">Pricing Policy</h2>
                             <button
                                 onClick={() => setShowPricingModal(false)}
-                                className="text-2xl text-charcoal hover: "
+                                className="text-2xl text-charcoal"
                             >
                                 ×
                             </button>
@@ -227,7 +230,7 @@ export const Stage3SizesAndPricing = ({
 
                             {(Object.entries(PRICING) as [ProductType, typeof PRICING.Belt][]).map(([product, tiers]) => (
                                 <div key={product}>
-                                    <h3 className="text-base   font-bold   mb-3 pb-1 border-b border-gold">
+                                    <h3 className="text-base font-bold mb-3 pb-1 border-b border-gold">
                                         {product}
                                     </h3>
                                     <table className="w-full text-sm">

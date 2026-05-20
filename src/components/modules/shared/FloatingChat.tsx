@@ -1,12 +1,16 @@
 "use client"
 
 import { useState } from "react"
+import { usePathname } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { X, MessageCircle, Send, Paperclip, MessageSquare } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 export default function FloatingChat() {
     const [open, setOpen] = useState(false)
+    const pathname = usePathname()
+
+    if (pathname === "/custom-design-tool") return null
 
     return (
         <>
