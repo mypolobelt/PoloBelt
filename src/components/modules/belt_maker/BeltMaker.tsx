@@ -131,6 +131,7 @@ export default function BeltMaker() {
 
                 {currentStage === 3 && (
                     <Stage3SizesAndPricing
+                        stampImage={stampImage}
                         designName={designName}
                         threadColors={threadColors}
                         beltWidth={beltWidth}

@@ -184,23 +184,7 @@ export const Stage2CustomizeDesign = ({
                             </Button>
                         </div>
                     </div>
-                ) : (
-                    <div className="bg-white border p-6 rounded-none shadow-lg mb-6">
-                        <h3 className="text-lg   font-bold   mb-4 pb-2 border-b-2 border-gold">
-                            Number of Thread Colours
-                        </h3>
-                        <select
-                            value={colorCount}
-                            onChange={(e) => setColorCount(e.target.value)}
-                            className="w-full px-3 py-2 border-2 border-gray-300 rounded-none font-sans text-sm focus:outline-none focus:border-gold"
-                        >
-                            <option value="">-- Select Number of Colours --</option>
-                            <option value="2">2 Colours</option>
-                            <option value="3">3 Colours</option>
-                            {selectedPreset === 'plk' && <option value="4">4 Colours</option>}
-                        </select>
-                    </div>
-                )}
+                ) : null}
 
                 {/* Thread Colors */}
                 {showThreadColorSection && (
