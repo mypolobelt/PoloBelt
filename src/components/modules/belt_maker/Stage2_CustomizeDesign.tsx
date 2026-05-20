@@ -128,6 +128,9 @@ export const Stage2CustomizeDesign = ({
     return (
         <section className="px-4 sm:px-6 lg:px-8 lg:pb-48 pb-20">
             <div className="max-w-4xl mx-auto">
+                <Button onClick={onBack} variant="outline" className="px-6 mb-4">
+                    ← Back to Designs
+                </Button>
                 {/* Design Name */}
                 <div className="bg-white border p-6 rounded-none shadow-lg mb-6">
                     <h3 className="text-lg   font-bold   mb-4 pb-2 border-b-2 border-gold">

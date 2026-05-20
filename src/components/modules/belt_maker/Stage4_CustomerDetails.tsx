@@ -45,6 +45,9 @@ export const Stage4CustomerDetails = ({
     return (
         <section className="px-4 sm:px-6 lg:px-8 lg:pb-48 pb-20">
             <div className="max-w-4xl mx-auto">
+                <Button onClick={onBack} variant="outline" className="px-6 mb-4">
+                    ← Back to Sizes
+                </Button>
                 {/* Prominent Design Name Header */}
                 <div className="bg-white border-t-4 border-gold p-4 mb-6 shadow-md rounded-none">
                     <h2 className="text-2xl   font-bold">

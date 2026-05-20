@@ -78,13 +78,13 @@ export default function BeltMaker() {
                 </header>
 
                 <div className="px-4 sm:px-6 lg:px-8 mt-6">
-                    {currentStage > 1 && (
+                    {/* {currentStage > 1 && (
                         <div className="max-w-6xl mx-auto mb-4">
                             <Button onClick={handleBackToDesignSelection} variant="outline" className="px-6">
                                 ← Back to Design Selection
                             </Button>
                         </div>
-                    )}
+                    )} */}
                     <StageIndicator currentStage={currentStage} />
                 </div>
 
