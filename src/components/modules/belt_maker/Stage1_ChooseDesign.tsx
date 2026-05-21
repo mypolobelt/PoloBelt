@@ -7,7 +7,7 @@ interface Stage1ChooseDesignProps {
 export const Stage1ChooseDesign = ({ onLoadPreset }: Stage1ChooseDesignProps) => {
     return (
         <section className="px-4 sm:px-6 lg:px-8">
-            <div className="max-w-6xl mx-auto">
+            <div className="max-w-7xl mx-auto">
                 <div className="bg-white border p-6 rounded-none shadow-lg">
                     <DesignPresets onLoadPreset={onLoadPreset} />
                 </div>

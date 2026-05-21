@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback } from "react";
+import { useState, useMemo, useCallback, useEffect } from "react";
 import { DESIGN_PRESETS, THREAD_COLORS } from "@/database/constants";
 import { generateGridDataFromColors, DesignType } from "@/database/utils";
 
@@ -265,17 +265,20 @@ export const useBeltDesign = () => {
     resolveDesignType,
   ]);
 
-  // Scroll helper
-  const scrollToTop = () => {
-    if (typeof window !== "undefined") {
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    }
-  };
-
   const goToStage = (stage: Stage) => {
     setCurrentStage(stage);
-    scrollToTop();
   };
+
+  // Scroll to top after React has painted the new stage content.
+  // Using requestAnimationFrame fixes a Safari iOS bug where scrollTo fires
+  // before the new stage's DOM is rendered, so the browser ignores it.
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      requestAnimationFrame(() => {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      });
+    }
+  }, [currentStage]);
 
   // Size-row management
   const handleAddSizeRow = () => {
@@ -590,7 +593,5 @@ export const useBeltDesign = () => {
     // Validation
     canProceedToStage3,
     canProceedToStage4,
-    // Helpers
-    scrollToTop,
   };
 };

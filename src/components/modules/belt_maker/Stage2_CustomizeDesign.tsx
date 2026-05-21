@@ -127,13 +127,13 @@ export const Stage2CustomizeDesign = ({
 
     return (
         <section className="px-4 sm:px-6 lg:px-8 lg:pb-48 pb-20">
-            <div className="max-w-4xl mx-auto">
+            <div className="max-w-7xl mx-auto">
                 <Button onClick={onBack} variant="outline" className="px-2 mb-4">
                     ← Back to Designs
                 </Button>
                 {/* Design Name */}
                 <div className="bg-white border p-6 rounded-none shadow-lg mb-6">
-                    <h3 className="text-lg   font-bold   mb-4 pb-2 border-b-2 border-gold">
+                    <h3 className="text-lg font-bold mb-4 pb-2 border-b-2 border-gold">
                         Design Name
                     </h3>
                     <input
@@ -191,8 +191,8 @@ export const Stage2CustomizeDesign = ({
 
                 {/* Thread Colors */}
                 {showThreadColorSection && (
-                    <div className="bg-white border p-6 rounded-none shadow-lg mb-6">
-                        <h3 className="text-lg   font-bold   mb-4 pb-2 border-b-2 border-gold">
+                    <div className="bg-white border p-2 md:p-6 rounded-none shadow-lg mb-6">
+                        <h3 className="text-lg font-bold mb-4 pb-2 border-b-2">
                             Choose Thread Colours
                         </h3>
                         <div className="space-y-4">
@@ -323,10 +323,10 @@ export const Stage2CustomizeDesign = ({
 
                 {/* Navigation */}
                 <div className="flex justify-between items-center mt-2">
-                    <Button onClick={onBack} variant="outline" className="px-6">
+                    <Button onClick={onBack} variant="outline" className="px-2">
                         ← Back to Designs
                     </Button>
-                    <Button onClick={onContinue} disabled={!canProceed} className="px-8">
+                    <Button onClick={onContinue} disabled={!canProceed} className="px-2">
                         Continue to Sizes →
                     </Button>
                 </div>

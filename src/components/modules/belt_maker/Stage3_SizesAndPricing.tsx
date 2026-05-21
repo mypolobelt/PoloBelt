@@ -151,7 +151,7 @@ export const Stage3SizesAndPricing = ({
 
     return (
         <section className="px-4 sm:px-6 lg:px-8 lg:pb-48 pb-20">
-            <div className="max-w-4xl mx-auto">
+            <div className="max-w-7xl mx-auto">
                 <Button onClick={onBack} variant="outline" className="px-2 mb-4">← Back to Customise</Button>
                 <SpecificationSheet
                     designName={designName}
@@ -203,9 +203,15 @@ export const Stage3SizesAndPricing = ({
                         <p className="text-xs text-gray-500">* Estimated quote, not including P&P</p>
                     </div>
                 </div>
-                <div className="flex justify-between items-center mt-2">
-                    <Button onClick={onBack} variant="outline">← Back to Customise</Button>
-                    <Button onClick={onContinue} disabled={!canProceed} className="px-2">Continue to Your Details →</Button>
+                <div className="flex justify-between items-center gap-2 mt-2">
+                    <Button onClick={onBack} variant="outline" className="shrink-0">
+                        <span className="sm:hidden">← Back</span>
+                        <span className="hidden sm:inline">← Back to Customise</span>
+                    </Button>
+                    <Button onClick={onContinue} disabled={!canProceed} className="shrink-0">
+                        <span className="sm:hidden">Continue →</span>
+                        <span className="hidden sm:inline">Continue to Your Details →</span>
+                    </Button>
                 </div>
             </div>
 
