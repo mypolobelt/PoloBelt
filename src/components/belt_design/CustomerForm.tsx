@@ -1,7 +1,7 @@
 'use client'
 
 import { validateEmail } from '@/database/utils'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Button } from '../ui/button'
 import { useRouter } from 'next/navigation'
 import { countries } from '@/database/countries'
@@ -29,6 +29,9 @@ interface CustomerFormProps {
   sizeOrders?: SizeOrder[]
   onResetDesign?: () => void
   onResetOrder?: () => void
+  onRequestSubmit?: () => void
+  confirmedAndSubmit?: boolean
+  onSubmitComplete?: () => void
 }
 
 export function CustomerForm({
@@ -37,6 +40,9 @@ export function CustomerForm({
   sizeOrders,
   onResetDesign,
   onResetOrder,
+  onRequestSubmit,
+  confirmedAndSubmit,
+  onSubmitComplete,
 }: CustomerFormProps) {
   const [customerName, setCustomerName] = useState('')
   const [email, setEmail] = useState('')
@@ -61,12 +67,12 @@ export function CustomerForm({
     }
   }
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  // Gate: validate then hand off to parent to open the review modal
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     setSuccessMessage('')
     setErrorMessage('')
 
-    // Validation
     if (!validateEmail(email)) {
       setEmailError('Please enter a valid email address')
       return
@@ -84,10 +90,17 @@ export function CustomerForm({
       return
     }
 
+    // All validation passed — ask parent to open the review modal
+    onRequestSubmit?.()
+  }
+
+  // Real API submit — only runs after modal confirmation
+  const submitOrder = async () => {
+    setSuccessMessage('')
+    setErrorMessage('')
     setIsLoading(true)
 
     try {
-      // Prepare order data
       const orderData = {
         customerName,
         email,
@@ -129,7 +142,8 @@ export function CustomerForm({
       setSuccessMessage(
         'Your order has been sent successfully! Check your email for confirmation.'
       )
-      // Reset form
+
+      // Reset form fields
       setCustomerName('')
       setEmail('')
       setAddressLine1('')
@@ -138,9 +152,11 @@ export function CustomerForm({
       setStateRegion('')
       setPostcode('')
       setCountry('')
-      // Reset design and order state
+
+      // Reset design and order state in parent
       onResetDesign?.()
       onResetOrder?.()
+
       // Clear success message after 3 seconds
       setTimeout(() => setSuccessMessage(''), 3000)
     } catch (error) {
@@ -150,19 +166,28 @@ export function CustomerForm({
       )
     } finally {
       setIsLoading(false)
-      router.push("/belt-maker")
+      onSubmitComplete?.()
+      router.push('/custom-design-tool')
     }
   }
 
+  // When the parent confirms via the modal, fire the real submit
+  useEffect(() => {
+    if (confirmedAndSubmit) {
+      submitOrder()
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [confirmedAndSubmit])
+
   return (
     <div className="bg-white p-4 md:p-6 lg:p-7 rounded-none shadow-lg">
-      <h3 className="text-lg sm:text-lg md:text-xl lg:text-2xl   font-bold   mb-3 sm:mb-4 pb-2 border-b-2 border-gold">
+      <h3 className="text-lg sm:text-lg md:text-xl lg:text-2xl font-bold mb-3 sm:mb-4 pb-2 border-b-2 border-gold">
         Customer Details
       </h3>
 
       <form onSubmit={handleSubmit} className="space-y-3 sm:space-y-4">
         <div>
-          <label className="block text-xs font-semibold  uppercase tracking-wider mb-2">
+          <label className="block text-xs font-semibold uppercase tracking-wider mb-2">
             Name
           </label>
           <input
@@ -176,7 +201,7 @@ export function CustomerForm({
         </div>
 
         <div>
-          <label className="block text-xs font-semibold  uppercase tracking-wider mb-2">
+          <label className="block text-xs font-semibold uppercase tracking-wider mb-2">
             Email Address
           </label>
           <input
@@ -194,14 +219,14 @@ export function CustomerForm({
         </div>
 
         <div>
-          <label className="block text-md text-center font-semibold  uppercase tracking-wider mb-2">
+          <label className="block text-md text-center font-semibold uppercase tracking-wider mb-2">
             Postal Address
           </label>
-          <p className="text-xs  italic mb-2 text-blue-500">
+          <p className="text-xs italic mb-2 text-blue-500">
             Full address required to accurately quote total cost including shipping
           </p>
           <div className="space-y-2">
-            <label className="block text-xs font-semibold  uppercase tracking-wider mb-2">
+            <label className="block text-xs font-semibold uppercase tracking-wider mb-2">
               Address Line 1
             </label>
             <input
@@ -212,7 +237,8 @@ export function CustomerForm({
               placeholder="Address Line 1 (Street, House Number)"
               className="w-full px-3 py-2 border-2 border-gray-300 rounded-none font-sans text-xs sm:text-sm focus:outline-none focus:border-gold"
             />
-            <label className="block text-xs font-semibold  uppercase tracking-wider mb-2">
+
+            <label className="block text-xs font-semibold uppercase tracking-wider mb-2">
               Address Line 2
             </label>
             <input
@@ -222,7 +248,8 @@ export function CustomerForm({
               placeholder="Address Line 2 (Apartment, Suite, etc.) - Optional"
               className="w-full px-3 py-2 border-2 border-gray-300 rounded-none font-sans text-xs sm:text-sm focus:outline-none focus:border-gold"
             />
-            <label className="block text-xs font-semibold  uppercase tracking-wider mb-2">
+
+            <label className="block text-xs font-semibold uppercase tracking-wider mb-2">
               City
             </label>
             <input
@@ -233,7 +260,8 @@ export function CustomerForm({
               placeholder="City / Town"
               className="w-full px-3 py-2 border-2 border-gray-300 rounded-none font-sans text-xs sm:text-sm focus:outline-none focus:border-gold"
             />
-            <label className="block text-xs font-semibold  uppercase tracking-wider mb-2">
+
+            <label className="block text-xs font-semibold uppercase tracking-wider mb-2">
               State
             </label>
             <input
@@ -244,7 +272,8 @@ export function CustomerForm({
               placeholder="State / Region"
               className="w-full px-3 py-2 border-2 border-gray-300 rounded-none font-sans text-xs sm:text-sm focus:outline-none focus:border-gold"
             />
-            <label className="block text-xs font-semibold  uppercase tracking-wider mb-2">
+
+            <label className="block text-xs font-semibold uppercase tracking-wider mb-2">
               Post Code
             </label>
             <input
@@ -256,9 +285,8 @@ export function CustomerForm({
               className="w-full px-3 py-2 border-2 border-gray-300 rounded-none font-sans text-xs sm:text-sm focus:outline-none focus:border-gold"
             />
 
-            {/* Country Select Dropdown */}
             <div>
-              <label className="block text-xs font-semibold  uppercase tracking-wider mb-2">
+              <label className="block text-xs font-semibold uppercase tracking-wider mb-2">
                 Country
               </label>
               <select
@@ -277,7 +305,11 @@ export function CustomerForm({
             </div>
           </div>
         </div>
-        <p className='text-xs'>Once submitted your order will be verified and an invoice emailed to you by one of our team</p>
+
+        <p className="text-xs">
+          Once submitted your order will be verified and an invoice emailed to you by one of our team
+        </p>
+
         <Button
           type="submit"
           disabled={isLoading}

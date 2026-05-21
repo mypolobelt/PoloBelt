@@ -9,7 +9,7 @@ interface Stage2CustomizeDesignProps {
     selectedPreset: string | null
     colorCount: string
     setColorCount: (count: string) => void
-    classicColorCount: 2 | 3 | 4 | null
+    classicColorCount: 2 | 3 | null
     classic2StripeColorCount: 2 | 3 | null
     handleClassic2StripeColorCount: (count: 2 | 3) => void
     showThreadColorSection: boolean
@@ -87,24 +87,12 @@ export const Stage2CustomizeDesign = ({
     const handleSelectColor = (colorId: string, colorName: string) => {
         const displayText = `${colorName} ${colorId}`
         switch (currentColorField) {
-            case 1:
-                setThreadColor1(displayText)
-                break
-            case 2:
-                setThreadColor2(displayText)
-                break
-            case 3:
-                setThreadColor3(displayText)
-                break
-            case 4:
-                setStripeColor(displayText)
-                break
-            case 5:
-                setOuterStripeColor(displayText)
-                break
-            case 6:
-                setInnerStripeColor(displayText)
-                break
+            case 1: setThreadColor1(displayText); break
+            case 2: setThreadColor2(displayText); break
+            case 3: setThreadColor3(displayText); break
+            case 4: setStripeColor(displayText); break
+            case 5: setOuterStripeColor(displayText); break
+            case 6: setInnerStripeColor(displayText); break
         }
         setColorPickerOpen(false)
     }
@@ -131,6 +119,7 @@ export const Stage2CustomizeDesign = ({
                 <Button onClick={onBack} variant="outline" className="px-2 mb-4">
                     ← Back to Designs
                 </Button>
+
                 {/* Design Name */}
                 <div className="bg-white border p-6 rounded-none shadow-lg mb-6">
                     <h3 className="text-lg font-bold mb-4 pb-2 border-b-2 border-gold">
@@ -145,17 +134,17 @@ export const Stage2CustomizeDesign = ({
                     />
                 </div>
 
-                {/* Color Count Selection */}
-                {selectedPreset === 'plk' && !classicColorCount ? (
+                {/* Colour Count Selection — Classic */}
+                {selectedPreset === 'plk' && !classicColorCount && (
                     <div className="bg-white border p-6 rounded-none shadow-lg mb-6">
-                        <h3 className="text-lg   font-bold   mb-4 pb-2 border-b-2 border-gold text-center">
+                        <h3 className="text-lg font-bold mb-4 pb-2 border-b-2 border-gold text-center">
                             The Classic Design
                         </h3>
                         <p className="text-sm text-charcoal mb-4 text-center">
                             Select how many colours you would like for your Classic design
                         </p>
                         <div className="bg-white border p-6 rounded-none shadow-lg mb-6">
-                            <h3 className="text-lg   font-bold   mb-4 pb-2 border-b-2 border-gold">
+                            <h3 className="text-lg font-bold mb-4 pb-2 border-b-2 border-gold">
                                 Number of Thread Colours
                             </h3>
                             <select
@@ -166,13 +155,15 @@ export const Stage2CustomizeDesign = ({
                                 <option value="">-- Select Number of Colours --</option>
                                 <option value="2">2 Colours</option>
                                 <option value="3">3 Colours</option>
-                                <option value="4">4 Colours</option>
                             </select>
                         </div>
                     </div>
-                ) : selectedPreset === 'Classic_2Stripe' && !classic2StripeColorCount ? (
+                )}
+
+                {/* Colour Count Selection — Classic 2 Stripe */}
+                {selectedPreset === 'Classic_2Stripe' && !classic2StripeColorCount && (
                     <div className="bg-white border p-6 rounded-none shadow-lg mb-6">
-                        <h3 className="text-lg   font-bold   mb-4 pb-2 border-b-2 border-gold text-center">
+                        <h3 className="text-lg font-bold mb-4 pb-2 border-b-2 border-gold text-center">
                             Classic + 2 Stripe Design
                         </h3>
                         <p className="text-sm text-charcoal mb-4 text-center">
@@ -187,53 +178,29 @@ export const Stage2CustomizeDesign = ({
                             </Button>
                         </div>
                     </div>
-                ) : null}
+                )}
 
-                {/* Thread Colors */}
+                {/* Thread Colours */}
                 {showThreadColorSection && (
                     <div className="bg-white border p-2 md:p-6 rounded-none shadow-lg mb-6">
                         <h3 className="text-lg font-bold mb-4 pb-2 border-b-2">
                             Choose Thread Colours
                         </h3>
                         <div className="space-y-4">
-                            <ColorField
-                                label="Thread Colour 1"
-                                value={threadColor1}
-                                onChoose={() => openColorPicker(1)}
-                            />
+                            <ColorField label="Thread Colour 1" value={threadColor1} onChoose={() => openColorPicker(1)} />
                             {(selectedPreset !== 'Classic_2Stripe' || classic2StripeColorCount === 2) && (
-                                <ColorField
-                                    label="Thread Colour 2"
-                                    value={threadColor2}
-                                    onChoose={() => openColorPicker(2)}
-                                />
+                                <ColorField label="Thread Colour 2" value={threadColor2} onChoose={() => openColorPicker(2)} />
                             )}
                             {showThreadColor3 && (
-                                <ColorField
-                                    label="Thread Colour 3"
-                                    value={threadColor3}
-                                    onChoose={() => openColorPicker(3)}
-                                />
+                                <ColorField label="Thread Colour 3" value={threadColor3} onChoose={() => openColorPicker(3)} />
                             )}
                             {showStripeColor && (
-                                <ColorField
-                                    label={colorCount === '4' ? 'Thread Colour 4' : 'Stripe Colour'}
-                                    value={stripeColor}
-                                    onChoose={() => openColorPicker(4)}
-                                />
+                                <ColorField label="Stripe Colour" value={stripeColor} onChoose={() => openColorPicker(4)} />
                             )}
                             {selectedPreset === 'Classic_2Stripe' && classic2StripeColorCount && (
                                 <>
-                                    <ColorField
-                                        label="Outer Stripe Colour"
-                                        value={outerStripeColor}
-                                        onChoose={() => openColorPicker(5)}
-                                    />
-                                    <ColorField
-                                        label="Inner Stripe Colour"
-                                        value={innerStripeColor}
-                                        onChoose={() => openColorPicker(6)}
-                                    />
+                                    <ColorField label="Outer Stripe Colour" value={outerStripeColor} onChoose={() => openColorPicker(5)} />
+                                    <ColorField label="Inner Stripe Colour" value={innerStripeColor} onChoose={() => openColorPicker(6)} />
                                 </>
                             )}
                         </div>
@@ -242,7 +209,7 @@ export const Stage2CustomizeDesign = ({
 
                 {/* Belt Specifications */}
                 <div className="bg-white border p-6 rounded-none shadow-lg mb-6">
-                    <h3 className="text-lg   font-bold   mb-4 pb-2 border-b-2 border-gold">
+                    <h3 className="text-lg font-bold mb-4 pb-2 border-b-2 border-gold">
                         Belt Specifications
                     </h3>
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -276,9 +243,9 @@ export const Stage2CustomizeDesign = ({
                     </div>
                 </div>
 
-                {/* Logo Upload */}
+                {/* Custom Logo / Stamp */}
                 <div className="bg-white border p-6 rounded-none shadow-lg mb-6">
-                    <h3 className="text-lg   font-bold   mb-4 pb-2 border-b-2 border-gold">
+                    <h3 className="text-lg font-bold mb-4 pb-2 border-b-2 border-gold">
                         Custom Logo / Stamp
                     </h3>
                     <input
@@ -297,9 +264,9 @@ export const Stage2CustomizeDesign = ({
                     )}
                 </div>
 
-                {/* Team Colors Upload */}
+                {/* Team Colours Upload */}
                 <div className="bg-white border p-6 rounded-none shadow-lg mb-3">
-                    <h3 className="text-lg   font-bold   mb-4 pb-2 border-b-2 border-gold">
+                    <h3 className="text-lg font-bold mb-4 pb-2 border-b-2 border-gold">
                         Upload Team Colours
                     </h3>
                     <p className="text-xs text-charcoal mb-3">
@@ -313,7 +280,7 @@ export const Stage2CustomizeDesign = ({
                     />
                     {teamColorImage && (
                         <div className="mt-3">
-                            <Image src={teamColorImage} alt="Team colors" className="max-w-12 max-h-12" height={1000} width={1000} />
+                            <Image src={teamColorImage} alt="Team colours" height={1000} width={1000} className="max-w-12 max-h-12" />
                             <Button onClick={() => setTeamColorImage(null)} className="mt-2 px-3 py-1 bg-red-600 text-white text-xs">
                                 Remove
                             </Button>
@@ -322,12 +289,14 @@ export const Stage2CustomizeDesign = ({
                 </div>
 
                 {/* Navigation */}
-                <div className="flex justify-between items-center mt-2">
-                    <Button onClick={onBack} variant="outline" className="px-2">
-                        ← Back to Designs
+                <div className="flex justify-between items-center gap-2 mt-2">
+                    <Button onClick={onBack} variant="outline" className="shrink-0">
+                        <span className="sm:hidden">← Back</span>
+                        <span className="hidden sm:inline">← Back to Designs</span>
                     </Button>
-                    <Button onClick={onContinue} disabled={!canProceed} className="px-2">
-                        Continue to Sizes →
+                    <Button onClick={onContinue} disabled={!canProceed} className="shrink-0">
+                        <span className="sm:hidden">Continue →</span>
+                        <span className="hidden sm:inline">Continue to Sizes →</span>
                     </Button>
                 </div>
             </div>
@@ -341,7 +310,6 @@ export const Stage2CustomizeDesign = ({
     )
 }
 
-// Helper component
 const ColorField = ({ label, value, onChoose }: { label: string; value: string; onChoose: () => void }) => (
     <div>
         <label className="block text-xs font-semibold text-charcoal uppercase tracking-wider mb-2">

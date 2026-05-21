@@ -4,7 +4,6 @@ import { ProductType, SizeRow } from './useBeltDesign'
 import { OrderForm } from '@/components/belt_design/OrderForm'
 import { SpecificationSheet } from '@/components/belt_design/SpecificationSheet'
 
-
 const PRICING = {
     Belt: [
         { min: 1, max: 1, price: 50 },
@@ -42,7 +41,7 @@ interface Stage3SizesAndPricingProps {
     stampImage: string | null
     sizeRows: SizeRow[]
     onAddSize: () => void
-    onUpdateSize: (id: string, productType: ProductType, size: string, width: 'Standard (3cm)' | 'Slim (2.5cm)', stamped: 'Yes' | 'No', quantity: number) => void
+    onUpdateSize: (id: string, productType: ProductType, size: string, width: 'Standard (3cm)' | 'Slim (2.5cm)' | '', stamped: 'Yes' | 'No', quantity: number) => void
     onRemoveSize: (id: string) => void
     canProceed: boolean
     onBack: () => void
@@ -100,9 +99,8 @@ export const Stage3SizesAndPricing = ({
 
         Object.values(groups).forEach(g => {
             const unitPrice = getUnitPrice(g.productType, g.quantity)
-            // Show "Standard & Slim" when both widths are present, otherwise the single width name
             const widthLabel = g.widths.size > 1
-                ? 'Standard & Slim'
+                ? 'Regular & Slim'
                 : Array.from(g.widths)[0] ?? ''
             lineItems.push({
                 label: `${g.quantity} × ${g.productType} (${widthLabel}) @ £${unitPrice.toFixed(2)} each`,
@@ -111,34 +109,43 @@ export const Stage3SizesAndPricing = ({
         })
 
         const productSubtotal = lineItems.reduce((sum, li) => sum + li.amount, 0)
-
         const stampLineItems: LineItem[] = []
 
-        if (hasStamp) {
+        if (stampImage) {
             const totalQuantity = sizeRows.reduce((sum, row) => sum + (row.quantity > 0 ? row.quantity : 0), 0)
             const stampIsFree = totalQuantity >= STAMP_FREE_THRESHOLD
 
             const stampedWidths = Array.from(
                 new Set(
                     sizeRows
-                        .filter(row => row.stamped === 'Yes' && row.quantity > 0)
+                        .filter(row => row.productType === 'Belt' && row.stamped === 'Yes' && row.quantity > 0)
                         .map(row => row.width)
                 )
             )
 
-            stampedWidths.forEach(width => {
+            const hasSlim = stampedWidths.includes('Slim (2.5cm)')
+            const hasRegular = stampedWidths.includes('Standard (3cm)')
+
+            if (hasSlim) {
+                stampLineItems.push({
+                    label: 'Stamp setup (Slim 2.5cm) — included',
+                    amount: 0,
+                })
+            }
+
+            if (hasRegular) {
                 if (stampIsFree) {
                     stampLineItems.push({
-                        label: `Stamp setup (${width}) — free for orders of ${STAMP_FREE_THRESHOLD}+`,
+                        label: `Stamp setup (Regular 3cm) — free for orders of ${STAMP_FREE_THRESHOLD}+`,
                         amount: 0,
                     })
                 } else {
                     stampLineItems.push({
-                        label: `Stamp setup (${width})`,
+                        label: 'Stamp setup (Regular 3cm)',
                         amount: STAMP_COST,
                     })
                 }
-            })
+            }
         }
 
         const stampSubtotal = stampLineItems.reduce((sum, li) => sum + li.amount, 0)
@@ -152,7 +159,6 @@ export const Stage3SizesAndPricing = ({
     return (
         <section className="px-4 sm:px-6 lg:px-8 lg:pb-48 pb-20">
             <div className="max-w-7xl mx-auto">
-                <Button onClick={onBack} variant="outline" className="px-2 mb-4">← Back to Customise</Button>
                 <SpecificationSheet
                     designName={designName}
                     threadColors={threadColors}
@@ -171,27 +177,28 @@ export const Stage3SizesAndPricing = ({
                         onRemoveSize={onRemoveSize}
                     />
                 </div>
+
                 <div className="bg-white border p-4 mt-6 shadow-md">
-                    <div className='flex justify-between items-center'>
-                        <h3 className="font-bold mb-2">Pricing Summary</h3>
+                    <div className="flex justify-between items-center mb-2">
+                        <h3 className="font-bold">Pricing Summary</h3>
                         <button
                             onClick={() => setShowPricingModal(true)}
-                            className="text-xs font-semibold text-blue-600 hover:underline mb-2"
+                            className="text-xs font-semibold text-blue-600 hover:underline"
                         >
                             Pricing Policy →
                         </button>
                     </div>
                     <div className="text-sm space-y-1">
                         {pricing.lineItems.map((item, i) => (
-                            <div key={i} className="flex justify-between">
+                            <div key={i} className="flex justify-between gap-4">
                                 <span>{item.label}</span>
-                                <span>£{item.amount.toFixed(2)}</span>
+                                <span className="shrink-0">£{item.amount.toFixed(2)}</span>
                             </div>
                         ))}
                         {pricing.stampLineItems.map((item, i) => (
-                            <div key={`stamp-${i}`} className="flex justify-between">
+                            <div key={`stamp-${i}`} className="flex justify-between gap-4">
                                 <span>{item.label}</span>
-                                <span className={item.amount === 0 ? 'text-green-600 font-medium' : ''}>
+                                <span className={`shrink-0 ${item.amount === 0 ? 'text-green-600 font-medium' : ''}`}>
                                     {item.amount === 0 ? 'Free' : `£${item.amount.toFixed(2)}`}
                                 </span>
                             </div>
@@ -203,6 +210,7 @@ export const Stage3SizesAndPricing = ({
                         <p className="text-xs text-gray-500">* Estimated quote, not including P&P</p>
                     </div>
                 </div>
+
                 <div className="flex justify-between items-center gap-2 mt-2">
                     <Button onClick={onBack} variant="outline" className="shrink-0">
                         <span className="sm:hidden">← Back</span>
@@ -260,7 +268,8 @@ export const Stage3SizesAndPricing = ({
 
                             <div className="bg-amber-50 border border-amber-200 p-4 text-sm text-amber-800 space-y-1">
                                 <p className="font-semibold">Custom Logo / Stamp</p>
-                                <p>A stamp setup fee of <span className="font-semibold">£{STAMP_COST}.00</span> applies per width ordered.</p>
+                                <p>Stamp setup on a <span className="font-semibold">Slim (2.5cm)</span> belt is included at no extra cost.</p>
+                                <p>Adding the stamp to a <span className="font-semibold">Regular (3cm)</span> belt incurs an additional <span className="font-semibold">£{STAMP_COST}.00</span> setup fee.</p>
                                 <p>This fee is <span className="font-semibold">waived</span> for orders of {STAMP_FREE_THRESHOLD} or more items in total.</p>
                             </div>
 
