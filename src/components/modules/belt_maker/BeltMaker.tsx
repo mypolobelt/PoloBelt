@@ -60,6 +60,17 @@ export default function BeltMaker() {
 
     const canvasRef = useRef<HTMLCanvasElement>(null!)
 
+    const handleUpdateSizeRowAdapter = (
+        id: string,
+        productType: Parameters<typeof handleUpdateSizeRow>[1],
+        size: string,
+        width: 'Standard (3cm)' | 'Slim (2.5cm)' | '',
+        stamped: 'Yes' | 'No',
+        quantity: number
+    ) => {
+        handleUpdateSizeRow(id, productType, size, width || 'Standard (3cm)', stamped, quantity)
+    }
+
     const threadColors = [threadColor1, threadColor2, threadColor3, stripeColor].filter(c => c)
     const hasStamp = !!stampImage
 
@@ -140,7 +151,7 @@ export default function BeltMaker() {
                         hasStamp={hasStamp}
                         sizeRows={sizeRows}
                         onAddSize={handleAddSizeRow}
-                        onUpdateSize={handleUpdateSizeRow}
+                        onUpdateSize={handleUpdateSizeRowAdapter}
                         onRemoveSize={handleRemoveSizeRow}
                         canProceed={canProceedToStage4()}
                         onBack={() => goToStage(2)}

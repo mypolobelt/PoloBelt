@@ -65,7 +65,7 @@ export const useBeltDesign = () => {
     },
   ]);
   const [selectedPreset, setSelectedPreset] = useState<string | null>(null);
-  const [classicColorCount, setClassicColorCount] = useState<2 | 3 | 4 | null>(
+  const [classicColorCount, setClassicColorCount] = useState<2 | 3 | null>(
     null,
   );
   const [classic2StripeColorCount, setClassic2StripeColorCount] = useState<
