@@ -11,7 +11,7 @@ interface SizeRow {
   id: string
   productType: ProductType
   size: string
-  width: 'Standard (3cm)' | 'Slim (2.5cm)'
+  width: 'Standard (3cm)' | 'Slim (2.5cm)' | ''
   stamped: 'Yes' | 'No'
   quantity: number
 }
@@ -24,7 +24,7 @@ interface OrderFormProps {
     id: string,
     productType: ProductType,
     size: string,
-    width: 'Standard (3cm)' | 'Slim (2.5cm)',
+    width: 'Standard (3cm)' | 'Slim (2.5cm)' | '',
     stamped: 'Yes' | 'No',
     quantity: number
   ) => void
@@ -191,7 +191,8 @@ export function OrderForm({
                         }
                         className={selectClass}
                       >
-                        <option value="Standard (3cm)">Wide (3cm)</option>
+                        <option value="">Width?</option>
+                        <option value="Standard (3cm)">Regular (3cm)</option>
                         <option value="Slim (2.5cm)">Slim (2.5cm)</option>
                       </select>
                     ) : (
@@ -266,8 +267,9 @@ export function OrderForm({
                       onUpdateSize(row.id, row.productType, row.size, e.target.value as 'Standard (3cm)' | 'Slim (2.5cm)', row.stamped, row.quantity)
                     }
                     className={selectClass}
-                  ><option>Width</option>
-                    <option value="Standard (3cm)">Wide (3cm)</option>
+                  >
+                    <option value="">Width?</option>
+                    <option value="Standard (3cm)">Regular (3cm)</option>
                     <option value="Slim (2.5cm)">Slim (2.5cm)</option>
                   </select>
                 ) : (
@@ -346,7 +348,7 @@ export function OrderForm({
             </div>
             <div className="p-6 space-y-8">
               <div>
-                <h3 className="text-lg   font-bold   mb-4 text-center">Sizing Guide</h3>
+                <h3 className="text-lg font-bold mb-4 text-center">Sizing Guide</h3>
                 <Image src="/assets/Sizing_Guide.webp" alt="Sizing Guide" width={1000} height={600} className="w-full h-auto" />
               </div>
               <div className="border-t-2 border-gray-200 pt-8">

@@ -27,6 +27,11 @@ const PRICING = {
         { min: 50, max: Infinity, price: 26.5 },
     ],
 }
+const PP_EXAMPLES = [
+    { flag: '🇬🇧', label: 'United Kingdom', price: '£4' },
+    { flag: '🇪🇺', label: 'Europe', price: '£10' },
+    { flag: '🇺🇸', label: 'USA', price: '£18' },
+]
 
 const STAMP_COST = 25
 const STAMP_FREE_THRESHOLD = 30
@@ -168,6 +173,49 @@ export const Stage3SizesAndPricing = ({
                     hasStamp={hasStamp}
                     stampImage={stampImage}
                 />
+                {/* ── Postage & Packaging Pricing ── */}
+                <div className="mt-6 rounded-none overflow-hidden shadow-md">
+
+                    {/* Section header — matches the gold-top-border style used elsewhere */}
+                    <div className="bg-white px-4 py-3">
+                        <h3 className="text-base font-semibold">Postage &amp; Packaging</h3>
+                        <p className="text-sm text-charcoal mt-0.5">
+                            Estimated P&amp;P for a single belt — the exact amount will be confirmed
+                            on your invoice.
+                        </p>
+                    </div>
+
+                    {/* Three-column price grid */}
+                    <div className="grid grid-cols-3 divide-x border-t border-charcoal/20">
+                        {PP_EXAMPLES.map(({ label, price }) => (
+                            <div key={label} className="bg-white py-2 text-center">
+                                {/* <div className="text-2xl mb-1">{flag}</div> */}
+                                <p className="text-xs text-charcoal/60 mb-1">{label}</p>
+                                <p className="text-xl font-bold">{price}</p>
+                                <p className="text-xs mt-0.5">e.g. 1 belt</p>
+                            </div>
+                        ))}
+                    </div>
+
+                    {/* Disclaimer notice */}
+                    <div className="bg-stone-100 border-t border-charcoal/10 px-4 py-3 flex gap-2 items-start">
+                        {/* Simple info indicator */}
+                        <span className="text-sm leading-5 shrink-0 mt-0.5">
+                            ℹ
+                        </span>
+                        <p className="md:text-sm text-xs leading-relaxed">
+                            <strong className="font-semibold">
+                                P&amp;P is not charged at this stage.
+                            </strong>{' '}
+                            The figures above are indicative examples only. P&amp;P fluctuates based
+                            on destination, weight, and quantity. Your final postage cost will be
+                            accurately quoted on the invoice using{' '}
+                            <strong className="font-semibold">UK Royal Mail</strong>{' '}
+                            or the best available overseas courier - always with full tracking
+                            included.
+                        </p>
+                    </div>
+                </div>
                 <div className="mt-6">
                     <OrderForm
                         sizeRows={sizeRows}

@@ -20,6 +20,7 @@ interface Stage4CustomerDetailsProps {
     onBack: () => void
 }
 
+
 export const Stage4CustomerDetails = ({
     designName,
     threadColors,
@@ -46,14 +47,10 @@ export const Stage4CustomerDetails = ({
             quantity: row.quantity,
         }))
 
-    // Called when the user clicks "Submit Enquiry" inside CustomerForm.
-    // We intercept and show the review modal first.
     const handleRequestSubmit = () => {
         setShowReviewModal(true)
     }
 
-    // Called when user confirms inside the modal.
-    // Dismiss modal and let CustomerForm know it's clear to proceed.
     const handleModalConfirm = () => {
         setShowReviewModal(false)
         setConfirmedAndSubmit(true)
@@ -65,7 +62,6 @@ export const Stage4CustomerDetails = ({
                 <Button onClick={onBack} variant="outline" className="px-2 mb-4">
                     ← Back to Sizes
                 </Button>
-
                 {/* Prominent Design Name Header */}
                 <div className="bg-white border-t-4 border-gold p-4 mb-6 shadow-md rounded-none">
                     <h2 className="text-2xl font-bold">
@@ -87,7 +83,7 @@ export const Stage4CustomerDetails = ({
                     hasStamp={hasStamp}
                     stampImage={stampImage}
                 />
-
+                {/* ── Customer Form ── */}
                 <div className="mt-6">
                     <CustomerForm
                         canvasRef={canvasRef}
@@ -103,10 +99,6 @@ export const Stage4CustomerDetails = ({
                         sizeOrders={sizeOrders}
                         onResetDesign={onResetDesign}
                         onResetOrder={onResetOrder}
-                        // Pass these so CustomerForm can trigger the review gate.
-                        // CustomerForm should call onRequestSubmit instead of
-                        // submitting directly; once confirmedAndSubmit is true it
-                        // may proceed (or re-check via the prop).
                         onRequestSubmit={handleRequestSubmit}
                         confirmedAndSubmit={confirmedAndSubmit}
                         onSubmitComplete={() => setConfirmedAndSubmit(false)}

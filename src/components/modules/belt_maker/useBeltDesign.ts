@@ -35,7 +35,7 @@ export interface SizeRow {
   id: string;
   productType: ProductType;
   size: string;
-  width: "Standard (3cm)" | "Slim (2.5cm)";
+  width: "Standard (3cm)" | "Slim (2.5cm)" | "";
   stamped: "Yes" | "No";
   quantity: number;
 }
@@ -59,7 +59,7 @@ export const useBeltDesign = () => {
       id: "1",
       productType: "Belt",
       size: "",
-      width: "Standard (3cm)",
+      width: "",
       stamped: "No",
       quantity: 1,
     },
@@ -210,15 +210,6 @@ export const useBeltDesign = () => {
     const stripe1Hex = getColorHex(effectiveStripeColor);
     const stripe2Hex = getColorHex(innerStripeColor);
 
-    // Per-cell reveal logic
-    //
-    // For each cell in the coloured pattern:
-    //   • Leather (#552B06) → always keep as-is
-    //   • Cell colour matches a slot AND that slot has been user-selected
-    //     → reveal the chosen colour
-    //   • Otherwise → replace with the corresponding grey from greyPattern
-    //     (falls back to toGrayscale if greyPattern is somehow unavailable)
-    //
     return coloredPattern.map((row, r) =>
       row.map((cell, c) => {
         // Leather is always brown
@@ -270,8 +261,6 @@ export const useBeltDesign = () => {
   };
 
   // Scroll to top after React has painted the new stage content.
-  // Using requestAnimationFrame fixes a Safari iOS bug where scrollTo fires
-  // before the new stage's DOM is rendered, so the browser ignores it.
   useEffect(() => {
     if (typeof window !== "undefined") {
       requestAnimationFrame(() => {
@@ -292,7 +281,7 @@ export const useBeltDesign = () => {
         id: newId,
         productType: "Belt",
         size: "",
-        width: "Standard (3cm)",
+        width: "",
         stamped: defaultStamped,
         quantity: 1,
       },
@@ -303,7 +292,7 @@ export const useBeltDesign = () => {
     id: string,
     productType: ProductType,
     size: string,
-    width: "Standard (3cm)" | "Slim (2.5cm)",
+    width: "Standard (3cm)" | "Slim (2.5cm)" | "",
     stamped: "Yes" | "No",
     quantity: number,
   ) => {
@@ -367,7 +356,7 @@ export const useBeltDesign = () => {
     setSelectedColor3(false);
     setSelectedStripe1(false);
     setSelectedStripe2(false);
-    setGreyPattern(null); // ← clear the stored grey pattern
+    setGreyPattern(null);
     goToStage(1);
   };
 
@@ -377,7 +366,7 @@ export const useBeltDesign = () => {
         id: "1",
         productType: "Belt",
         size: "",
-        width: "Standard (3cm)",
+        width: "",
         stamped: "No",
         quantity: 1,
       },
@@ -408,7 +397,6 @@ export const useBeltDesign = () => {
       setStripeColor("");
       setColorCount("2");
 
-      // Build grey preview for classic-2 pattern
       const rawPattern = generateGridDataFromColors(
         "",
         "",
@@ -435,7 +423,6 @@ export const useBeltDesign = () => {
       setStripeColor(preset.threads[3] || "");
       setColorCount("2");
 
-      // stripe-2 because it has a stripe colour
       const rawPattern = generateGridDataFromColors(
         "",
         "",
@@ -492,8 +479,6 @@ export const useBeltDesign = () => {
     const threadCount = preset.threads.length;
     setColorCount(threadCount.toString());
 
-    // Resolve the design type using the same logic as gridData so the grey
-    // pattern always matches the coloured pattern exactly.
     const hasStripe = !!preset.threads[3];
     const designType = resolveDesignType(
       presetId,
@@ -519,7 +504,7 @@ export const useBeltDesign = () => {
     setColorCount(count.toString());
   };
 
-  // Validatio─
+  // Validation
   const canProceedToStage3 = () => {
     if (selectedPreset === "Classic_2Stripe") {
       const hasRequiredMainColours =

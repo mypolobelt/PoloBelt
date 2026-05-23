@@ -21,8 +21,8 @@ export function SpecificationSheet({
   stampImage,
 }: SpecificationSheetProps) {
   return (
-    <div className="bg-cream p-4 sm:p-5 md:p-6 lg:p-8 rounded-none border-l-4 border-[#0f1526] shadow-lg">
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 sm:gap-5 md:gap-6">
+    <div className="p-4 sm:p-5 md:p-6 lg:p-8 rounded-none border-l-4 border-[#0f1526] shadow-lg">
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 sm:gap-5 md:gap-6">
         <div>
           <h4 className="text-xs sm:text-xs md:text-sm font-bold   uppercase tracking-wider mb-2 sm:mb-3">
             Thread Colours
