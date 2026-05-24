@@ -38,12 +38,6 @@ const getUnitPrice = (productType: ProductType, quantity: number) => {
     return tier?.price ?? 0
 }
 
-// ─── Helpers ─────────────────────────────────────────────────────────────────
-
-/**
- * Thread colors are stored as "Name ID" e.g. "Royal Blue 304".
- * Split on the last space to get name + ID separately.
- */
 const parseThreadColor = (raw: string): { name: string; id: string } => {
     const parts = raw.trim().split(' ')
     const id = parts[parts.length - 1]
@@ -51,7 +45,7 @@ const parseThreadColor = (raw: string): { name: string; id: string } => {
     return { name: name || raw, id }
 }
 
-// ─── Sub-components ───────────────────────────────────────────────────────────
+// ─── Sub-components
 
 const SectionHeading = ({ children }: { children: React.ReactNode }) => (
     <h3 className="text-[10px] font-bold uppercase tracking-[0.15em] text-gray-400 mb-3 pb-1.5 border-b border-gray-100">
@@ -68,7 +62,7 @@ const Row = ({ label, value, bold }: { label: string; value: React.ReactNode; bo
     </div>
 )
 
-// ─── Props ────────────────────────────────────────────────────────────────────
+// ─── Props 
 interface OrderReviewModalProps {
     designName: string
     threadColors: string[]   // raw "Name ID" strings from useBeltDesign
@@ -81,7 +75,7 @@ interface OrderReviewModalProps {
     onEdit: () => void
 }
 
-// ─── Main ─────────────────────────────────────────────────────────────────────
+// ─── Main
 export const OrderReviewModal = ({
     designName,
     threadColors,
@@ -330,7 +324,7 @@ export const OrderReviewModal = ({
                         ← Edit Order
                     </Button>
                     <Button onClick={onConfirm} className="text-sm font-semibold">
-                        Confirm &amp; Submit Enquiry →
+                        Confirm →
                     </Button>
                 </div>
             </div>

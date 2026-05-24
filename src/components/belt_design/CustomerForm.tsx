@@ -173,9 +173,12 @@ export function CustomerForm({
 
   // When the parent confirms via the modal, fire the real submit
   useEffect(() => {
-    if (confirmedAndSubmit) {
-      submitOrder()
+    if (!confirmedAndSubmit) return
+
+    const run = async () => {
+      await submitOrder()
     }
+    run()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [confirmedAndSubmit])
 
@@ -315,7 +318,7 @@ export function CustomerForm({
           disabled={isLoading}
           className="w-full mt-2 py-2 sm:py-3 uppercase tracking-wide disabled:opacity-50 transition-all text-xs sm:text-sm"
         >
-          {isLoading ? 'Sending...' : 'Request Invoice'}
+          {isLoading ? 'Sending...' : 'See Project Summary'}
         </Button>
 
         {successMessage && (

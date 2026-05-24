@@ -104,11 +104,8 @@ export const Stage3SizesAndPricing = ({
 
         Object.values(groups).forEach(g => {
             const unitPrice = getUnitPrice(g.productType, g.quantity)
-            const widthLabel = g.widths.size > 1
-                ? 'Regular & Slim'
-                : Array.from(g.widths)[0] ?? ''
             lineItems.push({
-                label: `${g.quantity} × ${g.productType} (${widthLabel}) @ £${unitPrice.toFixed(2)} each`,
+                label: `${g.quantity} × ${g.productType} @ £${unitPrice.toFixed(2)} each`,
                 amount: unitPrice * g.quantity,
             })
         })
@@ -244,7 +241,7 @@ export const Stage3SizesAndPricing = ({
                         </span>
                         <p className="md:text-sm text-xs leading-relaxed">
                             <strong className="font-semibold">
-                                P&amp;P is not charged at this stage.
+                                P&amp;P is not quoted at this stage.
                             </strong>{' '}
                             The figures above are indicative examples only. P&amp;P fluctuates based
                             on destination, weight, and quantity. Your final postage cost will be
