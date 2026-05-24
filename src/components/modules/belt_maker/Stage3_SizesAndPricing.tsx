@@ -34,7 +34,6 @@ const PP_EXAMPLES = [
 ]
 
 const STAMP_COST = 25
-const STAMP_FREE_THRESHOLD = 30
 
 interface Stage3SizesAndPricingProps {
     designName: string
@@ -54,8 +53,9 @@ interface Stage3SizesAndPricingProps {
 }
 
 const getUnitPrice = (productType: ProductType, quantity: number) => {
-    const tiers = PRICING[productType]
-    const tier = tiers.find(t => quantity >= t.min && quantity <= t.max)
+    if (!productType) return 0
+    const tiers = PRICING[productType as 'Belt' | 'Collar' | 'Dog Lead']
+    const tier = tiers.find((t: { min: number; max: number; price: number }) => quantity >= t.min && quantity <= t.max)
     return tier ? tier.price : 0
 }
 
@@ -93,7 +93,7 @@ export const Stage3SizesAndPricing = ({
         const groups: Record<string, { productType: ProductType; quantity: number; widths: Set<string> }> = {}
 
         sizeRows.forEach(row => {
-            if (!row.size || row.quantity <= 0) return
+            if (!row.productType || !row.size || row.quantity <= 0) return
             const key = row.productType
             if (!groups[key]) {
                 groups[key] = { productType: row.productType, quantity: 0, widths: new Set() }
@@ -117,13 +117,10 @@ export const Stage3SizesAndPricing = ({
         const stampLineItems: LineItem[] = []
 
         if (stampImage) {
-            const totalQuantity = sizeRows.reduce((sum, row) => sum + (row.quantity > 0 ? row.quantity : 0), 0)
-            const stampIsFree = totalQuantity >= STAMP_FREE_THRESHOLD
-
             const stampedWidths = Array.from(
                 new Set(
                     sizeRows
-                        .filter(row => row.productType === 'Belt' && row.stamped === 'Yes' && row.quantity > 0)
+                        .filter(row => row.productType === 'Belt' && row.quantity > 0 && row.stamped === 'Yes' && row.width)
                         .map(row => row.width)
                 )
             )
@@ -133,23 +130,23 @@ export const Stage3SizesAndPricing = ({
 
             if (hasSlim) {
                 stampLineItems.push({
-                    label: 'Stamp setup (Slim 2.5cm) — included',
-                    amount: 0,
+                    label: 'Stamp setup — Slim (2.5cm) belt',
+                    amount: STAMP_COST,
                 })
             }
 
             if (hasRegular) {
-                if (stampIsFree) {
-                    stampLineItems.push({
-                        label: `Stamp setup (Regular 3cm) — free for orders of ${STAMP_FREE_THRESHOLD}+`,
-                        amount: 0,
-                    })
-                } else {
-                    stampLineItems.push({
-                        label: 'Stamp setup (Regular 3cm)',
-                        amount: STAMP_COST,
-                    })
-                }
+                stampLineItems.push({
+                    label: 'Stamp setup — Regular (3cm) belt',
+                    amount: STAMP_COST,
+                })
+            }
+
+            if (!hasSlim && !hasRegular) {
+                stampLineItems.push({
+                    label: 'Stamp setup — no stamped belts selected',
+                    amount: 0,
+                })
             }
         }
 
@@ -173,6 +170,48 @@ export const Stage3SizesAndPricing = ({
                     hasStamp={hasStamp}
                     stampImage={stampImage}
                 />
+                <div className="mt-6">
+                    <OrderForm
+                        sizeRows={sizeRows}
+                        stampImage={stampImage}
+                        onAddSize={onAddSize}
+                        onUpdateSize={onUpdateSize}
+                        onRemoveSize={onRemoveSize}
+                    />
+                </div>
+
+                <div className="bg-white border p-4 mt-6 shadow-md">
+                    <div className="flex justify-between items-center mb-2">
+                        <h3 className="font-bold">Pricing Summary</h3>
+                        <button
+                            onClick={() => setShowPricingModal(true)}
+                            className="text-xs font-semibold text-blue-600 hover:underline"
+                        >
+                            Pricing Policy →
+                        </button>
+                    </div>
+                    <div className="text-sm space-y-1">
+                        {pricing.lineItems.map((item, i) => (
+                            <div key={i} className="flex justify-between gap-4">
+                                <span>{item.label}</span>
+                                <span className="shrink-0">£{item.amount.toFixed(2)}</span>
+                            </div>
+                        ))}
+                        {pricing.stampLineItems.map((item, i) => (
+                            <div key={`stamp-${i}`} className="flex justify-between gap-4">
+                                <span>{item.label}</span>
+                                <span className={`shrink-0 ${item.amount === 0 ? 'text-green-600 font-medium' : ''}`}>
+                                    {item.amount === 0 ? 'No Stamp' : `£${item.amount.toFixed(2)}`}
+                                </span>
+                            </div>
+                        ))}
+                        <div className="border-t pt-1 mt-1 font-bold text-lg flex justify-between">
+                            <span>Total</span>
+                            <span>£{pricing.total.toFixed(2)}</span>
+                        </div>
+                        <p className="text-xs text-gray-500">* Estimated quote, not including P&P</p>
+                    </div>
+                </div>
                 {/* ── Postage & Packaging Pricing ── */}
                 <div className="mt-6 rounded-none overflow-hidden shadow-md">
 
@@ -214,48 +253,6 @@ export const Stage3SizesAndPricing = ({
                             or the best available overseas courier - always with full tracking
                             included.
                         </p>
-                    </div>
-                </div>
-                <div className="mt-6">
-                    <OrderForm
-                        sizeRows={sizeRows}
-                        stampImage={stampImage}
-                        onAddSize={onAddSize}
-                        onUpdateSize={onUpdateSize}
-                        onRemoveSize={onRemoveSize}
-                    />
-                </div>
-
-                <div className="bg-white border p-4 mt-6 shadow-md">
-                    <div className="flex justify-between items-center mb-2">
-                        <h3 className="font-bold">Pricing Summary</h3>
-                        <button
-                            onClick={() => setShowPricingModal(true)}
-                            className="text-xs font-semibold text-blue-600 hover:underline"
-                        >
-                            Pricing Policy →
-                        </button>
-                    </div>
-                    <div className="text-sm space-y-1">
-                        {pricing.lineItems.map((item, i) => (
-                            <div key={i} className="flex justify-between gap-4">
-                                <span>{item.label}</span>
-                                <span className="shrink-0">£{item.amount.toFixed(2)}</span>
-                            </div>
-                        ))}
-                        {pricing.stampLineItems.map((item, i) => (
-                            <div key={`stamp-${i}`} className="flex justify-between gap-4">
-                                <span>{item.label}</span>
-                                <span className={`shrink-0 ${item.amount === 0 ? 'text-green-600 font-medium' : ''}`}>
-                                    {item.amount === 0 ? 'Free' : `£${item.amount.toFixed(2)}`}
-                                </span>
-                            </div>
-                        ))}
-                        <div className="border-t pt-1 mt-1 font-bold text-lg flex justify-between">
-                            <span>Total</span>
-                            <span>£{pricing.total.toFixed(2)}</span>
-                        </div>
-                        <p className="text-xs text-gray-500">* Estimated quote, not including P&P</p>
                     </div>
                 </div>
 
@@ -316,9 +313,18 @@ export const Stage3SizesAndPricing = ({
 
                             <div className="bg-amber-50 border border-amber-200 p-4 text-sm text-amber-800 space-y-1">
                                 <p className="font-semibold">Custom Logo / Stamp</p>
-                                <p>Stamp setup on a <span className="font-semibold">Slim (2.5cm)</span> belt is included at no extra cost.</p>
-                                <p>Adding the stamp to a <span className="font-semibold">Regular (3cm)</span> belt incurs an additional <span className="font-semibold">£{STAMP_COST}.00</span> setup fee.</p>
-                                <p>This fee is <span className="font-semibold">waived</span> for orders of {STAMP_FREE_THRESHOLD} or more items in total.</p>
+                                <p>
+                                    A stamp is a <span className="font-semibold">one-off setup fee of £{STAMP_COST}.00</span> per belt width.
+                                </p>
+                                <p>
+                                    If you order only <span className="font-semibold">Regular (3cm)</span> belts with a stamp — no matter how many — it is charged <span className="font-semibold">once: £{STAMP_COST}.00</span>.
+                                </p>
+                                <p>
+                                    If you order only <span className="font-semibold">Slim (2.5cm)</span> belts with a stamp, it is also charged <span className="font-semibold">once: £{STAMP_COST}.00</span>.
+                                </p>
+                                <p>
+                                    If you order <span className="font-semibold">both</span> Regular and Slim belts with a stamp, two stamps must be made — so the fee is charged <span className="font-semibold">twice: £{STAMP_COST * 2}.00</span> total.
+                                </p>
                             </div>
 
                             <p className="text-xs text-gray-500 italic">

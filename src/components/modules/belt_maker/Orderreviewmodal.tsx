@@ -2,7 +2,8 @@ import { Button } from '@/components/ui/button'
 import { ProductType, SizeRow } from './useBeltDesign'
 
 // ─── Pricing (mirrors Stage3) ────────────────────────────────────────────────
-const PRICING: Record<ProductType, { min: number; max: number; price: number }[]> = {
+const PRICING: Record<Exclude<ProductType, ''>, { min: number; max: number; price: number }[]> = {
+
     Belt: [
         { min: 1, max: 1, price: 50 },
         { min: 2, max: 9, price: 45 },
@@ -30,7 +31,10 @@ const STAMP_COST = 25
 const STAMP_FREE_THRESHOLD = 30
 
 const getUnitPrice = (productType: ProductType, quantity: number) => {
-    const tier = PRICING[productType].find(t => quantity >= t.min && quantity <= t.max)
+    if (!productType) return 0
+    const tier = PRICING[productType as Exclude<ProductType, ''>].find(
+        (t: { min: number; max: number; price: number }) => quantity >= t.min && quantity <= t.max
+    )
     return tier?.price ?? 0
 }
 

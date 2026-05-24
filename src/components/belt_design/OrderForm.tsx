@@ -4,17 +4,7 @@ import { BELT_SIZES, COLLAR_SIZES, DOG_LEAD_SIZE } from '@/database/constants'
 import { Button } from '../ui/button'
 import Image from 'next/image'
 import { useState } from 'react'
-
-type ProductType = 'Belt' | 'Collar' | 'Dog Lead'
-
-interface SizeRow {
-  id: string
-  productType: ProductType
-  size: string
-  width: 'Standard (3cm)' | 'Slim (2.5cm)' | ''
-  stamped: 'Yes' | 'No'
-  quantity: number
-}
+import { ProductType, SizeRow } from '@/components/modules/belt_maker/useBeltDesign'
 
 interface OrderFormProps {
   sizeRows: SizeRow[]
@@ -35,14 +25,10 @@ const PRODUCT_TYPES: ProductType[] = ['Belt', 'Collar', 'Dog Lead']
 
 const getSizesForProductType = (productType: ProductType): string[] => {
   switch (productType) {
-    case 'Belt':
-      return BELT_SIZES
-    case 'Collar':
-      return COLLAR_SIZES
-    case 'Dog Lead':
-      return DOG_LEAD_SIZE
-    default:
-      return BELT_SIZES
+    case 'Belt': return BELT_SIZES
+    case 'Collar': return COLLAR_SIZES
+    case 'Dog Lead': return DOG_LEAD_SIZE
+    default: return [] 
   }
 }
 
@@ -65,15 +51,13 @@ export function OrderForm({
     if (row.productType === 'Collar' || row.productType === 'Dog Lead') {
       return { disabled: true, reason: 'Special request only' }
     }
-    if (row.width === 'Slim (2.5cm)') {
-      return { disabled: true, reason: 'Not available on Slim' }
+    if (!stampImage) {
+      return { disabled: true, reason: 'No stamp uploaded' }
     }
-    if (stampImage) {
-      // Logo uploaded — stamp is always Yes for Standard belts, no choice needed
-      return { disabled: true, reason: null }
-    }
+    // Stamp uploaded + Belt (any width) → user can choose Yes or No
     return { disabled: false, reason: null }
   }
+
 
   const StampedField = ({ row, className }: { row: SizeRow; className?: string }) => {
     const { disabled, reason } = getStampedState(row)
@@ -81,7 +65,7 @@ export function OrderForm({
     if (disabled) {
       return (
         <div className={`${disabledSelectClass} ${className ?? ''}`}>
-          {reason ?? (row.stamped === 'Yes' ? 'Yes — logo applied' : 'No')}
+          {reason ?? 'No'}
         </div>
       )
     }
@@ -122,13 +106,6 @@ export function OrderForm({
         </p>
       </div>
 
-      {/* Column headers — desktop only */}
-      <div className="hidden lg:grid lg:grid-cols-[1fr_1fr_1.2fr_1fr_80px_36px] gap-3 px-5 pt-4 pb-1">
-        {['Product', 'Size', 'Width', 'Stamped', 'Qty', ''].map((h) => (
-          <span key={h} className={labelClass}>{h}</span>
-        ))}
-      </div>
-
       {/* Rows */}
       <div className="divide-y divide-gray-100">
         {sizeRows.map((row, index) => {
@@ -153,7 +130,7 @@ export function OrderForm({
                 </div>
                 <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <label className={labelClass}>Product</label>
+                    {/* <label className={labelClass}>Product</label> */}
                     <select
                       value={row.productType}
                       onChange={(e) => {
@@ -163,13 +140,14 @@ export function OrderForm({
                       }}
                       className={selectClass}
                     >
+                      <option value="">Default</option> 
                       {PRODUCT_TYPES.map((type) => (
                         <option key={type} value={type}>{type}</option>
                       ))}
                     </select>
                   </div>
                   <div>
-                    <label className={labelClass}>Size</label>
+                    {/* <label className={labelClass}>Size</label> */}
                     <select
                       value={row.size}
                       onChange={(e) => onUpdateSize(row.id, row.productType, e.target.value, row.width, row.stamped, row.quantity)}
@@ -182,7 +160,7 @@ export function OrderForm({
                     </select>
                   </div>
                   <div>
-                    <label className={labelClass}>Width</label>
+                    {/* <label className={labelClass}>Width</label> */}
                     {row.productType === 'Belt' ? (
                       <select
                         value={row.width}
@@ -200,8 +178,16 @@ export function OrderForm({
                     )}
                   </div>
                   <div>
-                    <label className={labelClass}>Stamped</label>
-                    <StampedField row={row} />
+                    <select
+                      value={row.stamped}
+                      onChange={(e) =>
+                        onUpdateSize(row.id, row.productType, row.size, row.width, e.target.value as 'Yes' | 'No', row.quantity)
+                      }
+                      className={`${selectClass}`}
+                    >
+                      <option value="Yes">Yes</option>
+                      <option value="No">No</option>
+                    </select>
                   </div>
                   <div className="col-span-2">
                     <label className={labelClass}>Quantity</label>
@@ -244,6 +230,7 @@ export function OrderForm({
                   }}
                   className={selectClass}
                 >
+                  <option value="">Default</option> 
                   {PRODUCT_TYPES.map((type) => (
                     <option key={type} value={type}>{type}</option>
                   ))}

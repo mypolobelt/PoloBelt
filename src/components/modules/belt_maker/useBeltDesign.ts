@@ -30,7 +30,7 @@ const applyPlaceholderGreys = (pattern: string[][]): string[][] => {
   );
 };
 
-export type ProductType = "Belt" | "Collar" | "Dog Lead";
+export type ProductType = "Belt" | "Collar" | "Dog Lead" | "";
 export interface SizeRow {
   id: string;
   productType: ProductType;
@@ -57,7 +57,7 @@ export const useBeltDesign = () => {
   const [sizeRows, setSizeRows] = useState<SizeRow[]>([
     {
       id: "1",
-      productType: "Belt",
+      productType: "",
       size: "",
       width: "",
       stamped: "No",
@@ -279,7 +279,7 @@ export const useBeltDesign = () => {
       ...sizeRows,
       {
         id: newId,
-        productType: "Belt",
+        productType: "",
         size: "",
         width: "",
         stamped: defaultStamped,
@@ -299,10 +299,21 @@ export const useBeltDesign = () => {
     setSizeRows(
       sizeRows.map((row) => {
         if (row.id !== id) return row;
-        const resolvedStamped: "Yes" | "No" =
-          width === "Slim (2.5cm)" && row.width !== "Slim (2.5cm)"
-            ? "No"
+
+        // When switching product type away from Belt, clear stamp
+        const isBelt = productType === "Belt";
+
+        // When width changes, re-apply stamp default based on stampImage
+        // rather than blindly carrying over the old stamped value
+        const widthChanged = width !== row.width;
+        const resolvedStamped: "Yes" | "No" = !isBelt
+          ? "No"
+          : widthChanged
+            ? stampImage
+              ? "Yes"
+              : "No"
             : stamped;
+
         return {
           ...row,
           productType,
@@ -364,7 +375,7 @@ export const useBeltDesign = () => {
     setSizeRows([
       {
         id: "1",
-        productType: "Belt",
+        productType: "",
         size: "",
         width: "",
         stamped: "No",
