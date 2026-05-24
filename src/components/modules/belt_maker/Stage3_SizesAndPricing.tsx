@@ -127,14 +127,14 @@ export const Stage3SizesAndPricing = ({
 
             if (hasSlim) {
                 stampLineItems.push({
-                    label: 'Stamp setup — Slim (2.5cm) belt',
+                    label: 'Stamp setup - Slim belt',
                     amount: STAMP_COST,
                 })
             }
 
             if (hasRegular) {
                 stampLineItems.push({
-                    label: 'Stamp setup — Regular (3cm) belt',
+                    label: 'Stamp setup - Regular belt',
                     amount: STAMP_COST,
                 })
             }

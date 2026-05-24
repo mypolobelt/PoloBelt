@@ -1,6 +1,5 @@
 'use client'
 import { useRef } from 'react'
-import { Button } from '@/components/ui/button'
 import { useBeltDesign } from './useBeltDesign'
 import { StageIndicator } from './StageIndicator'
 import { Stage1ChooseDesign } from './Stage1_ChooseDesign'
@@ -162,6 +161,7 @@ export default function BeltMaker() {
                 {currentStage === 4 && (
                     <Stage4CustomerDetails
                         designName={designName}
+                        selectedPreset={selectedPreset}
                         threadColors={threadColors}
                         beltWidth={beltWidth}
                         leatherColor={leatherColor}

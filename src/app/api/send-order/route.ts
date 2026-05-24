@@ -1,86 +1,100 @@
-import { NextRequest, NextResponse } from 'next/server'
-import nodemailer from 'nodemailer'
+import { NextRequest, NextResponse } from "next/server";
+import nodemailer from "nodemailer";
 
 interface OrderData {
-  customerName: string
-  email: string
+  customerName: string;
+  email: string;
   address: {
-    line1: string
-    line2: string
-    city: string
-    stateRegion: string
-    postcode: string
-    country: string
-  }
+    line1: string;
+    line2: string;
+    city: string;
+    stateRegion: string;
+    postcode: string;
+    country: string;
+  };
   designDetails: {
-    designName: string
-    threadColors: string[]
-    beltWidth: string
-    leatherColor: string
-    buckleFinish: string
-    hasStamp: boolean
-    stampImage?: string
-  }
+    designName: string;
+    selectedPreset?: string | null;
+    threadColors: string[];
+    beltWidth: string;
+    leatherColor: string;
+    buckleFinish: string;
+    hasStamp: boolean;
+    stampImage?: string;
+  };
   orderQuantities: Array<{
-    size: string
-    width?: string
-    stamped?: 'Yes' | 'No'
-    quantity: number
-  }>
-  timestamp: string
+    size: string;
+    width?: string;
+    stamped?: "Yes" | "No";
+    quantity: number;
+  }>;
+  timestamp: string;
 }
+const PRESET_DISPLAY_NAMES: Record<string, string> = {
+  plk: "The Classic",
+  classicstripe: "The Classic Stripe",
+  classicdoublestripe: "Classic Double Stripe",
+  chain: "The Chain",
+  aztec: "The Aztec",
+  triplestripe: "Triple Stripe",
+  diamondstripe: "Diamond Stripe",
+  stripey: "The Stripey One",
+  diamonds: "Diamonds",
+  altblock: "Alt Block & Stripes",
+  Classic_2Stripe: "Classic 2-Stripe",
+};
 
 export async function POST(request: NextRequest) {
   try {
-    const data: OrderData = await request.json()
+    const data: OrderData = await request.json();
 
     // Configure your Gmail SMTP
     const transporter = nodemailer.createTransport({
-      service: 'gmail',
+      service: "gmail",
       auth: {
         user: process.env.GMAIL_USER,
         pass: process.env.GMAIL_APP_PASSWORD,
       },
-    })
+    });
 
     // Prepare stamp attachment if it exists
     const attachments: Array<{
-      filename: string
-      content: Buffer
-      contentDisposition: 'attachment' | 'inline'
-    }> = []
+      filename: string;
+      content: Buffer;
+      contentDisposition: "attachment" | "inline";
+    }> = [];
 
     if (data.designDetails.stampImage) {
       try {
         // Convert base64 data URL to buffer
         const base64Data = data.designDetails.stampImage.replace(
           /^data:image\/[^;]+;base64,/,
-          ''
-        )
-        const stampBuffer = Buffer.from(base64Data, 'base64')
-        const stampFilename = `polo-belt-stamp-${Date.now()}.png`
+          "",
+        );
+        const stampBuffer = Buffer.from(base64Data, "base64");
+        const stampFilename = `polo-belt-stamp-${Date.now()}.png`;
 
         attachments.push({
           filename: stampFilename,
           content: stampBuffer,
-          contentDisposition: 'attachment',
-        })
+          contentDisposition: "attachment",
+        });
       } catch (error) {
-        console.error('Error processing stamp image:', error)
+        console.error("Error processing stamp image:", error);
       }
     }
 
     // Build email HTML
-    const emailHTML = buildOrderEmail(data)
+    const emailHTML = buildOrderEmail(data);
 
     // Send same detailed email to admin/seller
     await transporter.sendMail({
       from: process.env.GMAIL_USER,
-      to: process.env.ADMIN_EMAIL || 'sales@example.com',
+      to: process.env.ADMIN_EMAIL || "sales@example.com",
       subject: `New Polo Belt Order - ${data.customerName}`,
       html: emailHTML,
       attachments: attachments,
-    })
+    });
 
     // Send same detailed email to customer
     await transporter.sendMail({
@@ -89,34 +103,40 @@ export async function POST(request: NextRequest) {
       subject: `Order Confirmation - ${data.customerName}`,
       html: emailHTML,
       attachments: attachments,
-    })
+    });
 
     return NextResponse.json({
       success: true,
-      message: 'Order emails sent successfully',
-    })
+      message: "Order emails sent successfully",
+    });
   } catch (error) {
-    console.error('Error sending email:', error)
+    console.error("Error sending email:", error);
     return NextResponse.json(
-      { success: false, error: 'Failed to send order' },
-      { status: 500 }
-    )
+      { success: false, error: "Failed to send order" },
+      { status: 500 },
+    );
   }
 }
 
 function buildOrderEmail(data: OrderData): string {
   const threadColorsList = data.designDetails.threadColors
     .map((color, idx) => `<li>Thread Color ${idx + 1}: ${color}</li>`)
-    .join('')
+    .join("");
 
   const orderItemsList = data.orderQuantities
     .map(
       (item) =>
-        `<li>${item.size} | ${item.width || 'Width not specified'} | Stamped: ${item.stamped || 'No'} | Qty: ${item.quantity}</li>`
+        `<li>${item.size} | ${item.width || "Width not specified"} | Stamped: ${item.stamped || "No"} | Qty: ${item.quantity}</li>`,
     )
-    .join('')
+    .join("");
 
-  const orderId = generateOrderId()
+  const orderId = generateOrderId();
+
+  const templateName = data.designDetails.selectedPreset
+    ? (PRESET_DISPLAY_NAMES[data.designDetails.selectedPreset] ??
+      data.designDetails.selectedPreset)
+    : "Unknown";
+
 
   return `
     <!DOCTYPE html>
@@ -156,7 +176,7 @@ function buildOrderEmail(data: OrderData): string {
             <h3>Shipping Address</h3>
             <p>
               ${escapeHtml(data.address.line1)}<br/>
-              ${data.address.line2 ? escapeHtml(data.address.line2) + '<br/>' : ''}
+              ${data.address.line2 ? escapeHtml(data.address.line2) + "<br/>" : ""}
               ${escapeHtml(data.address.city)}, ${escapeHtml(data.address.stateRegion)}<br/>
               ${escapeHtml(data.address.postcode)}<br/>
               ${escapeHtml(data.address.country)}
@@ -165,18 +185,19 @@ function buildOrderEmail(data: OrderData): string {
 
           <div class="section">
             <h3>Belt Design Details</h3>
+            <p><strong>Design Template:</strong> ${escapeHtml(templateName)}</p>
             <p><strong>Design Name:</strong> ${escapeHtml(data.designDetails.designName)}</p>
             <p><strong>Belt Width:</strong> ${escapeHtml(data.designDetails.beltWidth)}</p>
             <p><strong>Leather Color:</strong> ${escapeHtml(data.designDetails.leatherColor)}</p>
             <p><strong>Buckle Finish:</strong> ${escapeHtml(data.designDetails.buckleFinish)}</p>
             <p><strong>Thread Colors:</strong></p>
-            <ul>${threadColorsList || '<li>None specified</li>'}</ul>
-            <p><strong>Custom Stamp:</strong> ${data.designDetails.hasStamp ? 'Yes - See attached file' : 'No'}</p>
+            <ul>${threadColorsList || "<li>None specified</li>"}</ul>
+            <p><strong>Custom Stamp:</strong> ${data.designDetails.hasStamp ? "Yes - See attached file" : "No"}</p>
           </div>
 
           <div class="section">
             <h3>Order Quantities</h3>
-            <ul>${orderItemsList || '<li>No items specified</li>'}</ul>
+            <ul>${orderItemsList || "<li>No items specified</li>"}</ul>
           </div>
 
           <div class="footer">
@@ -186,20 +207,20 @@ function buildOrderEmail(data: OrderData): string {
         </div>
       </body>
     </html>
-  `
+  `;
 }
 
 function escapeHtml(text: string): string {
   const map: { [key: string]: string } = {
-    '&': '&amp;',
-    '<': '&lt;',
-    '>': '&gt;',
-    '"': '&quot;',
-    "'": '&#039;',
-  }
-  return text.replace(/[&<>"']/g, (m) => map[m])
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#039;",
+  };
+  return text.replace(/[&<>"']/g, (m) => map[m]);
 }
 
 function generateOrderId(): string {
-  return `ORD-${Date.now()}-${Math.random().toString(36).substr(2, 9).toUpperCase()}`
+  return `ORD-${Date.now()}-${Math.random().toString(36).substr(2, 9).toUpperCase()}`;
 }

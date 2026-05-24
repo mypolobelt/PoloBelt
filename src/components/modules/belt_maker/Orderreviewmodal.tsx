@@ -3,7 +3,6 @@ import { ProductType, SizeRow } from './useBeltDesign'
 
 // ─── Pricing (mirrors Stage3) ────────────────────────────────────────────────
 const PRICING: Record<Exclude<ProductType, ''>, { min: number; max: number; price: number }[]> = {
-
     Belt: [
         { min: 1, max: 1, price: 50 },
         { min: 2, max: 9, price: 45 },
@@ -45,7 +44,7 @@ const parseThreadColor = (raw: string): { name: string; id: string } => {
     return { name: name || raw, id }
 }
 
-// ─── Sub-components
+// ─── Sub-components ───────────────────────────────────────────────────────────
 
 const SectionHeading = ({ children }: { children: React.ReactNode }) => (
     <h3 className="text-[10px] font-bold uppercase tracking-[0.15em] text-gray-400 mb-3 pb-1.5 border-b border-gray-100">
@@ -65,7 +64,8 @@ const Row = ({ label, value, bold }: { label: string; value: React.ReactNode; bo
 // ─── Props 
 interface OrderReviewModalProps {
     designName: string
-    threadColors: string[]   // raw "Name ID" strings from useBeltDesign
+    selectedPreset: string | null
+    threadColors: string[]
     leatherColor: string
     buckleFinish: string
     hasStamp: boolean
@@ -74,10 +74,24 @@ interface OrderReviewModalProps {
     onConfirm: () => void
     onEdit: () => void
 }
+const PRESET_DISPLAY_NAMES: Record<string, string> = {
+    plk: 'The Classic',
+    classicstripe: 'The Classic Stripe',
+    classicdoublestripe: 'Classic Double Stripe',
+    chain: 'The Chain',
+    aztec: 'The Aztec',
+    triplestripe: 'Triple Stripe',
+    diamondstripe: 'Diamond Stripe',
+    stripey: 'The Stripey One',
+    diamonds: 'Diamonds',
+    altblock: 'Alt Block & Stripes',
+    Classic_2Stripe: 'Classic 2-Stripe',
+}
 
-// ─── Main
+// ─── Main 
 export const OrderReviewModal = ({
     designName,
+    selectedPreset,
     threadColors,
     leatherColor,
     buckleFinish,
@@ -88,30 +102,39 @@ export const OrderReviewModal = ({
     onEdit,
 }: OrderReviewModalProps) => {
 
-    const validRows = sizeRows.filter(r => r.size && r.quantity > 0)
+    // Only rows with a product selected, a size chosen, and qty > 0
+    const validRows = sizeRows.filter(r => r.productType && r.size && r.quantity > 0)
     const totalItems = validRows.reduce((s, r) => s + r.quantity, 0)
 
     // Group by productType for pricing
-    const groups: Record<string, { productType: ProductType; quantity: number }> = {}
+    const groups: Record<string, { productType: ProductType; quantity: number; widths: Set<string> }> = {}
     validRows.forEach(row => {
-        if (!groups[row.productType]) groups[row.productType] = { productType: row.productType, quantity: 0 }
+        if (!groups[row.productType]) {
+            groups[row.productType] = { productType: row.productType, quantity: 0, widths: new Set() }
+        }
         groups[row.productType].quantity += row.quantity
+        groups[row.productType].widths.add(row.width)
     })
 
-    const lineItems = Object.values(groups).map(g => ({
-        label: `${g.productType} (${g.quantity} × £${getUnitPrice(g.productType, g.quantity).toFixed(2)})`,
-        amount: getUnitPrice(g.productType, g.quantity) * g.quantity,
-    }))
+    const lineItems = Object.values(groups).map(g => {
+        const unitPrice = getUnitPrice(g.productType, g.quantity)
+        return {
+            label: `${g.productType} (${g.quantity} × £${unitPrice.toFixed(2)})`,
+            amount: unitPrice * g.quantity,
+        }
+    })
 
     // Stamp fees
     const stampLineItems: { label: string; amount: number }[] = []
     if (stampImage) {
         const stampFree = totalItems >= STAMP_FREE_THRESHOLD
         const stampedWidths = Array.from(new Set(
-            validRows.filter(r => r.productType === 'Belt' && r.stamped === 'Yes').map(r => r.width)
+            validRows
+                .filter(r => r.productType === 'Belt' && r.stamped === 'Yes')
+                .map(r => r.width)
         ))
         if (stampedWidths.includes('Slim (2.5cm)'))
-            stampLineItems.push({ label: 'Stamp — Slim (2.5cm)', amount: 0 })
+            stampLineItems.push({ label: 'Stamp — Slim (2.5cm)', amount: STAMP_COST })
         if (stampedWidths.includes('Standard (3cm)'))
             stampLineItems.push(
                 stampFree
@@ -122,7 +145,6 @@ export const OrderReviewModal = ({
 
     const total = [...lineItems, ...stampLineItems].reduce((s, li) => s + li.amount, 0)
 
-    // Leather dot colour for the visual indicator
     const leatherDotColor: Record<string, string> = {
         Brown: '#7B4F2E',
         Black: '#1A1A1A',
@@ -133,7 +155,7 @@ export const OrderReviewModal = ({
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
             <div
                 className="bg-white w-full max-w-xl max-h-[92vh] overflow-y-auto shadow-2xl flex flex-col"
-                style={{ borderTop: '3px solid #C9A84C' }}  // gold accent — matches border-gold
+                style={{ borderTop: '3px solid #C9A84C' }}
             >
                 {/* ── Header ── */}
                 <div className="sticky top-0 bg-white z-10 px-6 pt-5 pb-4 border-b border-gray-100 flex justify-between items-start">
@@ -164,6 +186,11 @@ export const OrderReviewModal = ({
                     <div>
                         <SectionHeading>Design Specification</SectionHeading>
                         <div className="space-y-0">
+                            <Row
+                                label="Design Template"
+                                value={selectedPreset ? (PRESET_DISPLAY_NAMES[selectedPreset] ?? selectedPreset) : '—'}
+                                bold
+                            />
                             <Row label="Design Name" value={designName || <em className="text-gray-400">Untitled</em>} bold />
                             <Row
                                 label="Leather"
@@ -201,9 +228,6 @@ export const OrderReviewModal = ({
                                             key={i}
                                             className="flex items-center gap-2 border border-gray-200 rounded-sm px-2.5 py-1.5 text-xs bg-gray-50"
                                         >
-                                            {/* Colour swatch — background set via inline style so Tailwind JIT doesn't
-                                                need to know the arbitrary hex. The hex lookup would normally come from
-                                                THREAD_COLORS[id]?.hex but we keep the modal dependency-free here. */}
                                             <span
                                                 className="w-3.5 h-3.5 rounded-sm border border-gray-300 shrink-0"
                                                 title={`ID: ${id}`}
@@ -260,7 +284,10 @@ export const OrderReviewModal = ({
                                             <td className="py-2 text-gray-700">{row.productType}</td>
                                             <td className="py-2 text-gray-700 font-medium">{row.size}</td>
                                             <td className="py-2 text-gray-500">
-                                                {row.width === 'Standard (3cm)' ? 'Standard' : 'Slim'}
+                                                {row.productType === 'Belt'
+                                                    ? (row.width === 'Standard (3cm)' ? 'Standard' : 'Slim')
+                                                    : '—'
+                                                }
                                             </td>
                                             {hasStamp && (
                                                 <td className="py-2">

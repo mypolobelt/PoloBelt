@@ -7,6 +7,7 @@ import { OrderReviewModal } from './Orderreviewmodal'
 
 interface Stage4CustomerDetailsProps {
     designName: string
+    selectedPreset: string | null   
     threadColors: string[]
     beltWidth: string
     leatherColor: string
@@ -23,6 +24,7 @@ interface Stage4CustomerDetailsProps {
 
 export const Stage4CustomerDetails = ({
     designName,
+    selectedPreset,
     threadColors,
     beltWidth,
     leatherColor,
@@ -90,6 +92,7 @@ export const Stage4CustomerDetails = ({
                         stampImage={stampImage}
                         designDetails={{
                             designName,
+                            selectedPreset,
                             threadColors,
                             beltWidth,
                             leatherColor,
@@ -116,6 +119,7 @@ export const Stage4CustomerDetails = ({
             {showReviewModal && (
                 <OrderReviewModal
                     designName={designName}
+                    selectedPreset={selectedPreset}
                     threadColors={threadColors}
                     leatherColor={leatherColor}
                     buckleFinish={buckleFinish}

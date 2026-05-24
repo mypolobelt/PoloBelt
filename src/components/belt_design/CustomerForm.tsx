@@ -15,6 +15,7 @@ interface SizeOrder {
 
 interface DesignDetails {
   designName: string
+  selectedPreset?: string | null
   threadColors: string[]
   beltWidth: string
   leatherColor: string
