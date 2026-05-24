@@ -155,7 +155,7 @@ const Nav = () => {
                     </NavigationMenu> */}
                 </div>
                 {/* Mobile Header */}
-                <div className="lg:flex md:flex flex xl:hidden items-center justify-between w-full gap-10">
+                <div className="lg:flex md:flex flex xl:hidden items-center justify-between w-full">
                     <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
                         <SheetTrigger asChild>
                             <button className="text-white p-1 sm:p-2 hover:bg-white/10 rounded-md transition-colors" aria-label="Toggle menu">
@@ -167,7 +167,7 @@ const Nav = () => {
                                 <SheetTitle className="text-white text-left text-lg sm:text-xl">Menu</SheetTitle>
                             </SheetHeader>
                             <nav className="mt-6 sm:mt-8">
-                                <ul className="flex flex-col gap-1">
+                                <ul className="flex flex-col gap-2">
                                     <li>
                                         <Link
                                             href="/"
@@ -180,7 +180,7 @@ const Nav = () => {
                                     <li>
                                         <Link
                                             href="/custom-design-tool"
-                                            className="block px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base text-white hover:bg-white/10 rounded-md transition-colors"
+                                            className="px-2 py-2 text-sm sm:text-base text-white font-semibold rounded-md border-r border-orange-600 transition-all duration-300  shadow-xl shadow-orange-600/20"
                                             onClick={closeSheet}
                                         >
                                             Custom Design Tool
