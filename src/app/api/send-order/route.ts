@@ -45,9 +45,9 @@ const PRESET_DISPLAY_NAMES: Record<string, string> = {
   Classic_2Stripe: "Classic 2-Stripe",
 };
 
-const resend = new Resend(process.env.RESEND_API_KEY);
-
 export async function POST(request: NextRequest) {
+  // resend api key
+  const resend = new Resend(process.env.RESEND_API_KEY);
   try {
     const data: OrderData = await request.json();
 
