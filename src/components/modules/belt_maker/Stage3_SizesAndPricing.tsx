@@ -158,6 +158,9 @@ export const Stage3SizesAndPricing = ({
     return (
         <section className="px-4 sm:px-6 lg:px-8 lg:pb-48 pb-20">
             <div className="max-w-7xl mx-auto">
+                <Button onClick={onBack} variant="outline" className="px-2 mb-4">
+                    ← Back to Customise
+                </Button>
                 <SpecificationSheet
                     designName={designName}
                     threadColors={threadColors}

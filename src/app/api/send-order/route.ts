@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import nodemailer from "nodemailer";
+import { Resend } from "resend";
 
 interface OrderData {
   customerName: string;
@@ -30,6 +30,7 @@ interface OrderData {
   }>;
   timestamp: string;
 }
+
 const PRESET_DISPLAY_NAMES: Record<string, string> = {
   plk: "The Classic",
   classicstripe: "The Classic Stripe",
@@ -44,65 +45,52 @@ const PRESET_DISPLAY_NAMES: Record<string, string> = {
   Classic_2Stripe: "Classic 2-Stripe",
 };
 
+const resend = new Resend(process.env.RESEND_API_KEY);
+
 export async function POST(request: NextRequest) {
   try {
     const data: OrderData = await request.json();
 
-    // Configure your Gmail SMTP
-    const transporter = nodemailer.createTransport({
-      service: "gmail",
-      auth: {
-        user: process.env.GMAIL_USER,
-        pass: process.env.GMAIL_APP_PASSWORD,
-      },
-    });
-
-    // Prepare stamp attachment if it exists
     const attachments: Array<{
       filename: string;
-      content: Buffer;
-      contentDisposition: "attachment" | "inline";
+      content: string;
     }> = [];
 
     if (data.designDetails.stampImage) {
       try {
-        // Convert base64 data URL to buffer
         const base64Data = data.designDetails.stampImage.replace(
           /^data:image\/[^;]+;base64,/,
           "",
         );
-        const stampBuffer = Buffer.from(base64Data, "base64");
-        const stampFilename = `polo-belt-stamp-${Date.now()}.png`;
-
         attachments.push({
-          filename: stampFilename,
-          content: stampBuffer,
-          contentDisposition: "attachment",
+          filename: `polo-belt-stamp-${Date.now()}.png`,
+          content: base64Data,
         });
       } catch (error) {
         console.error("Error processing stamp image:", error);
       }
     }
 
-    // Build email HTML
     const emailHTML = buildOrderEmail(data);
+    const fromAddress =
+      process.env.RESEND_FROM_ADDRESS || "orders@yourdomain.com";
 
-    // Send same detailed email to admin/seller
-    await transporter.sendMail({
-      from: process.env.GMAIL_USER,
+    // Send to admin
+    await resend.emails.send({
+      from: fromAddress,
       to: process.env.ADMIN_EMAIL || "sales@example.com",
       subject: `New Polo Belt Order - ${data.customerName}`,
       html: emailHTML,
-      attachments: attachments,
+      attachments,
     });
 
-    // Send same detailed email to customer
-    await transporter.sendMail({
-      from: process.env.GMAIL_USER,
+    // Send to customer
+    await resend.emails.send({
+      from: fromAddress,
       to: data.email,
       subject: `Order Confirmation - ${data.customerName}`,
       html: emailHTML,
-      attachments: attachments,
+      attachments,
     });
 
     return NextResponse.json({
@@ -136,7 +124,6 @@ function buildOrderEmail(data: OrderData): string {
     ? (PRESET_DISPLAY_NAMES[data.designDetails.selectedPreset] ??
       data.designDetails.selectedPreset)
     : "Unknown";
-
 
   return `
     <!DOCTYPE html>

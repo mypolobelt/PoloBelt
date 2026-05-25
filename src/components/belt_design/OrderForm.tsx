@@ -28,7 +28,7 @@ const getSizesForProductType = (productType: ProductType): string[] => {
     case 'Belt': return BELT_SIZES
     case 'Collar': return COLLAR_SIZES
     case 'Dog Lead': return DOG_LEAD_SIZE
-    default: return [] 
+    default: return []
   }
 }
 
@@ -78,6 +78,7 @@ export function OrderForm({
         }
         className={`${selectClass} ${className ?? ''}`}
       >
+        <option value="" disabled>Stamped?</option>
         <option value="No">No</option>
         <option value="Yes">Yes</option>
       </select>
@@ -117,7 +118,7 @@ export function OrderForm({
               <div className="lg:hidden">
                 <div className="flex items-center justify-between mb-3">
                   <span className="text-xs font-bold   uppercase tracking-widest">
-                    Item {index + 1}
+                    Line {index + 1}
                   </span>
                   {sizeRows.length > 1 && (
                     <button
@@ -140,7 +141,7 @@ export function OrderForm({
                       }}
                       className={selectClass}
                     >
-                      <option value="">Default</option> 
+                      <option value="">Select Product</option>
                       {PRODUCT_TYPES.map((type) => (
                         <option key={type} value={type}>{type}</option>
                       ))}
@@ -178,16 +179,7 @@ export function OrderForm({
                     )}
                   </div>
                   <div>
-                    <select
-                      value={row.stamped}
-                      onChange={(e) =>
-                        onUpdateSize(row.id, row.productType, row.size, row.width, e.target.value as 'Yes' | 'No', row.quantity)
-                      }
-                      className={`${selectClass}`}
-                    >
-                      <option value="Yes">Yes</option>
-                      <option value="No">No</option>
-                    </select>
+                    <StampedField row={row} />
                   </div>
                   <div className="col-span-2">
                     <label className={labelClass}>Quantity</label>
@@ -230,7 +222,7 @@ export function OrderForm({
                   }}
                   className={selectClass}
                 >
-                  <option value="">Default</option> 
+                  <option value="">Select Product</option>
                   {PRODUCT_TYPES.map((type) => (
                     <option key={type} value={type}>{type}</option>
                   ))}
