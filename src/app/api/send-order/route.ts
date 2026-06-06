@@ -73,12 +73,12 @@ export async function POST(request: NextRequest) {
 
     const emailHTML = buildOrderEmail(data);
     const fromAddress =
-      process.env.RESEND_FROM_ADDRESS || "orders@yourdomain.com";
+      process.env.RESEND_FROM_ADDRESS || "";
 
     // Send to admin
     await resend.emails.send({
       from: fromAddress,
-      to: process.env.ADMIN_EMAIL || "sales@example.com",
+      to: process.env.ADMIN_EMAIL || "",
       subject: `New Polo Belt Order - ${data.customerName}`,
       html: emailHTML,
       attachments,
