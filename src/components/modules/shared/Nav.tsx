@@ -37,7 +37,7 @@ const Nav = () => {
                                 </Link>
                             </NavigationMenuLink>
                         </NavigationMenuItem>
-                        <NavigationMenuItem>
+                        {/* <NavigationMenuItem>
                             <NavigationMenuLink asChild>
                                 <Link
                                     href="/custom-design-tool"
@@ -46,7 +46,7 @@ const Nav = () => {
                                     Custom Design Tool
                                 </Link>
                             </NavigationMenuLink>
-                        </NavigationMenuItem>
+                        </NavigationMenuItem> */}
                         <NavigationMenuItem>
                             <NavigationMenuLink asChild>
                                 <Link href="https://www.etsy.com/shop/MyPoloBelt" target="_blank" className="px-2 sm:px-3 py-2 text-sm sm:text-base text-white hover:text-white/80 transition-colors">
@@ -177,7 +177,7 @@ const Nav = () => {
                                             Home
                                         </Link>
                                     </li>
-                                    <li>
+                                    {/* <li>
                                         <Link
                                             href="/custom-design-tool"
                                             className="px-2 py-2 text-sm sm:text-base text-white font-semibold rounded-md border-r border-orange-600 transition-all duration-300  shadow-xl shadow-orange-600/20"
@@ -186,7 +186,7 @@ const Nav = () => {
                                             Custom Design Tool
                                         </Link>
                                     </li>
-                                    <li>
+                                    <li> */}
                                         <Link
                                             href="https://www.etsy.com/shop/MyPoloBelt" target="_blank"
                                             className="block px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base text-white hover:bg-white/10 rounded-md transition-colors"
