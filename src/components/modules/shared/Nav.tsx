@@ -98,6 +98,14 @@ const Nav = () => {
                                             Dog Collars & Leads
                                         </Link>
                                     </li>
+                                    <li>
+                                        <Link
+                                            href="/thread-chart"
+                                            className="block hover:bg-white/10 rounded-md px-4 py-2 text-white text-sm"
+                                        >
+                                            Thread Chart
+                                        </Link>
+                                    </li>
                                 </ul>
                             </NavigationMenuContent>
                         </NavigationMenuItem>
@@ -249,7 +257,7 @@ const Nav = () => {
                                                         className="block px-3 sm:px-4 py-2 text-xs sm:text-sm text-white hover:bg-white/10 rounded-md transition-colors"
                                                         onClick={closeSheet}
                                                     >
-                                                        Dog Collars & Lead
+                                                        Dog Collars & Leads
                                                     </Link>
                                                 </li>
                                                 <li>
