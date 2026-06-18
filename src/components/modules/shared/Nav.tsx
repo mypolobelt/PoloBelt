@@ -37,7 +37,7 @@ const Nav = () => {
                                 </Link>
                             </NavigationMenuLink>
                         </NavigationMenuItem>
-                        {/* <NavigationMenuItem>
+                        <NavigationMenuItem>
                             <NavigationMenuLink asChild>
                                 <Link
                                     href="/custom-design-tool"
@@ -46,7 +46,7 @@ const Nav = () => {
                                     Custom Design Tool
                                 </Link>
                             </NavigationMenuLink>
-                        </NavigationMenuItem> */}
+                        </NavigationMenuItem>
                         <NavigationMenuItem>
                             <NavigationMenuLink asChild>
                                 <Link href="https://www.etsy.com/shop/MyPoloBelt" target="_blank" className="px-2 sm:px-3 py-2 text-sm sm:text-base text-white hover:text-white/80 transition-colors">
