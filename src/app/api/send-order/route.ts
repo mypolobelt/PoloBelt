@@ -158,7 +158,7 @@ export async function POST(request: NextRequest) {
       console.error("PDF generation error:", err);
     }
 
-    const emailHTML = buildOrderEmail(data, threadColorDetails, beltImageUrl, stampImageUrl, baseUrl, designPdfUrl);
+    const emailHTML = buildOrderEmail(data, threadColorDetails, beltImageUrl, stampImageUrl, baseUrl, designPdfUrl, logoPngDataUri);
     const fromAddress = process.env.RESEND_FROM_ADDRESS || "";
     const adminEmail = process.env.ADMIN_EMAIL || "";
 
@@ -215,7 +215,7 @@ export async function POST(request: NextRequest) {
   }
 }
 
-function buildOrderEmail(data: OrderData, threadColorDetails: ThreadColorDetail[], beltImageUrl: string | null = null, stampImageUrl: string | null = null, baseUrl: string = "", designPdfUrl: string | null = null): string {
+function buildOrderEmail(data: OrderData, threadColorDetails: ThreadColorDetail[], beltImageUrl: string | null = null, stampImageUrl: string | null = null, baseUrl: string = "", designPdfUrl: string | null = null, logoPngDataUri: string | null = null): string {
   const threadSwatchesHtml = threadColorDetails.length > 0
     ? threadColorDetails.map(tc => `
         <div style="display:flex;align-items:center;margin-bottom:6px;">
@@ -294,7 +294,7 @@ function buildOrderEmail(data: OrderData, threadColorDetails: ThreadColorDetail[
                   <h2 style="margin:0;font-size:20px;font-weight:bold;color:#1a1a1a;">${escapeHtml(data.designDetails.designName || "Custom Design")}</h2>
                 </td>
                 <td style="vertical-align:middle;text-align:right;width:60px;">
-                  <img src="${baseUrl}/assets/logo.webp" alt="MPB Logo" style="width:52px;height:52px;display:inline-block;" />
+                  <img src="${logoPngDataUri || `${baseUrl}/assets/logo.webp`}" alt="MPB Logo" style="width:52px;height:52px;display:inline-block;" />
                 </td>
               </tr>
             </table>
