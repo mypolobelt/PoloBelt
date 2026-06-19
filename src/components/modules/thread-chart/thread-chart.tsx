@@ -246,21 +246,21 @@ function GroupColumn({ group }: { group: ThreadGroup }) {
         <div className="border border-gray-400 flex flex-col">
             {/* Header */}
             <div className="flex items-stretch border-b border-gray-400 bg-white">
-                {/* Vertical labels top→bottom via inline writingMode */}
-                <div className="flex items-start gap-2 px-2 py-2 lg:py-2.5 flex-1">
+                {/* Vertical labels */}
+                <div className="flex items-start gap-1 sm:gap-2 px-1.5 sm:px-2 py-2 lg:py-2.5 flex-1">
                     {(['4636/25', '4591/8', 'SHADE'] as const).map((label) => (
                         <span
                             key={label}
                             style={{ writingMode: 'vertical-lr' }}
-                            className="text-[5.5px] lg:text-[7px] text-gray-500 font-medium leading-none whitespace-nowrap"
+                            className="text-[6px] sm:text-[5.5px] lg:text-[7px] text-gray-500 font-medium leading-none whitespace-nowrap"
                         >
                             {label}
                         </span>
                     ))}
                 </div>
-                {/* Blue group number box — inline style to avoid Tailwind purge */}
+                {/* Blue group number box */}
                 <div
-                    className="w-9 lg:w-14 shrink-0 flex items-center justify-center font-bold text-2xl lg:text-4xl select-none"
+                    className="w-8 sm:w-9 lg:w-14 shrink-0 flex items-center justify-center font-bold text-xl sm:text-2xl lg:text-4xl select-none"
                     style={{ backgroundColor: '#3b82f6', color: '#ffffff' }}
                 >
                     {group.id}
@@ -271,18 +271,18 @@ function GroupColumn({ group }: { group: ThreadGroup }) {
             {group.shades.map((entry, idx) => (
                 <div
                     key={idx}
-                    className="flex items-center border-b border-gray-200 last:border-b-0 h-5 lg:h-7"
+                    className="flex items-center border-b border-gray-200 last:border-b-0 h-6 sm:h-5 lg:h-7"
                 >
                     {/* Left: dots + shade number */}
                     <div className="flex items-center gap-0.5 lg:gap-1 px-1 lg:px-1.5 shrink-0">
-                        <span className="text-[7px] lg:text-[10px] text-gray-500 leading-none select-none">●</span>
-                        <span className="text-[7px] lg:text-[10px] text-gray-500 leading-none select-none">●</span>
-                        <span className="text-[7px] lg:text-[10px] text-gray-800 font-medium text-right shrink-0 w-8 lg:w-11 leading-none">
+                        <span className="hidden sm:inline text-[7px] lg:text-[10px] text-gray-500 leading-none select-none">●</span>
+                        <span className="hidden sm:inline text-[7px] lg:text-[10px] text-gray-500 leading-none select-none">●</span>
+                        <span className="text-[8px] sm:text-[7px] lg:text-[10px] text-gray-800 font-medium text-right shrink-0 w-8 sm:w-8 lg:w-11 leading-none">
                             {entry.shade}
                         </span>
                     </div>
 
-                    {/* Color swatch — py-0.5 on parent gives equal 2px gap top & bottom */}
+                    {/* Color swatch */}
                     <div
                         className="flex-1 h-full"
                         style={{ backgroundColor: entry.color }}
@@ -319,7 +319,7 @@ export default function ThreadChart() {
                     viewport={{ once: false, amount: 0.1 }}
                     transition={{ duration: 0.6 }}
                 >
-                    <div className="grid grid-cols-4 gap-2 lg:gap-3 min-w-120">
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 lg:gap-3 sm:min-w-120">
                         {row1.map((g) => <GroupColumn key={g.id} group={g} />)}
                     </div>
                 </motion.div>
@@ -332,7 +332,7 @@ export default function ThreadChart() {
                     viewport={{ once: false, amount: 0.1 }}
                     transition={{ duration: 0.6, delay: 0.1 }}
                 >
-                    <div className="grid grid-cols-4 gap-2 lg:gap-3 min-w-120">
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 lg:gap-3 sm:min-w-120">
                         {row2.map((g) => <GroupColumn key={g.id} group={g} />)}
                     </div>
                 </motion.div>

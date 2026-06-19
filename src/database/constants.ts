@@ -1552,6 +1552,46 @@ export const THREAD_COLORS: ThreadColorDatabase = {
     name: "Off White",
     hex: "#f8f0e0",
   },
+  "701": {
+    name: "Light Rose",
+    hex: "#fce0e8",
+  },
+  "702": {
+    name: "Pale Peach",
+    hex: "#fcd0c8",
+  },
+  "703": {
+    name: "Peach",
+    hex: "#f8c0b0",
+  },
+  "704": {
+    name: "Light Salmon",
+    hex: "#f0a890",
+  },
+  "705": {
+    name: "Bright Teal",
+    hex: "#08b8c0",
+  },
+  "706": {
+    name: "Ruby",
+    hex: "#802030",
+  },
+  "707": {
+    name: "Claret",
+    hex: "#701828",
+  },
+  "708": {
+    name: "Jet Black",
+    hex: "#282828",
+  },
+  "709": {
+    name: "Champagne",
+    hex: "#f0d8c0",
+  },
+  "710": {
+    name: "Antique White",
+    hex: "#f8f4e8",
+  },
 };
 
 export const BASIC_PALETTE = [

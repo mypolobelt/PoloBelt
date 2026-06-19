@@ -1,6 +1,7 @@
 'use client'
 
 import { validateEmail } from '@/database/utils'
+import { THREAD_COLORS } from '@/database/constants'
 import { useState, useEffect } from 'react'
 import { Button } from '../ui/button'
 import { useRouter } from 'next/navigation'
@@ -35,7 +36,18 @@ interface CustomerFormProps {
   onSubmitComplete?: () => void
 }
 
+function parseThreadColorDetails(threadColors: string[]) {
+  return threadColors.map(raw => {
+    const parts = raw.trim().split(' ')
+    const id = parts[parts.length - 1]
+    const name = parts.slice(0, -1).join(' ')
+    const dbEntry = THREAD_COLORS[id as keyof typeof THREAD_COLORS] as { name: string; hex: string } | undefined
+    return { name: dbEntry?.name || name, id, hex: dbEntry?.hex || '#888888' }
+  })
+}
+
 export function CustomerForm({
+  canvasRef,
   stampImage,
   designDetails,
   sizeOrders,
@@ -55,7 +67,8 @@ export function CustomerForm({
   const [postcode, setPostcode] = useState('')
   const [country, setCountry] = useState('')
   const [isLoading, setIsLoading] = useState(false)
-  const [successMessage, setSuccessMessage] = useState('')
+  const [showSuccessModal, setShowSuccessModal] = useState(false)
+  const [submittedEmail, setSubmittedEmail] = useState('')
   const [errorMessage, setErrorMessage] = useState('')
 
   const router = useRouter()
@@ -71,7 +84,6 @@ export function CustomerForm({
   // Gate: validate then hand off to parent to open the review modal
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    setSuccessMessage('')
     setErrorMessage('')
 
     if (!validateEmail(email)) {
@@ -97,11 +109,17 @@ export function CustomerForm({
 
   // Real API submit — only runs after modal confirmation
   const submitOrder = async () => {
-    setSuccessMessage('')
     setErrorMessage('')
     setIsLoading(true)
 
     try {
+      const beltImage = canvasRef?.current
+        ? canvasRef.current.toDataURL('image/png')
+        : undefined
+
+      const threadColors = designDetails?.threadColors || []
+      const threadColorDetails = parseThreadColorDetails(threadColors)
+
       const orderData = {
         customerName,
         email,
@@ -123,6 +141,8 @@ export function CustomerForm({
             hasStamp: false,
           }),
           stampImage,
+          beltImage,
+          threadColorDetails,
         },
         orderQuantities: sizeOrders || [],
         timestamp: new Date().toISOString(),
@@ -130,9 +150,7 @@ export function CustomerForm({
 
       const response = await fetch('/api/send-order', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(orderData),
       })
 
@@ -140,9 +158,9 @@ export function CustomerForm({
         throw new Error('Failed to send order')
       }
 
-      setSuccessMessage(
-        'Your order has been sent successfully! Check your email for confirmation.'
-      )
+      // Show confirmation popup
+      setSubmittedEmail(email)
+      setShowSuccessModal(true)
 
       // Reset form fields
       setCustomerName('')
@@ -154,12 +172,8 @@ export function CustomerForm({
       setPostcode('')
       setCountry('')
 
-      // Reset design and order state in parent
       onResetDesign?.()
       onResetOrder?.()
-
-      // Clear success message after 3 seconds
-      setTimeout(() => setSuccessMessage(''), 3000)
     } catch (error) {
       console.error('Error submitting form:', error)
       setErrorMessage(
@@ -168,7 +182,6 @@ export function CustomerForm({
     } finally {
       setIsLoading(false)
       onSubmitComplete?.()
-      router.push('/custom-design-tool')
     }
   }
 
@@ -322,18 +335,47 @@ export function CustomerForm({
           {isLoading ? 'Sending...' : 'See Project Summary'}
         </Button>
 
-        {successMessage && (
-          <div className="mt-4 p-3 sm:p-4 bg-green-100 border-2 border-green-500 text-green-700 rounded-none text-xs sm:text-sm">
-            {successMessage}
-          </div>
-        )}
-
         {errorMessage && (
           <div className="mt-4 p-3 sm:p-4 bg-red-100 border-2 border-red-500 text-red-700 rounded-none text-xs sm:text-sm">
             {errorMessage}
           </div>
         )}
       </form>
+
+      {/* Success Confirmation Popup */}
+      {showSuccessModal && (
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div
+            className="bg-white w-full max-w-md shadow-2xl p-8 flex flex-col items-center text-center"
+            style={{ borderTop: '4px solid #C9A84C' }}
+          >
+            <div className="w-14 h-14 rounded-full bg-green-100 flex items-center justify-center mb-4">
+              <svg className="w-7 h-7 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+              </svg>
+            </div>
+            <h2 className="text-xl font-bold text-gray-900 mb-2">Order Submitted!</h2>
+            <p className="text-sm text-gray-600 mb-1">
+              A confirmation has been sent to:
+            </p>
+            <p className="text-sm font-semibold text-gray-900 mb-4 break-all">
+              {submittedEmail}
+            </p>
+            <p className="text-xs text-amber-700 bg-amber-50 border border-amber-200 rounded px-3 py-2 mb-6">
+              Please check your <strong>junk / spam folder</strong> if you don&apos;t see it in your inbox.
+            </p>
+            <Button
+              onClick={() => {
+                setShowSuccessModal(false)
+                router.push('/custom-design-tool')
+              }}
+              className="w-full"
+            >
+              Close
+            </Button>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

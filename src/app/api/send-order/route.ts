@@ -1,5 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import { Resend } from "resend";
+import { THREAD_COLORS } from "@/database/constants";
+
+interface ThreadColorDetail {
+  name: string;
+  id: string;
+  hex: string;
+}
 
 interface OrderData {
   customerName: string;
@@ -16,11 +23,13 @@ interface OrderData {
     designName: string;
     selectedPreset?: string | null;
     threadColors: string[];
+    threadColorDetails?: ThreadColorDetail[];
     beltWidth: string;
     leatherColor: string;
     buckleFinish: string;
     hasStamp: boolean;
     stampImage?: string;
+    beltImage?: string;
   };
   orderQuantities: Array<{
     size: string;
@@ -29,6 +38,22 @@ interface OrderData {
     quantity: number;
   }>;
   timestamp: string;
+}
+
+function parseThreadColorDetails(threadColors: string[]): ThreadColorDetail[] {
+  return threadColors.map((raw) => {
+    const parts = raw.trim().split(" ");
+    const id = parts[parts.length - 1];
+    const name = parts.slice(0, -1).join(" ");
+    const dbEntry = THREAD_COLORS[id as keyof typeof THREAD_COLORS] as
+      | { name: string; hex: string }
+      | undefined;
+    return {
+      name: dbEntry?.name || name,
+      id,
+      hex: dbEntry?.hex || "#888888",
+    };
+  });
 }
 
 const PRESET_DISPLAY_NAMES: Record<string, string> = {
@@ -51,6 +76,11 @@ export async function POST(request: NextRequest) {
   try {
     const data: OrderData = await request.json();
 
+    // Resolve thread colour hex values from THREAD_COLORS db
+    const threadColorDetails =
+      data.designDetails.threadColorDetails ||
+      parseThreadColorDetails(data.designDetails.threadColors);
+
     const attachments: Array<{
       filename: string;
       content: string;
@@ -71,7 +101,7 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    const emailHTML = buildOrderEmail(data);
+    const emailHTML = buildOrderEmail(data, threadColorDetails);
     const fromAddress =
       process.env.RESEND_FROM_ADDRESS || "";
 
@@ -106,10 +136,14 @@ export async function POST(request: NextRequest) {
   }
 }
 
-function buildOrderEmail(data: OrderData): string {
-  const threadColorsList = data.designDetails.threadColors
-    .map((color, idx) => `<li>Thread Color ${idx + 1}: ${color}</li>`)
-    .join("");
+function buildOrderEmail(data: OrderData, threadColorDetails: ThreadColorDetail[]): string {
+  const threadSwatchesHtml = threadColorDetails.length > 0
+    ? threadColorDetails.map(tc => `
+        <div style="display:flex;align-items:center;margin-bottom:6px;">
+          <span style="display:inline-block;width:16px;height:16px;background-color:${tc.hex};border:1px solid #ccc;margin-right:8px;flex-shrink:0;"></span>
+          <span style="font-size:13px;color:#333;">- ${tc.name.toLowerCase()} ${tc.id}</span>
+        </div>`).join("")
+    : "<p style='font-size:13px;color:#888;'>Not specified</p>";
 
   const orderItemsList = data.orderQuantities
     .map(
@@ -125,21 +159,31 @@ function buildOrderEmail(data: OrderData): string {
       data.designDetails.selectedPreset)
     : "Unknown";
 
+  const beltImageHtml = data.designDetails.beltImage
+    ? `<img src="${data.designDetails.beltImage}" alt="Belt Design Preview" style="width:100%;max-width:560px;display:block;margin:0 auto;" />`
+    : "";
+
+  const stampImageHtml = data.designDetails.stampImage
+    ? `<img src="${data.designDetails.stampImage}" alt="Stamp" style="width:80px;height:80px;object-fit:contain;" />`
+    : "<p style='font-size:13px;color:#888;'>None</p>";
+
   return `
     <!DOCTYPE html>
     <html>
       <head>
         <style>
           body { font-family: Arial, sans-serif; color: #333; }
-          .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+          .container { max-width: 620px; margin: 0 auto; padding: 20px; }
           .header { background: #6B2E1F; color: white; padding: 20px; border-radius: 5px; margin-bottom: 20px; }
           .order-id { background: #D4A574; color: #6B2E1F; padding: 10px; border-radius: 5px; margin-bottom: 20px; font-weight: bold; text-align: center; }
           .section { margin: 20px 0; padding: 15px; border: 1px solid #ddd; border-radius: 5px; }
           .section h3 { color: #6B2E1F; margin-top: 0; border-bottom: 2px solid #D4A574; padding-bottom: 10px; }
           ul { margin: 10px 0; padding-left: 20px; }
           li { margin: 8px 0; }
-          .timestamp { color: #999; font-size: 12px; margin-top: 10px; }
           .footer { text-align: center; margin-top: 30px; padding-top: 20px; border-top: 1px solid #ddd; color: #666; font-size: 12px; }
+          .spec-row { display: table; width: 100%; border-collapse: collapse; }
+          .spec-col { display: table-cell; vertical-align: top; padding-right: 20px; width: 33%; }
+          .spec-label { font-size: 11px; font-weight: bold; text-transform: uppercase; letter-spacing: 0.08em; color: #6B2E1F; margin-bottom: 8px; }
         </style>
       </head>
       <body>
@@ -151,6 +195,37 @@ function buildOrderEmail(data: OrderData): string {
 
           <div class="order-id">
             Order ID: ${orderId}
+          </div>
+
+          <!-- DESIGN SPEC SECTION (matches client's typical design spec format) -->
+          <div class="section" style="background:#fafafa;">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px;">
+              <h2 style="margin:0;font-size:20px;color:#1a1a1a;">${escapeHtml(data.designDetails.designName || "Custom Design")}</h2>
+              <div style="width:46px;height:46px;border-radius:50%;background:#1a1a2e;border:2px solid #8b0000;display:flex;align-items:center;justify-content:center;text-align:center;padding-top:4px;">
+                <span style="color:#c8a96e;font-size:10px;font-weight:bold;line-height:1;">MPB</span>
+              </div>
+            </div>
+
+            ${beltImageHtml ? `<div style="margin-bottom:16px;">${beltImageHtml}</div>` : ""}
+
+            <table style="width:100%;border-collapse:collapse;">
+              <tr>
+                <td style="vertical-align:top;width:33%;padding-right:16px;">
+                  <p class="spec-label">Thread colours:</p>
+                  ${threadSwatchesHtml}
+                </td>
+                <td style="vertical-align:top;width:33%;padding-right:16px;">
+                  <p class="spec-label">Leather colour:</p>
+                  <p style="font-size:13px;color:#333;margin:0 0 12px 0;">${escapeHtml(data.designDetails.leatherColor)}</p>
+                  <p class="spec-label">Buckle colour:</p>
+                  <p style="font-size:13px;color:#333;margin:0;">${escapeHtml(data.designDetails.buckleFinish)}</p>
+                </td>
+                <td style="vertical-align:top;width:33%;">
+                  <p class="spec-label">Stamp:</p>
+                  ${stampImageHtml}
+                </td>
+              </tr>
+            </table>
           </div>
 
           <div class="section">
@@ -178,7 +253,7 @@ function buildOrderEmail(data: OrderData): string {
             <p><strong>Leather Color:</strong> ${escapeHtml(data.designDetails.leatherColor)}</p>
             <p><strong>Buckle Finish:</strong> ${escapeHtml(data.designDetails.buckleFinish)}</p>
             <p><strong>Thread Colors:</strong></p>
-            <ul>${threadColorsList || "<li>None specified</li>"}</ul>
+            <ul>${threadColorDetails.map(tc => `<li>${tc.name} ${tc.id}</li>`).join("") || "<li>None specified</li>"}</ul>
             <p><strong>Custom Stamp:</strong> ${data.designDetails.hasStamp ? "Yes - See attached file" : "No"}</p>
           </div>
 

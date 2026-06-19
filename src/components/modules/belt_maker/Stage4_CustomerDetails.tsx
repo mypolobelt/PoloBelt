@@ -4,6 +4,7 @@ import { SizeRow } from './useBeltDesign'
 import { SpecificationSheet } from '@/components/belt_design/SpecificationSheet'
 import { CustomerForm } from '@/components/belt_design/CustomerForm'
 import { OrderReviewModal } from './Orderreviewmodal'
+import { DownloadPDFButton } from '@/components/belt_design/DownloadPDFButton'
 
 interface Stage4CustomerDetailsProps {
     designName: string
@@ -85,6 +86,18 @@ export const Stage4CustomerDetails = ({
                     hasStamp={hasStamp}
                     stampImage={stampImage}
                 />
+
+                {/* Download Design Spec PDF */}
+                <div className="mt-4 flex justify-end">
+                    <DownloadPDFButton
+                        designName={designName}
+                        threadColors={threadColors}
+                        leatherColor={leatherColor}
+                        buckleFinish={buckleFinish}
+                        stampImage={stampImage}
+                        canvasRef={canvasRef}
+                    />
+                </div>
                 {/* ── Customer Form ── */}
                 <div className="mt-6">
                     <CustomerForm
