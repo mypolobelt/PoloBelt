@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { Resend } from "resend";
+import { put } from "@vercel/blob";
 import { THREAD_COLORS } from "@/database/constants";
 
 interface ThreadColorDetail {
@@ -79,43 +80,46 @@ export async function POST(request: NextRequest) {
       data.designDetails.threadColorDetails ||
       parseThreadColorDetails(data.designDetails.threadColors);
 
-    const attachments: Array<{ filename: string; content: string; content_id?: string }> = [];
+    const attachments: Array<{ filename: string; content: string }> = [];
+    const blobUrlsToDelete: string[] = [];
 
-    // Belt canvas image — inline CID attachment (works in Gmail)
+    // Upload belt image to Vercel Blob → public URL for email
+    let beltImageUrl: string | null = null;
     if (data.designDetails.beltImage) {
       try {
-        const beltBase64 = data.designDetails.beltImage.replace(
-          /^data:image\/[^;]+;base64,/,
-          "",
-        );
-        attachments.push({
-          filename: "belt-design.jpg",
-          content: beltBase64,
-          content_id: "belt-design",
+        const beltBase64 = data.designDetails.beltImage.replace(/^data:image\/[^;]+;base64,/, "");
+        const buffer = Buffer.from(beltBase64, "base64");
+        const blob = await put(`belt-designs/belt-${Date.now()}.jpg`, buffer, {
+          access: "public",
+          contentType: "image/jpeg",
         });
+        beltImageUrl = blob.url;
+        blobUrlsToDelete.push(blob.url);
+        // Also send as attachment for download
+        attachments.push({ filename: "belt-design.jpg", content: beltBase64 });
       } catch (err) {
-        console.error("Belt image processing error:", err);
+        console.error("Belt image blob upload error:", err);
       }
     }
 
-    // Stamp image attachment
+    // Upload stamp image to Vercel Blob → public URL for email
+    let stampImageUrl: string | null = null;
     if (data.designDetails.stampImage) {
       try {
-        const base64Data = data.designDetails.stampImage.replace(
-          /^data:image\/[^;]+;base64,/,
-          "",
-        );
-        attachments.push({
-          filename: `polo-belt-stamp-${Date.now()}.png`,
-          content: base64Data,
-          content_id: "stamp-image",
+        const stampBase64 = data.designDetails.stampImage.replace(/^data:image\/[^;]+;base64,/, "");
+        const buffer = Buffer.from(stampBase64, "base64");
+        const blob = await put(`stamps/stamp-${Date.now()}.png`, buffer, {
+          access: "public",
+          contentType: "image/png",
         });
+        stampImageUrl = blob.url;
+        blobUrlsToDelete.push(blob.url);
       } catch (err) {
-        console.error("Stamp image processing error:", err);
+        console.error("Stamp image blob upload error:", err);
       }
     }
 
-    const emailHTML = buildOrderEmail(data, threadColorDetails);
+    const emailHTML = buildOrderEmail(data, threadColorDetails, beltImageUrl, stampImageUrl);
     const fromAddress = process.env.RESEND_FROM_ADDRESS || "";
     const adminEmail = process.env.ADMIN_EMAIL || "";
 
@@ -172,7 +176,7 @@ export async function POST(request: NextRequest) {
   }
 }
 
-function buildOrderEmail(data: OrderData, threadColorDetails: ThreadColorDetail[]): string {
+function buildOrderEmail(data: OrderData, threadColorDetails: ThreadColorDetail[], beltImageUrl: string | null = null, stampImageUrl: string | null = null): string {
   const threadSwatchesHtml = threadColorDetails.length > 0
     ? threadColorDetails.map(tc => `
         <div style="display:flex;align-items:center;margin-bottom:6px;">
@@ -195,13 +199,12 @@ function buildOrderEmail(data: OrderData, threadColorDetails: ThreadColorDetail[
       data.designDetails.selectedPreset)
     : "Unknown";
 
-  // Belt image sent as file attachment (data URIs and CID inline both blocked/unsupported by Gmail)
-  const beltImageHtml = data.designDetails.beltImage
-    ? `<p style="font-size:11px;color:#888;font-style:italic;margin:0 0 8px 0;">&#128206; Belt design image attached below</p>`
+  const beltImageHtml = beltImageUrl
+    ? `<img src="${beltImageUrl}" alt="Belt Design" style="width:100%;max-width:560px;display:block;margin:0 auto 16px auto;border-radius:4px;" />`
     : "";
 
-  const stampImageHtml = data.designDetails.stampImage
-    ? `<img src="cid:stamp-image" alt="Stamp" style="width:80px;height:80px;object-fit:contain;" />`
+  const stampImageHtml = stampImageUrl
+    ? `<img src="${stampImageUrl}" alt="Stamp" style="width:80px;height:80px;object-fit:contain;" />`
     : "<p style='font-size:13px;color:#888;'>None</p>";
 
   return `
