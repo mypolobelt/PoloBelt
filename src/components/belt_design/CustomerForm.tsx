@@ -70,6 +70,7 @@ export function CustomerForm({
   const [showSuccessModal, setShowSuccessModal] = useState(false)
   const [submittedEmail, setSubmittedEmail] = useState('')
   const [errorMessage, setErrorMessage] = useState('')
+  const [pendingReset, setPendingReset] = useState(false)
 
   const router = useRouter()
 
@@ -113,8 +114,9 @@ export function CustomerForm({
     setIsLoading(true)
 
     try {
+      // Use JPEG at 0.6 quality to keep request size small
       const beltImage = canvasRef?.current
-        ? canvasRef.current.toDataURL('image/png')
+        ? canvasRef.current.toDataURL('image/jpeg', 0.6)
         : undefined
 
       const threadColors = designDetails?.threadColors || []
@@ -155,12 +157,9 @@ export function CustomerForm({
       })
 
       if (!response.ok) {
-        throw new Error('Failed to send order')
+        const errText = await response.text()
+        throw new Error(errText || 'Failed to send order')
       }
-
-      // Show confirmation popup
-      setSubmittedEmail(email)
-      setShowSuccessModal(true)
 
       // Reset form fields
       setCustomerName('')
@@ -172,8 +171,12 @@ export function CustomerForm({
       setPostcode('')
       setCountry('')
 
-      onResetDesign?.()
-      onResetOrder?.()
+      // Mark that we need to reset design after modal closes
+      setPendingReset(true)
+
+      // Show confirmation popup — do NOT reset design yet (would unmount this component)
+      setSubmittedEmail(email)
+      setShowSuccessModal(true)
     } catch (error) {
       console.error('Error submitting form:', error)
       setErrorMessage(
@@ -367,6 +370,11 @@ export function CustomerForm({
             <Button
               onClick={() => {
                 setShowSuccessModal(false)
+                if (pendingReset) {
+                  onResetDesign?.()
+                  onResetOrder?.()
+                  setPendingReset(false)
+                }
                 router.push('/custom-design-tool')
               }}
               className="w-full"
