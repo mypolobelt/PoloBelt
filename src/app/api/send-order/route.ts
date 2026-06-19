@@ -247,8 +247,8 @@ function buildOrderEmail(data: OrderData, threadColorDetails: ThreadColorDetail[
                 <td style="vertical-align:middle;">
                   <h2 style="margin:0;font-size:20px;font-weight:bold;color:#1a1a1a;">${escapeHtml(data.designDetails.designName || "Custom Design")}</h2>
                 </td>
-                <td style="vertical-align:middle;text-align:right;width:80px;">
-                  <img src="${baseUrl}/assets/logo.webp" alt="MPB Logo" style="width:72px;height:72px;display:inline-block;" />
+                <td style="vertical-align:middle;text-align:right;width:60px;">
+                  <img src="${baseUrl}/assets/logo.webp" alt="MPB Logo" style="width:52px;height:52px;display:inline-block;" />
                 </td>
               </tr>
             </table>
