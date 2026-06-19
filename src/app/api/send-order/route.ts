@@ -95,8 +95,6 @@ export async function POST(request: NextRequest) {
         });
         beltImageUrl = blob.url;
         blobUrlsToDelete.push(blob.url);
-        // Also send as attachment for download
-        attachments.push({ filename: "belt-design.jpg", content: beltBase64 });
       } catch (err) {
         console.error("Belt image blob upload error:", err);
       }
@@ -200,9 +198,9 @@ function buildOrderEmail(data: OrderData, threadColorDetails: ThreadColorDetail[
     : "Unknown";
 
   const beltImageHtml = beltImageUrl
-    ? `<img src="${beltImageUrl}" alt="Belt Design" style="width:100%;max-width:560px;display:block;margin:0 auto 8px auto;border-radius:4px;" />
-       <div style="text-align:center;margin-bottom:16px;">
-         <a href="${beltImageUrl}" download="belt-design.jpg" style="display:inline-block;font-size:11px;color:#8b6914;text-decoration:none;border:1px solid #c9a84c;padding:4px 12px;border-radius:4px;">&#11015; Download Belt Design Image</a>
+    ? `<img src="${beltImageUrl}" alt="Belt Design" style="width:100%;max-width:560px;display:block;margin:0 auto 12px auto;border-radius:4px;" />
+       <div style="text-align:center;margin-bottom:20px;">
+         <a href="${beltImageUrl}" download="belt-design.jpg" style="display:inline-block;font-size:13px;font-weight:bold;color:#ffffff;text-decoration:none;background:#1a1a2e;border:2px solid #c9a84c;padding:10px 24px;border-radius:6px;letter-spacing:0.5px;">&#11015;&nbsp;&nbsp;Download Belt Design Image</a>
        </div>`
     : "";
 

@@ -353,65 +353,108 @@ export function CustomerForm({
 
       {/* Success Confirmation Popup */}
       {showSuccessModal && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-          <div
-            className="bg-white w-full max-w-md shadow-2xl flex flex-col items-center text-center relative"
-            style={{ borderTop: '4px solid #C9A84C' }}
-          >
-            {/* Close X button */}
-            <button
-              onClick={() => {
-                setShowSuccessModal(false)
-                if (pendingReset) {
-                  onResetDesign?.()
-                  onResetOrder?.()
-                  setPendingReset(false)
-                }
-                router.push('/custom-design-tool')
-              }}
-              className="absolute top-3 right-4 text-gray-400 hover:text-gray-700 text-2xl leading-none"
-              aria-label="Close"
-            >
-              ×
-            </button>
+        <>
+          <style>{`
+            @keyframes modalFadeIn {
+              from { opacity: 0; transform: scale(0.92) translateY(16px); }
+              to   { opacity: 1; transform: scale(1) translateY(0); }
+            }
+            @keyframes checkPop {
+              0%   { transform: scale(0); opacity: 0; }
+              60%  { transform: scale(1.2); opacity: 1; }
+              100% { transform: scale(1); }
+            }
+            @keyframes checkDraw {
+              from { stroke-dashoffset: 40; }
+              to   { stroke-dashoffset: 0; }
+            }
+            .modal-enter { animation: modalFadeIn 0.35s cubic-bezier(0.34,1.56,0.64,1) both; }
+            .check-pop   { animation: checkPop 0.5s cubic-bezier(0.34,1.56,0.64,1) 0.15s both; }
+            .check-draw  { stroke-dasharray: 40; animation: checkDraw 0.4s ease 0.5s both; }
+          `}</style>
 
-            <div className="px-8 pt-10 pb-8 w-full flex flex-col items-center">
-              {/* Checkmark icon */}
-              <div className="w-16 h-16 rounded-full bg-green-50 border-2 border-green-200 flex items-center justify-center mb-5">
-                <svg className="w-8 h-8 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
-                </svg>
+          <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+            <div className="modal-enter bg-white w-full max-w-md rounded-2xl shadow-2xl overflow-hidden">
+
+              {/* Gold top bar */}
+              <div className="h-1.5 w-full" style={{ background: 'linear-gradient(90deg,#C9A84C,#e8c96a,#C9A84C)' }} />
+
+              {/* Close button */}
+              <div className="relative px-6 pt-5 pb-0 flex justify-end">
+                <button
+                  onClick={() => {
+                    setShowSuccessModal(false)
+                    if (pendingReset) {
+                      onResetDesign?.()
+                      onResetOrder?.()
+                      setPendingReset(false)
+                    }
+                    router.push('/custom-design-tool')
+                  }}
+                  className="w-9 h-9 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-colors"
+                  aria-label="Close"
+                >
+                  <svg className="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
               </div>
 
-              <h2 className="text-2xl font-bold text-gray-900 mb-1">Order Submitted Successfully!</h2>
-              <p className="text-sm text-gray-500 mb-4">Thank you — we&apos;ll be in touch shortly.</p>
+              {/* Content */}
+              <div className="px-8 pt-2 pb-8 flex flex-col items-center text-center">
 
-              <div className="w-full bg-gray-50 border border-gray-200 rounded px-4 py-3 mb-4">
-                <p className="text-xs text-gray-500 mb-0.5">Confirmation sent to:</p>
-                <p className="text-sm font-semibold text-gray-900 break-all">{submittedEmail}</p>
+                {/* Animated checkmark */}
+                <div className="check-pop w-20 h-20 rounded-full flex items-center justify-center mb-5"
+                  style={{ background: 'linear-gradient(135deg,#d4f0d4,#a8e6a8)' }}>
+                  <svg className="w-10 h-10" fill="none" viewBox="0 0 24 24">
+                    <path
+                      className="check-draw"
+                      stroke="#22c55e"
+                      strokeWidth={2.5}
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M5 13l4 4L19 7"
+                    />
+                  </svg>
+                </div>
+
+                <h2 className="text-2xl font-bold text-gray-900 mb-1">Order Submitted!</h2>
+                <p className="text-base font-medium text-green-600 mb-5">Successfully ✓</p>
+
+                {/* Email box */}
+                <div className="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 mb-4 text-left">
+                  <p className="text-xs text-gray-400 uppercase tracking-wider mb-1">Confirmation sent to</p>
+                  <p className="text-sm font-semibold text-gray-900 break-all">{submittedEmail}</p>
+                </div>
+
+                {/* Spam note */}
+                <div className="w-full flex gap-2 items-start bg-amber-50 border border-amber-200 rounded-xl px-4 py-3 mb-6 text-left">
+                  <svg className="w-4 h-4 text-amber-500 mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                  </svg>
+                  <p className="text-xs text-amber-700">
+                    Please check your <strong>junk / spam folder</strong> if you don&apos;t see it in your inbox.
+                  </p>
+                </div>
+
+                <Button
+                  onClick={() => {
+                    setShowSuccessModal(false)
+                    if (pendingReset) {
+                      onResetDesign?.()
+                      onResetOrder?.()
+                      setPendingReset(false)
+                    }
+                    router.push('/custom-design-tool')
+                  }}
+                  className="w-full py-3 text-sm font-semibold uppercase tracking-widest rounded-xl"
+                >
+                  Close
+                </Button>
               </div>
-
-              <p className="text-xs text-amber-700 bg-amber-50 border border-amber-200 rounded px-3 py-2 mb-6 w-full">
-                Please check your <strong>junk / spam folder</strong> if you don&apos;t see it in your inbox.
-              </p>
-
-              <Button
-                onClick={() => {
-                  setShowSuccessModal(false)
-                  if (pendingReset) {
-                    onResetDesign?.()
-                    onResetOrder?.()
-                    setPendingReset(false)
-                  }
-                  router.push('/custom-design-tool')
-                }}
-                className="w-full py-3 text-sm font-semibold uppercase tracking-wide"
-              >
-                Close
-              </Button>
             </div>
           </div>
-        </div>
+        </>
       )}
     </div>
   )
