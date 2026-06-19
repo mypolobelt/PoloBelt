@@ -1,6 +1,6 @@
 'use client'
 
-import { validateEmail, generateGridDataFromColors } from '@/database/utils'
+import { validateEmail } from '@/database/utils'
 import { THREAD_COLORS } from '@/database/constants'
 import { useState, useEffect } from 'react'
 import { Button } from '../ui/button'
@@ -399,7 +399,7 @@ export function CustomerForm({
                     }
                     router.push('/custom-design-tool')
                   }}
-                  className="w-9 h-9 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-colors"
+                  className="w-9 h-9 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-colors cursor-pointer"
                   aria-label="Close"
                 >
                   <svg className="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -426,8 +426,7 @@ export function CustomerForm({
                   </svg>
                 </div>
 
-                <h2 className="text-2xl font-bold text-gray-900 mb-1">Order Submitted!</h2>
-                <p className="text-base font-medium text-green-600 mb-5">Successfully ✓</p>
+                <h2 className="text-2xl font-bold text-gray-900 mb-5">Order Submitted Successfully!</h2>
 
                 {/* Email box */}
                 <div className="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 mb-4 text-left">

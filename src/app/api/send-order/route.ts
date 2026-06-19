@@ -178,7 +178,7 @@ function buildOrderEmail(data: OrderData, threadColorDetails: ThreadColorDetail[
   const threadSwatchesHtml = threadColorDetails.length > 0
     ? threadColorDetails.map(tc => `
         <div style="display:flex;align-items:center;margin-bottom:6px;">
-          <span style="display:inline-block;width:16px;height:16px;background-color:${tc.hex};border:1px solid #ccc;margin-right:8px;flex-shrink:0;"></span>
+          <span style="display:inline-block;width:18px;height:18px;background-color:${tc.hex};border:1px solid #999;border-radius:2px;margin-right:8px;flex-shrink:0;outline:1px solid rgba(0,0,0,0.08);"></span>
           <span style="font-size:13px;color:#333;">- ${tc.name.toLowerCase()} ${tc.id}</span>
         </div>`).join("")
     : "<p style='font-size:13px;color:#888;'>Not specified</p>";
