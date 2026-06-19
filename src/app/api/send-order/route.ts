@@ -5,6 +5,8 @@ import { THREAD_COLORS } from "@/database/constants";
 import { renderToBuffer } from "@react-pdf/renderer";
 import { createElement } from "react";
 import { DesignSpecPDFDocument } from "@/components/belt_design/DesignSpecPDF";
+import sharp from "sharp";
+import path from "path";
 
 interface ThreadColorDetail {
   name: string;
@@ -121,6 +123,16 @@ export async function POST(request: NextRequest) {
       }
     }
 
+    // Convert logo.webp → PNG base64 for @react-pdf/renderer (webp not supported)
+    let logoPngDataUri: string | null = null;
+    try {
+      const logoPath = path.join(process.cwd(), "public", "assets", "logo.webp");
+      const pngBuffer = await sharp(logoPath).png().toBuffer();
+      logoPngDataUri = `data:image/png;base64,${pngBuffer.toString("base64")}`;
+    } catch (err) {
+      console.error("Logo conversion error:", err);
+    }
+
     // Generate full design spec PDF and upload to Vercel Blob
     let designPdfUrl: string | null = null;
     try {
@@ -131,7 +143,7 @@ export async function POST(request: NextRequest) {
         leatherColor: data.designDetails.leatherColor,
         buckleFinish: data.designDetails.buckleFinish,
         stampImage: stampImageUrl || data.designDetails.stampImage || null,
-        logoUrl: `${baseUrl}/assets/logo.webp`,
+        logoUrl: logoPngDataUri || undefined,
       });
       // @ts-expect-error — renderToBuffer expects DocumentProps but our wrapper renders a Document
       const pdfBuffer = await renderToBuffer(pdfElement);
