@@ -2,6 +2,9 @@ import { NextRequest, NextResponse } from "next/server";
 import { Resend } from "resend";
 import { put } from "@vercel/blob";
 import { THREAD_COLORS } from "@/database/constants";
+import { renderToBuffer } from "@react-pdf/renderer";
+import { createElement } from "react";
+import { DesignSpecPDFDocument } from "@/components/belt_design/DesignSpecPDF";
 
 interface ThreadColorDetail {
   name: string;
@@ -118,7 +121,31 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    const emailHTML = buildOrderEmail(data, threadColorDetails, beltImageUrl, stampImageUrl, baseUrl);
+    // Generate full design spec PDF and upload to Vercel Blob
+    let designPdfUrl: string | null = null;
+    try {
+      const pdfElement = createElement(DesignSpecPDFDocument, {
+        designName: data.designDetails.designName || "Custom Design",
+        beltImage: data.designDetails.beltImage || null,
+        threadColorDetails,
+        leatherColor: data.designDetails.leatherColor,
+        buckleFinish: data.designDetails.buckleFinish,
+        stampImage: stampImageUrl || data.designDetails.stampImage || null,
+      });
+      // @ts-expect-error — renderToBuffer expects DocumentProps but our wrapper renders a Document
+      const pdfBuffer = await renderToBuffer(pdfElement);
+      const pdfBlob = await put(
+        `design-specs/${data.designDetails.designName || "design"}-${Date.now()}.pdf`,
+        pdfBuffer,
+        { access: "public", contentType: "application/pdf" }
+      );
+      designPdfUrl = pdfBlob.url;
+      blobUrlsToDelete.push(pdfBlob.url);
+    } catch (err) {
+      console.error("PDF generation error:", err);
+    }
+
+    const emailHTML = buildOrderEmail(data, threadColorDetails, beltImageUrl, stampImageUrl, baseUrl, designPdfUrl);
     const fromAddress = process.env.RESEND_FROM_ADDRESS || "";
     const adminEmail = process.env.ADMIN_EMAIL || "";
 
@@ -175,7 +202,7 @@ export async function POST(request: NextRequest) {
   }
 }
 
-function buildOrderEmail(data: OrderData, threadColorDetails: ThreadColorDetail[], beltImageUrl: string | null = null, stampImageUrl: string | null = null, baseUrl: string = ""): string {
+function buildOrderEmail(data: OrderData, threadColorDetails: ThreadColorDetail[], beltImageUrl: string | null = null, stampImageUrl: string | null = null, baseUrl: string = "", designPdfUrl: string | null = null): string {
   const threadSwatchesHtml = threadColorDetails.length > 0
     ? threadColorDetails.map(tc => `
         <div style="display:flex;align-items:center;margin-bottom:6px;">
@@ -198,10 +225,13 @@ function buildOrderEmail(data: OrderData, threadColorDetails: ThreadColorDetail[
       data.designDetails.selectedPreset)
     : "Unknown";
 
+  const downloadUrl = designPdfUrl || beltImageUrl;
+  const downloadFilename = designPdfUrl ? "design-spec.pdf" : "belt-design.jpg";
+
   const beltImageHtml = beltImageUrl
     ? `<img src="${beltImageUrl}" alt="Belt Design" style="width:100%;max-width:560px;display:block;margin:0 auto 12px auto;border-radius:4px;" />
        <div style="text-align:center;margin-bottom:20px;">
-         <a href="${beltImageUrl}" download="belt-design.jpg" style="display:inline-block;font-size:14px;font-weight:bold;color:#ffffff;text-decoration:none;background:#1a1a2e;border:2px solid #c9a84c;padding:12px 32px;border-radius:6px;letter-spacing:1px;">&#11015;&nbsp; Download Design</a>
+         <a href="${downloadUrl}" download="${downloadFilename}" style="display:inline-block;font-size:14px;font-weight:bold;color:#ffffff;text-decoration:none;background:#1a1a2e;border:2px solid #c9a84c;padding:12px 32px;border-radius:6px;letter-spacing:1px;">&#11015;&nbsp; Download Design</a>
        </div>`
     : "";
 
