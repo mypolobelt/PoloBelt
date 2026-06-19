@@ -355,25 +355,11 @@ export function CustomerForm({
       {showSuccessModal && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
           <div
-            className="bg-white w-full max-w-md shadow-2xl p-8 flex flex-col items-center text-center"
+            className="bg-white w-full max-w-md shadow-2xl flex flex-col items-center text-center relative"
             style={{ borderTop: '4px solid #C9A84C' }}
           >
-            <div className="w-14 h-14 rounded-full bg-green-100 flex items-center justify-center mb-4">
-              <svg className="w-7 h-7 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-              </svg>
-            </div>
-            <h2 className="text-xl font-bold text-gray-900 mb-2">Order Submitted!</h2>
-            <p className="text-sm text-gray-600 mb-1">
-              A confirmation has been sent to:
-            </p>
-            <p className="text-sm font-semibold text-gray-900 mb-4 break-all">
-              {submittedEmail}
-            </p>
-            <p className="text-xs text-amber-700 bg-amber-50 border border-amber-200 rounded px-3 py-2 mb-6">
-              Please check your <strong>junk / spam folder</strong> if you don&apos;t see it in your inbox.
-            </p>
-            <Button
+            {/* Close X button */}
+            <button
               onClick={() => {
                 setShowSuccessModal(false)
                 if (pendingReset) {
@@ -383,10 +369,47 @@ export function CustomerForm({
                 }
                 router.push('/custom-design-tool')
               }}
-              className="w-full"
+              className="absolute top-3 right-4 text-gray-400 hover:text-gray-700 text-2xl leading-none"
+              aria-label="Close"
             >
-              Close
-            </Button>
+              ×
+            </button>
+
+            <div className="px-8 pt-10 pb-8 w-full flex flex-col items-center">
+              {/* Checkmark icon */}
+              <div className="w-16 h-16 rounded-full bg-green-50 border-2 border-green-200 flex items-center justify-center mb-5">
+                <svg className="w-8 h-8 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+                </svg>
+              </div>
+
+              <h2 className="text-2xl font-bold text-gray-900 mb-1">Order Submitted Successfully!</h2>
+              <p className="text-sm text-gray-500 mb-4">Thank you — we&apos;ll be in touch shortly.</p>
+
+              <div className="w-full bg-gray-50 border border-gray-200 rounded px-4 py-3 mb-4">
+                <p className="text-xs text-gray-500 mb-0.5">Confirmation sent to:</p>
+                <p className="text-sm font-semibold text-gray-900 break-all">{submittedEmail}</p>
+              </div>
+
+              <p className="text-xs text-amber-700 bg-amber-50 border border-amber-200 rounded px-3 py-2 mb-6 w-full">
+                Please check your <strong>junk / spam folder</strong> if you don&apos;t see it in your inbox.
+              </p>
+
+              <Button
+                onClick={() => {
+                  setShowSuccessModal(false)
+                  if (pendingReset) {
+                    onResetDesign?.()
+                    onResetOrder?.()
+                    setPendingReset(false)
+                  }
+                  router.push('/custom-design-tool')
+                }}
+                className="w-full py-3 text-sm font-semibold uppercase tracking-wide"
+              >
+                Close
+              </Button>
+            </div>
           </div>
         </div>
       )}

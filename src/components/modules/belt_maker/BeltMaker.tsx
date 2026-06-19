@@ -177,7 +177,7 @@ export default function BeltMaker() {
                 )}
 
                 {currentStage >= 2 && currentStage <= 4 && (
-                    <FixedBottomCanvas gridData={gridData} leatherColor={leatherColor} />
+                    <FixedBottomCanvas gridData={gridData} leatherColor={leatherColor} canvasRef={canvasRef} />
                 )}
             </div>
         </main>
