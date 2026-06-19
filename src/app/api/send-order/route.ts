@@ -71,20 +71,15 @@ const PRESET_DISPLAY_NAMES: Record<string, string> = {
 };
 
 export async function POST(request: NextRequest) {
-  // resend api key
   const resend = new Resend(process.env.RESEND_API_KEY);
   try {
     const data: OrderData = await request.json();
 
-    // Resolve thread colour hex values from THREAD_COLORS db
     const threadColorDetails =
       data.designDetails.threadColorDetails ||
       parseThreadColorDetails(data.designDetails.threadColors);
 
-    const attachments: Array<{
-      filename: string;
-      content: string;
-    }> = [];
+    const attachments: Array<{ filename: string; content: string }> = [];
 
     if (data.designDetails.stampImage) {
       try {
@@ -96,41 +91,63 @@ export async function POST(request: NextRequest) {
           filename: `polo-belt-stamp-${Date.now()}.png`,
           content: base64Data,
         });
-      } catch (error) {
-        console.error("Error processing stamp image:", error);
+      } catch (err) {
+        console.error("Stamp image processing error:", err);
       }
     }
 
     const emailHTML = buildOrderEmail(data, threadColorDetails);
-    const fromAddress =
-      process.env.RESEND_FROM_ADDRESS || "";
+    const fromAddress = process.env.RESEND_FROM_ADDRESS || "";
+    const adminEmail = process.env.ADMIN_EMAIL || "";
+
+    if (!fromAddress || !adminEmail) {
+      console.error("Missing env: RESEND_FROM_ADDRESS or ADMIN_EMAIL");
+      return NextResponse.json(
+        { success: false, error: "Server email config missing" },
+        { status: 500 },
+      );
+    }
 
     // Send to admin
-    await resend.emails.send({
+    const adminResult = await resend.emails.send({
       from: fromAddress,
-      to: process.env.ADMIN_EMAIL || "",
+      to: adminEmail,
       subject: `New Polo Belt Order - ${data.customerName}`,
       html: emailHTML,
       attachments,
     });
 
+    if (adminResult.error) {
+      console.error("Resend admin email error:", adminResult.error);
+      return NextResponse.json(
+        { success: false, error: `Admin email failed: ${adminResult.error.message}` },
+        { status: 500 },
+      );
+    }
+
     // Send to customer
-    await resend.emails.send({
+    const customerResult = await resend.emails.send({
       from: fromAddress,
       to: data.email,
-      subject: `Order Confirmation - ${data.customerName}`,
+      subject: `Order Confirmation - Polo Belt`,
       html: emailHTML,
       attachments,
     });
+
+    if (customerResult.error) {
+      console.error("Resend customer email error:", customerResult.error);
+      // Admin email sent — don't fail the whole request
+    }
 
     return NextResponse.json({
       success: true,
       message: "Order emails sent successfully",
     });
   } catch (error) {
-    console.error("Error sending email:", error);
+    const msg = error instanceof Error ? error.message : String(error);
+    console.error("send-order route error:", msg);
     return NextResponse.json(
-      { success: false, error: "Failed to send order" },
+      { success: false, error: msg },
       { status: 500 },
     );
   }

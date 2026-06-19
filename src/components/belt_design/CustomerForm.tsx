@@ -157,8 +157,14 @@ export function CustomerForm({
       })
 
       if (!response.ok) {
-        const errText = await response.text()
-        throw new Error(errText || 'Failed to send order')
+        let errMsg = 'Failed to send order'
+        try {
+          const errJson = await response.json()
+          errMsg = errJson.error || errMsg
+        } catch {
+          errMsg = await response.text() || errMsg
+        }
+        throw new Error(errMsg)
       }
 
       // Reset form fields
