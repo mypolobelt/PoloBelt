@@ -131,6 +131,7 @@ export async function POST(request: NextRequest) {
         leatherColor: data.designDetails.leatherColor,
         buckleFinish: data.designDetails.buckleFinish,
         stampImage: stampImageUrl || data.designDetails.stampImage || null,
+        logoUrl: `${baseUrl}/assets/logo.webp`,
       });
       // @ts-expect-error — renderToBuffer expects DocumentProps but our wrapper renders a Document
       const pdfBuffer = await renderToBuffer(pdfElement);
@@ -229,8 +230,11 @@ function buildOrderEmail(data: OrderData, threadColorDetails: ThreadColorDetail[
   const downloadFilename = designPdfUrl ? "design-spec.pdf" : "belt-design.jpg";
 
   const beltImageHtml = beltImageUrl
-    ? `<img src="${beltImageUrl}" alt="Belt Design" style="width:100%;max-width:560px;display:block;margin:0 auto 12px auto;border-radius:4px;" />
-       <div style="text-align:center;margin-bottom:20px;">
+    ? `<img src="${beltImageUrl}" alt="Belt Design" style="width:100%;max-width:560px;display:block;margin:0 auto 0 auto;border-radius:4px;" />`
+    : "";
+
+  const downloadBtnHtml = downloadUrl
+    ? `<div style="text-align:center;margin:16px 0 4px 0;">
          <a href="${downloadUrl}" download="${downloadFilename}" style="display:inline-block;font-size:14px;font-weight:bold;color:#ffffff;text-decoration:none;background:#1a1a2e;border:2px solid #c9a84c;padding:12px 32px;border-radius:6px;letter-spacing:1px;">&#11015;&nbsp; Download Design</a>
        </div>`
     : "";
@@ -303,6 +307,8 @@ function buildOrderEmail(data: OrderData, threadColorDetails: ThreadColorDetail[
                 </td>
               </tr>
             </table>
+
+            ${downloadBtnHtml}
           </div>
 
           <div class="section">

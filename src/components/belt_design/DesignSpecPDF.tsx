@@ -96,6 +96,7 @@ export interface DesignSpecPDFProps {
     leatherColor: string
     buckleFinish: string
     stampImage: string | null
+    logoUrl?: string
 }
 
 export const DesignSpecPDFDocument = ({
@@ -105,15 +106,20 @@ export const DesignSpecPDFDocument = ({
     leatherColor,
     buckleFinish,
     stampImage,
+    logoUrl,
 }: DesignSpecPDFProps) => (
     <Document>
         <Page size="A4" orientation="landscape" style={styles.page}>
             {/* Header */}
             <View style={styles.header}>
                 <Text style={styles.designName}>{designName || 'Custom Design'}</Text>
-                <View style={styles.logoCircle}>
-                    <Text style={styles.logoText}>MPB</Text>
-                </View>
+                {logoUrl ? (
+                    <Image src={logoUrl} style={{ width: 52, height: 52 }} />
+                ) : (
+                    <View style={styles.logoCircle}>
+                        <Text style={styles.logoText}>MPB</Text>
+                    </View>
+                )}
             </View>
 
             {/* Belt Canvas Image */}
