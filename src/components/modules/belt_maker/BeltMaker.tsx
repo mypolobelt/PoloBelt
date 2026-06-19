@@ -169,6 +169,7 @@ export default function BeltMaker() {
                         hasStamp={hasStamp}
                         stampImage={stampImage}
                         sizeRows={sizeRows}
+                        gridData={gridData}
                         canvasRef={canvasRef}
                         onResetDesign={handleResetDesign}
                         onResetOrder={handleResetOrder}

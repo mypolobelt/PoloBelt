@@ -1,11 +1,12 @@
 'use client'
 
-import { validateEmail } from '@/database/utils'
+import { validateEmail, generateGridDataFromColors } from '@/database/utils'
 import { THREAD_COLORS } from '@/database/constants'
 import { useState, useEffect } from 'react'
 import { Button } from '../ui/button'
 import { useRouter } from 'next/navigation'
 import { countries } from '@/database/countries'
+import { renderBeltCanvas } from '@/database/canvas'
 
 interface SizeOrder {
   size: string
@@ -28,6 +29,7 @@ interface CustomerFormProps {
   canvasRef: React.RefObject<HTMLCanvasElement>
   stampImage: string | null
   designDetails?: DesignDetails
+  gridData?: string[][]
   sizeOrders?: SizeOrder[]
   onResetDesign?: () => void
   onResetOrder?: () => void
@@ -47,7 +49,8 @@ function parseThreadColorDetails(threadColors: string[]) {
 }
 
 export function CustomerForm({
-  canvasRef,
+  canvasRef: _canvasRef,
+  gridData,
   stampImage,
   designDetails,
   sizeOrders,
@@ -114,10 +117,15 @@ export function CustomerForm({
     setIsLoading(true)
 
     try {
-      // Use JPEG at 0.6 quality to keep request size small
-      const beltImage = canvasRef?.current
-        ? canvasRef.current.toDataURL('image/jpeg', 0.6)
-        : undefined
+      // Render belt fresh into an off-screen canvas to ensure correct colors
+      let beltImage: string | undefined
+      if (gridData && gridData.length > 0) {
+        const offscreen = document.createElement('canvas')
+        offscreen.width = 768
+        offscreen.height = 120
+        renderBeltCanvas(offscreen, gridData, designDetails?.leatherColor || 'Brown', false)
+        beltImage = offscreen.toDataURL('image/jpeg', 0.7)
+      }
 
       const threadColors = designDetails?.threadColors || []
       const threadColorDetails = parseThreadColorDetails(threadColors)

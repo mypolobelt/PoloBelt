@@ -200,7 +200,7 @@ function buildOrderEmail(data: OrderData, threadColorDetails: ThreadColorDetail[
   const beltImageHtml = beltImageUrl
     ? `<img src="${beltImageUrl}" alt="Belt Design" style="width:100%;max-width:560px;display:block;margin:0 auto 12px auto;border-radius:4px;" />
        <div style="text-align:center;margin-bottom:20px;">
-         <a href="${beltImageUrl}" download="belt-design.jpg" style="display:inline-block;font-size:13px;font-weight:bold;color:#ffffff;text-decoration:none;background:#1a1a2e;border:2px solid #c9a84c;padding:10px 24px;border-radius:6px;letter-spacing:0.5px;">&#11015;&nbsp;&nbsp;Download Belt Design Image</a>
+         <a href="${beltImageUrl}" download="belt-design.jpg" style="display:inline-block;font-size:14px;font-weight:bold;color:#ffffff;text-decoration:none;background:#1a1a2e;border:2px solid #c9a84c;padding:12px 32px;border-radius:6px;letter-spacing:1px;">&#11015;&nbsp; Download Design</a>
        </div>`
     : "";
 

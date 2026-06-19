@@ -8,7 +8,7 @@ import { DownloadPDFButton } from '@/components/belt_design/DownloadPDFButton'
 
 interface Stage4CustomerDetailsProps {
     designName: string
-    selectedPreset: string | null   
+    selectedPreset: string | null
     threadColors: string[]
     beltWidth: string
     leatherColor: string
@@ -16,6 +16,7 @@ interface Stage4CustomerDetailsProps {
     hasStamp: boolean
     stampImage: string | null
     sizeRows: SizeRow[]
+    gridData: string[][]
     canvasRef: RefObject<HTMLCanvasElement>
     onResetDesign: () => void
     onResetOrder: () => void
@@ -33,6 +34,7 @@ export const Stage4CustomerDetails = ({
     hasStamp,
     stampImage,
     sizeRows,
+    gridData,
     canvasRef,
     onResetDesign,
     onResetOrder,
@@ -102,6 +104,7 @@ export const Stage4CustomerDetails = ({
                 <div className="mt-6">
                     <CustomerForm
                         canvasRef={canvasRef}
+                        gridData={gridData}
                         stampImage={stampImage}
                         designDetails={{
                             designName,
