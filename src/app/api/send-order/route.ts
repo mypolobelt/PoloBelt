@@ -73,6 +73,7 @@ const PRESET_DISPLAY_NAMES: Record<string, string> = {
 
 export async function POST(request: NextRequest) {
   const resend = new Resend(process.env.RESEND_API_KEY);
+  const baseUrl = `${request.nextUrl.protocol}//${request.nextUrl.host}`;
   try {
     const data: OrderData = await request.json();
 
@@ -117,7 +118,7 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    const emailHTML = buildOrderEmail(data, threadColorDetails, beltImageUrl, stampImageUrl);
+    const emailHTML = buildOrderEmail(data, threadColorDetails, beltImageUrl, stampImageUrl, baseUrl);
     const fromAddress = process.env.RESEND_FROM_ADDRESS || "";
     const adminEmail = process.env.ADMIN_EMAIL || "";
 
@@ -174,7 +175,7 @@ export async function POST(request: NextRequest) {
   }
 }
 
-function buildOrderEmail(data: OrderData, threadColorDetails: ThreadColorDetail[], beltImageUrl: string | null = null, stampImageUrl: string | null = null): string {
+function buildOrderEmail(data: OrderData, threadColorDetails: ThreadColorDetail[], beltImageUrl: string | null = null, stampImageUrl: string | null = null, baseUrl: string = ""): string {
   const threadSwatchesHtml = threadColorDetails.length > 0
     ? threadColorDetails.map(tc => `
         <div style="display:flex;align-items:center;margin-bottom:6px;">
@@ -246,10 +247,8 @@ function buildOrderEmail(data: OrderData, threadColorDetails: ThreadColorDetail[
                 <td style="vertical-align:middle;">
                   <h2 style="margin:0;font-size:20px;font-weight:bold;color:#1a1a1a;">${escapeHtml(data.designDetails.designName || "Custom Design")}</h2>
                 </td>
-                <td style="vertical-align:middle;text-align:right;width:52px;">
-                  <div style="width:46px;height:46px;border-radius:50%;background:#1a1a2e;border:2px solid #8b0000;display:inline-block;text-align:center;line-height:46px;">
-                    <span style="color:#c8a96e;font-size:10px;font-weight:bold;">MPB</span>
-                  </div>
+                <td style="vertical-align:middle;text-align:right;width:60px;">
+                  <img src="${baseUrl}/assets/logo.webp" alt="MPB Logo" style="width:52px;height:52px;border-radius:50%;display:inline-block;" />
                 </td>
               </tr>
             </table>
