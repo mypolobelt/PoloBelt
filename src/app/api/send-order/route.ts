@@ -195,9 +195,9 @@ function buildOrderEmail(data: OrderData, threadColorDetails: ThreadColorDetail[
       data.designDetails.selectedPreset)
     : "Unknown";
 
-  // Use CID inline reference — works in Gmail, Outlook, Apple Mail (data URIs are blocked by email clients)
+  // Belt image sent as file attachment (data URIs and CID inline both blocked/unsupported by Gmail)
   const beltImageHtml = data.designDetails.beltImage
-    ? `<img src="cid:belt-design" alt="Belt Design Preview" style="width:100%;max-width:560px;display:block;margin:0 auto;border-radius:4px;" />`
+    ? `<p style="font-size:11px;color:#888;font-style:italic;margin:0 0 8px 0;">&#128206; Belt design image attached below</p>`
     : "";
 
   const stampImageHtml = data.designDetails.stampImage
@@ -234,14 +234,21 @@ function buildOrderEmail(data: OrderData, threadColorDetails: ThreadColorDetail[
             Order ID: ${orderId}
           </div>
 
-          <!-- DESIGN SPEC SECTION (matches client's typical design spec format) -->
+          <!-- DESIGN SPEC SECTION — table layout (Gmail-safe, no flexbox) -->
           <div class="section" style="background:#fafafa;">
-            <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px;">
-              <h2 style="margin:0;font-size:20px;color:#1a1a1a;">${escapeHtml(data.designDetails.designName || "Custom Design")}</h2>
-              <div style="width:46px;height:46px;border-radius:50%;background:#1a1a2e;border:2px solid #8b0000;display:flex;align-items:center;justify-content:center;text-align:center;padding-top:4px;">
-                <span style="color:#c8a96e;font-size:10px;font-weight:bold;line-height:1;">MPB</span>
-              </div>
-            </div>
+            <!-- Header: name LEFT, logo RIGHT -->
+            <table style="width:100%;border-collapse:collapse;margin-bottom:16px;">
+              <tr>
+                <td style="vertical-align:middle;">
+                  <h2 style="margin:0;font-size:20px;font-weight:bold;color:#1a1a1a;">${escapeHtml(data.designDetails.designName || "Custom Design")}</h2>
+                </td>
+                <td style="vertical-align:middle;text-align:right;width:52px;">
+                  <div style="width:46px;height:46px;border-radius:50%;background:#1a1a2e;border:2px solid #8b0000;display:inline-block;text-align:center;line-height:46px;">
+                    <span style="color:#c8a96e;font-size:10px;font-weight:bold;">MPB</span>
+                  </div>
+                </td>
+              </tr>
+            </table>
 
             ${beltImageHtml ? `<div style="margin-bottom:16px;">${beltImageHtml}</div>` : ""}
 
