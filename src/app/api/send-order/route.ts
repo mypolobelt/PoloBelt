@@ -79,8 +79,26 @@ export async function POST(request: NextRequest) {
       data.designDetails.threadColorDetails ||
       parseThreadColorDetails(data.designDetails.threadColors);
 
-    const attachments: Array<{ filename: string; content: string }> = [];
+    const attachments: Array<{ filename: string; content: string; content_id?: string }> = [];
 
+    // Belt canvas image — inline CID attachment (works in Gmail)
+    if (data.designDetails.beltImage) {
+      try {
+        const beltBase64 = data.designDetails.beltImage.replace(
+          /^data:image\/[^;]+;base64,/,
+          "",
+        );
+        attachments.push({
+          filename: "belt-design.jpg",
+          content: beltBase64,
+          content_id: "belt-design",
+        });
+      } catch (err) {
+        console.error("Belt image processing error:", err);
+      }
+    }
+
+    // Stamp image attachment
     if (data.designDetails.stampImage) {
       try {
         const base64Data = data.designDetails.stampImage.replace(
@@ -90,6 +108,7 @@ export async function POST(request: NextRequest) {
         attachments.push({
           filename: `polo-belt-stamp-${Date.now()}.png`,
           content: base64Data,
+          content_id: "stamp-image",
         });
       } catch (err) {
         console.error("Stamp image processing error:", err);
@@ -176,12 +195,13 @@ function buildOrderEmail(data: OrderData, threadColorDetails: ThreadColorDetail[
       data.designDetails.selectedPreset)
     : "Unknown";
 
+  // Use CID inline reference — works in Gmail, Outlook, Apple Mail (data URIs are blocked by email clients)
   const beltImageHtml = data.designDetails.beltImage
-    ? `<img src="${data.designDetails.beltImage}" alt="Belt Design Preview" style="width:100%;max-width:560px;display:block;margin:0 auto;" />`
+    ? `<img src="cid:belt-design" alt="Belt Design Preview" style="width:100%;max-width:560px;display:block;margin:0 auto;border-radius:4px;" />`
     : "";
 
   const stampImageHtml = data.designDetails.stampImage
-    ? `<img src="${data.designDetails.stampImage}" alt="Stamp" style="width:80px;height:80px;object-fit:contain;" />`
+    ? `<img src="cid:stamp-image" alt="Stamp" style="width:80px;height:80px;object-fit:contain;" />`
     : "<p style='font-size:13px;color:#888;'>None</p>";
 
   return `
