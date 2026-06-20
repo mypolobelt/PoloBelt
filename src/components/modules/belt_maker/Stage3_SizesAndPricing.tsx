@@ -43,6 +43,7 @@ interface Stage3SizesAndPricingProps {
     buckleFinish: string
     hasStamp: boolean
     stampImage: string | null
+    teamColorImage: string | null
     sizeRows: SizeRow[]
     onAddSize: () => void
     onUpdateSize: (id: string, productType: ProductType, size: string, width: 'Standard (3cm)' | 'Slim (2.5cm)' | '', stamped: 'Yes' | 'No', quantity: number) => void
@@ -78,6 +79,7 @@ export const Stage3SizesAndPricing = ({
     buckleFinish,
     hasStamp,
     stampImage,
+    teamColorImage,
     sizeRows,
     onAddSize,
     onUpdateSize,
@@ -169,6 +171,7 @@ export const Stage3SizesAndPricing = ({
                     buckleFinish={buckleFinish}
                     hasStamp={hasStamp}
                     stampImage={stampImage}
+                    teamColorImage={teamColorImage}
                 />
                 <div className="mt-6">
                     <OrderForm
