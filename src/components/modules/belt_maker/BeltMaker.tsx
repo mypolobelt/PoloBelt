@@ -168,6 +168,7 @@ export default function BeltMaker() {
                         buckleFinish={buckleFinish}
                         hasStamp={hasStamp}
                         stampImage={stampImage}
+                        teamColorImage={teamColorImage}
                         sizeRows={sizeRows}
                         gridData={gridData}
                         canvasRef={canvasRef}

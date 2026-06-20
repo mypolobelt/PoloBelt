@@ -28,6 +28,7 @@ interface DesignDetails {
 interface CustomerFormProps {
   canvasRef: React.RefObject<HTMLCanvasElement>
   stampImage: string | null
+  teamColorImage?: string | null
   designDetails?: DesignDetails
   gridData?: string[][]
   sizeOrders?: SizeOrder[]
@@ -52,6 +53,7 @@ export function CustomerForm({
   canvasRef: _canvasRef,
   gridData,
   stampImage,
+  teamColorImage,
   designDetails,
   sizeOrders,
   onResetDesign,
@@ -151,6 +153,7 @@ export function CustomerForm({
             hasStamp: false,
           }),
           stampImage,
+          teamColorImage: teamColorImage || undefined,
           beltImage,
           threadColorDetails,
         },
@@ -358,6 +361,35 @@ export function CustomerForm({
           </div>
         )}
       </form>
+
+      {/* Loading overlay — shown while submitting order */}
+      {isLoading && (
+        <>
+          <style>{`
+            @keyframes spinRing {
+              to { transform: rotate(360deg); }
+            }
+            .spin-ring { animation: spinRing 0.9s linear infinite; }
+            @keyframes loadingFadeIn {
+              from { opacity: 0; }
+              to   { opacity: 1; }
+            }
+            .loading-fade { animation: loadingFadeIn 0.2s ease both; }
+          `}</style>
+          <div className="loading-fade fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+            <div className="bg-white rounded-2xl shadow-2xl px-10 py-10 flex flex-col items-center text-center max-w-xs w-full">
+              <div className="h-1.5 w-full absolute top-0 left-0 rounded-t-2xl" style={{ background: 'linear-gradient(90deg,#C9A84C,#e8c96a,#C9A84C)' }} />
+              {/* Spinner */}
+              <svg className="spin-ring w-14 h-14 mb-5 text-amber-500" viewBox="0 0 50 50" fill="none">
+                <circle cx="25" cy="25" r="20" stroke="#e5e7eb" strokeWidth="5" />
+                <path d="M25 5 a20 20 0 0 1 20 20" stroke="#C9A84C" strokeWidth="5" strokeLinecap="round" />
+              </svg>
+              <h2 className="text-xl font-bold text-gray-900 mb-2">Please Wait</h2>
+              <p className="text-sm text-gray-500">Submitting your order and generating design files&hellip;</p>
+            </div>
+          </div>
+        </>
+      )}
 
       {/* Success Confirmation Popup */}
       {showSuccessModal && (

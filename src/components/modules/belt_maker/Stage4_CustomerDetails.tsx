@@ -15,6 +15,7 @@ interface Stage4CustomerDetailsProps {
     buckleFinish: string
     hasStamp: boolean
     stampImage: string | null
+    teamColorImage: string | null
     sizeRows: SizeRow[]
     gridData: string[][]
     canvasRef: RefObject<HTMLCanvasElement>
@@ -33,6 +34,7 @@ export const Stage4CustomerDetails = ({
     buckleFinish,
     hasStamp,
     stampImage,
+    teamColorImage,
     sizeRows,
     gridData,
     canvasRef,
@@ -98,6 +100,7 @@ export const Stage4CustomerDetails = ({
                         buckleFinish={buckleFinish}
                         stampImage={stampImage}
                         canvasRef={canvasRef}
+                        gridData={gridData}
                     />
                 </div>
                 {/* ── Customer Form ── */}
@@ -106,6 +109,7 @@ export const Stage4CustomerDetails = ({
                         canvasRef={canvasRef}
                         gridData={gridData}
                         stampImage={stampImage}
+                        teamColorImage={teamColorImage}
                         designDetails={{
                             designName,
                             selectedPreset,

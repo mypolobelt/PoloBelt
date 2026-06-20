@@ -35,6 +35,7 @@ interface OrderData {
     buckleFinish: string;
     hasStamp: boolean;
     stampImage?: string;
+    teamColorImage?: string;
     beltImage?: string;
   };
   orderQuantities: Array<{
@@ -123,6 +124,23 @@ export async function POST(request: NextRequest) {
       }
     }
 
+    // Upload team colour image to Vercel Blob → public URL for email
+    let teamColorImageUrl: string | null = null;
+    if (data.designDetails.teamColorImage) {
+      try {
+        const tcBase64 = data.designDetails.teamColorImage.replace(/^data:image\/[^;]+;base64,/, "");
+        const buffer = Buffer.from(tcBase64, "base64");
+        const blob = await put(`team-colours/tc-${Date.now()}.png`, buffer, {
+          access: "public",
+          contentType: "image/png",
+        });
+        teamColorImageUrl = blob.url;
+        blobUrlsToDelete.push(blob.url);
+      } catch (err) {
+        console.error("Team colour image blob upload error:", err);
+      }
+    }
+
     // Convert logo.webp → PNG base64 for @react-pdf/renderer (webp not supported)
     let logoPngDataUri: string | null = null;
     try {
@@ -158,7 +176,7 @@ export async function POST(request: NextRequest) {
       console.error("PDF generation error:", err);
     }
 
-    const emailHTML = buildOrderEmail(data, threadColorDetails, beltImageUrl, stampImageUrl, baseUrl, designPdfUrl);
+    const emailHTML = buildOrderEmail(data, threadColorDetails, beltImageUrl, stampImageUrl, baseUrl, designPdfUrl, teamColorImageUrl);
     const fromAddress = process.env.RESEND_FROM_ADDRESS || "";
     const adminEmail = process.env.ADMIN_EMAIL || "";
 
@@ -215,7 +233,7 @@ export async function POST(request: NextRequest) {
   }
 }
 
-function buildOrderEmail(data: OrderData, threadColorDetails: ThreadColorDetail[], beltImageUrl: string | null = null, stampImageUrl: string | null = null, baseUrl: string = "", designPdfUrl: string | null = null): string {
+function buildOrderEmail(data: OrderData, threadColorDetails: ThreadColorDetail[], beltImageUrl: string | null = null, stampImageUrl: string | null = null, baseUrl: string = "", designPdfUrl: string | null = null, teamColorImageUrl: string | null = null): string {
   const threadSwatchesHtml = threadColorDetails.length > 0
     ? threadColorDetails.map(tc => `
         <div style="display:flex;align-items:center;margin-bottom:6px;">
@@ -254,6 +272,17 @@ function buildOrderEmail(data: OrderData, threadColorDetails: ThreadColorDetail[
   const stampImageHtml = stampImageUrl
     ? `<img src="${stampImageUrl}" alt="Stamp" style="width:80px;height:80px;object-fit:contain;" />`
     : "<p style='font-size:13px;color:#888;'>None</p>";
+
+  const teamColorHtml = teamColorImageUrl
+    ? `<table style="width:100%;border-collapse:collapse;margin-top:16px;">
+         <tr>
+           <td style="vertical-align:top;">
+             <p style="font-size:11px;font-weight:bold;text-transform:uppercase;letter-spacing:0.08em;color:#6B2E1F;margin:0 0 8px 0;">Team Colours Reference:</p>
+             <img src="${teamColorImageUrl}" alt="Team Colours" style="max-width:200px;max-height:120px;object-fit:contain;border:1px solid #ddd;border-radius:4px;" />
+           </td>
+         </tr>
+       </table>`
+    : "";
 
   return `
     <!DOCTYPE html>
@@ -320,6 +349,7 @@ function buildOrderEmail(data: OrderData, threadColorDetails: ThreadColorDetail[
               </tr>
             </table>
 
+            ${teamColorHtml}
             ${downloadBtnHtml}
           </div>
 
@@ -379,5 +409,5 @@ function escapeHtml(text: string): string {
 }
 
 function generateOrderId(): string {
-  return `ORD-${Date.now()}-${Math.random().toString(36).substr(2, 9).toUpperCase()}`;
+  return `ORD-${Date.now()}-${Math.random().toString(36).substring(2, 11).toUpperCase()}`;
 }
