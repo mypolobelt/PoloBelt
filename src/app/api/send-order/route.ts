@@ -161,6 +161,7 @@ export async function POST(request: NextRequest) {
         leatherColor: data.designDetails.leatherColor,
         buckleFinish: data.designDetails.buckleFinish,
         stampImage: stampImageUrl || data.designDetails.stampImage || null,
+        teamColorImage: teamColorImageUrl || null,
         logoUrl: logoPngDataUri || undefined,
       });
       // @ts-expect-error — renderToBuffer expects DocumentProps but our wrapper renders a Document

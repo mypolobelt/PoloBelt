@@ -89,6 +89,7 @@ export const Stage4CustomerDetails = ({
                     buckleFinish={buckleFinish}
                     hasStamp={hasStamp}
                     stampImage={stampImage}
+                    teamColorImage={teamColorImage}
                 />
 
                 {/* Download Design Spec PDF */}
@@ -99,6 +100,7 @@ export const Stage4CustomerDetails = ({
                         leatherColor={leatherColor}
                         buckleFinish={buckleFinish}
                         stampImage={stampImage}
+                        teamColorImage={teamColorImage}
                         canvasRef={canvasRef}
                         gridData={gridData}
                     />

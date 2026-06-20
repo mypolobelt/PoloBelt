@@ -96,6 +96,7 @@ export interface DesignSpecPDFProps {
     leatherColor: string
     buckleFinish: string
     stampImage: string | null
+    teamColorImage?: string | null
     logoUrl?: string
 }
 
@@ -106,6 +107,7 @@ export const DesignSpecPDFDocument = ({
     leatherColor,
     buckleFinish,
     stampImage,
+    teamColorImage,
     logoUrl,
 }: DesignSpecPDFProps) => (
     <Document>
@@ -163,6 +165,14 @@ export const DesignSpecPDFDocument = ({
                         <Text style={styles.noStampText}>None</Text>
                     )}
                 </View>
+
+                {/* Team Colours Reference */}
+                {teamColorImage && (
+                    <View style={styles.infoSection}>
+                        <Text style={styles.sectionTitle}>Team Colours:</Text>
+                        <Image src={teamColorImage} style={{ width: 80, height: 80, objectFit: 'contain' }} />
+                    </View>
+                )}
             </View>
         </Page>
     </Document>

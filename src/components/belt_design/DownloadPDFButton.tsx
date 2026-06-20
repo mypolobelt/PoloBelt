@@ -13,6 +13,7 @@ interface DownloadPDFButtonProps {
     leatherColor: string
     buckleFinish: string
     stampImage: string | null
+    teamColorImage?: string | null
     canvasRef: RefObject<HTMLCanvasElement>
     gridData?: string[][]
 }
@@ -57,6 +58,7 @@ export function DownloadPDFButton({
     leatherColor,
     buckleFinish,
     stampImage,
+    teamColorImage,
     canvasRef,
     gridData,
 }: DownloadPDFButtonProps) {
@@ -88,6 +90,7 @@ export function DownloadPDFButton({
                     leatherColor={leatherColor}
                     buckleFinish={buckleFinish}
                     stampImage={stampImage}
+                    teamColorImage={teamColorImage}
                     logoUrl={logoUrl}
                 />
             )

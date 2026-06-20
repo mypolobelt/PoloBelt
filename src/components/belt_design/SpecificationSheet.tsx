@@ -10,6 +10,7 @@ interface SpecificationSheetProps {
   buckleFinish: string
   hasStamp: boolean
   stampImage?: string | null
+  teamColorImage?: string | null
 }
 
 export function SpecificationSheet({
@@ -19,6 +20,7 @@ export function SpecificationSheet({
   buckleFinish,
   hasStamp,
   stampImage,
+  teamColorImage,
 }: SpecificationSheetProps) {
   return (
     <div className="p-4 sm:p-5 md:p-6 lg:p-8 rounded-none border-l-4 border-[#0f1526] shadow-lg">
@@ -71,6 +73,20 @@ export function SpecificationSheet({
             <p className="text-xs sm:text-sm text-charcoal">None</p>
           )}
         </div>
+        {teamColorImage && (
+          <div>
+            <h4 className="text-xs sm:text-xs md:text-sm font-bold uppercase tracking-wider mb-2 sm:mb-3">
+              Team Colours
+            </h4>
+            <Image
+              src={teamColorImage}
+              alt="Team colour reference"
+              width={48}
+              height={48}
+              className="w-12 h-12 object-contain border border-gray-200 bg-white"
+            />
+          </div>
+        )}
       </div>
     </div>
   )
