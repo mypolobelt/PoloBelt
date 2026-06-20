@@ -156,6 +156,16 @@ export const DesignSpecPDFDocument = ({
                     <Text style={styles.infoText}>{buckleFinish}</Text>
                 </View>
 
+                {/* Team Colours Reference */}
+                <View style={styles.infoSection}>
+                    <Text style={styles.sectionTitle}>Team Colours:</Text>
+                    {teamColorImage ? (
+                        <Image src={teamColorImage} style={{ width: 80, height: 80, objectFit: 'contain' }} />
+                    ) : (
+                        <Text style={styles.noStampText}>None</Text>
+                    )}
+                </View>
+
                 {/* Stamp */}
                 <View style={styles.infoSection}>
                     <Text style={styles.sectionTitle}>Stamp:</Text>
@@ -165,14 +175,6 @@ export const DesignSpecPDFDocument = ({
                         <Text style={styles.noStampText}>None</Text>
                     )}
                 </View>
-
-                {/* Team Colours Reference */}
-                {teamColorImage && (
-                    <View style={styles.infoSection}>
-                        <Text style={styles.sectionTitle}>Team Colours:</Text>
-                        <Image src={teamColorImage} style={{ width: 80, height: 80, objectFit: 'contain' }} />
-                    </View>
-                )}
             </View>
         </Page>
     </Document>

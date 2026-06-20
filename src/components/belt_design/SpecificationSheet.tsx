@@ -73,11 +73,11 @@ export function SpecificationSheet({
             <p className="text-xs sm:text-sm text-charcoal">None</p>
           )}
         </div>
-        {teamColorImage && (
-          <div>
-            <h4 className="text-xs sm:text-xs md:text-sm font-bold uppercase tracking-wider mb-2 sm:mb-3">
-              Team Colours
-            </h4>
+        <div>
+          <h4 className="text-xs sm:text-xs md:text-sm font-bold uppercase tracking-wider mb-2 sm:mb-3">
+            Team Colours
+          </h4>
+          {teamColorImage ? (
             <Image
               src={teamColorImage}
               alt="Team colour reference"
@@ -85,8 +85,10 @@ export function SpecificationSheet({
               height={48}
               className="w-12 h-12 object-contain border border-gray-200 bg-white"
             />
-          </div>
-        )}
+          ) : (
+            <p className="text-xs sm:text-sm text-charcoal">None</p>
+          )}
+        </div>
       </div>
     </div>
   )

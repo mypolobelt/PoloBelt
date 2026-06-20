@@ -274,16 +274,9 @@ function buildOrderEmail(data: OrderData, threadColorDetails: ThreadColorDetail[
     ? `<img src="${stampImageUrl}" alt="Stamp" style="width:80px;height:80px;object-fit:contain;" />`
     : "<p style='font-size:13px;color:#888;'>None</p>";
 
-  const teamColorHtml = teamColorImageUrl
-    ? `<table style="width:100%;border-collapse:collapse;margin-top:16px;">
-         <tr>
-           <td style="vertical-align:top;">
-             <p style="font-size:11px;font-weight:bold;text-transform:uppercase;letter-spacing:0.08em;color:#6B2E1F;margin:0 0 8px 0;">Team Colours Reference:</p>
-             <img src="${teamColorImageUrl}" alt="Team Colours" style="max-width:200px;max-height:120px;object-fit:contain;border:1px solid #ddd;border-radius:4px;" />
-           </td>
-         </tr>
-       </table>`
-    : "";
+  const teamColorCellHtml = teamColorImageUrl
+    ? `<img src="${teamColorImageUrl}" alt="Team Colours" style="width:80px;height:80px;object-fit:contain;" />`
+    : "<p style='font-size:13px;color:#888;'>None</p>";
 
   return `
     <!DOCTYPE html>
@@ -308,7 +301,7 @@ function buildOrderEmail(data: OrderData, threadColorDetails: ThreadColorDetail[
         <div class="container">
           <div class="header">
             <h1 style="margin: 0; text-align: center;">Polo Belt Order</h1>
-            <p style="margin: 10px 0 0 0; text-align: center;">Order submitted: ${new Date(data.timestamp).toLocaleString()}</p>
+            <p style="margin: 10px 0 0 0; text-align: center;">Order submitted: ${new Date(data.timestamp).toLocaleString('en-GB', { timeZone: 'Europe/London', day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', timeZoneName: 'short' })}</p>
           </div>
 
           <div class="order-id">
@@ -333,24 +326,27 @@ function buildOrderEmail(data: OrderData, threadColorDetails: ThreadColorDetail[
 
             <table style="width:100%;border-collapse:collapse;">
               <tr>
-                <td style="vertical-align:top;width:33%;padding-right:16px;">
+                <td style="vertical-align:top;width:25%;padding-right:12px;">
                   <p class="spec-label">Thread colours:</p>
                   ${threadSwatchesHtml}
                 </td>
-                <td style="vertical-align:top;width:33%;padding-right:16px;">
+                <td style="vertical-align:top;width:25%;padding-right:12px;">
                   <p class="spec-label">Leather colour:</p>
                   <p style="font-size:13px;color:#333;margin:0 0 12px 0;">${escapeHtml(data.designDetails.leatherColor)}</p>
                   <p class="spec-label">Buckle colour:</p>
                   <p style="font-size:13px;color:#333;margin:0;">${escapeHtml(data.designDetails.buckleFinish)}</p>
                 </td>
-                <td style="vertical-align:top;width:33%;">
+                <td style="vertical-align:top;width:25%;padding-right:12px;">
+                  <p class="spec-label">Team colours:</p>
+                  ${teamColorCellHtml}
+                </td>
+                <td style="vertical-align:top;width:25%;">
                   <p class="spec-label">Stamp:</p>
                   ${stampImageHtml}
                 </td>
               </tr>
             </table>
 
-            ${teamColorHtml}
             ${downloadBtnHtml}
           </div>
 
@@ -390,7 +386,7 @@ function buildOrderEmail(data: OrderData, threadColorDetails: ThreadColorDetail[
 
           <div class="footer">
             <p>Thank you for your order. We will process this and contact you shortly with pricing and delivery details.</p>
-            <p>Order Time: ${new Date(data.timestamp).toISOString()}</p>
+            <p>Order Time: ${new Date(data.timestamp).toLocaleString('en-GB', { timeZone: 'Europe/London', day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', timeZoneName: 'short' })}</p>
           </div>
         </div>
       </body>

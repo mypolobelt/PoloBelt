@@ -1,5 +1,6 @@
 import { Button } from '@/components/ui/button'
 import { ProductType, SizeRow } from './useBeltDesign'
+import { THREAD_COLORS } from '@/database/constants'
 
 // ─── Pricing (mirrors Stage3) ────────────────────────────────────────────────
 const PRICING: Record<Exclude<ProductType, ''>, { min: number; max: number; price: number }[]> = {
@@ -37,11 +38,12 @@ const getUnitPrice = (productType: ProductType, quantity: number) => {
     return tier?.price ?? 0
 }
 
-const parseThreadColor = (raw: string): { name: string; id: string } => {
+const parseThreadColor = (raw: string): { name: string; id: string; hex: string } => {
     const parts = raw.trim().split(' ')
     const id = parts[parts.length - 1]
     const name = parts.slice(0, -1).join(' ')
-    return { name: name || raw, id }
+    const dbEntry = THREAD_COLORS[id as keyof typeof THREAD_COLORS] as { name: string; hex: string } | undefined
+    return { name: dbEntry?.name || name || raw, id, hex: dbEntry?.hex || '#888888' }
 }
 
 // ─── Sub-components ───────────────────────────────────────────────────────────
@@ -222,7 +224,7 @@ export const OrderReviewModal = ({
                             <SectionHeading>Thread Colours</SectionHeading>
                             <div className="flex flex-wrap gap-2">
                                 {threadColors.map((raw, i) => {
-                                    const { name, id } = parseThreadColor(raw)
+                                    const { name, id, hex } = parseThreadColor(raw)
                                     return (
                                         <div
                                             key={i}
@@ -230,6 +232,7 @@ export const OrderReviewModal = ({
                                         >
                                             <span
                                                 className="w-3.5 h-3.5 rounded-sm border border-gray-300 shrink-0"
+                                                style={{ backgroundColor: hex }}
                                                 title={`ID: ${id}`}
                                             />
                                             <span className="font-medium text-gray-800">{name}</span>
