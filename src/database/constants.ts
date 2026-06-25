@@ -907,8 +907,8 @@ export const THREAD_COLORS: ThreadColorDatabase = {
   "132": { name: "Royal Blue", hex: "#1858B0" }, // royal blue
   "133": { name: "Medium Blue", hex: "#2860A8" }, // medium-dark blue
   "134": { name: "Dark Blue", hex: "#1848A0" }, // dark blue
-  "142": { name: "Dark Navy", hex: "#0C1438" }, //dark navy
-  "149": { name: "Navy", hex: "#141E58" }, // navy
+  "142": { name: "Navy", hex: "#1C2D6E" }, // medium navy blue
+  "149": { name: "Dark Navy", hex: "#0A0E20" }, // very dark navy
 
   // ── Teals ─────────────────────────────────────────────────────────────────
   "168": { name: "Teal Blue", hex: "#3080A8" }, // teal-blue
@@ -995,12 +995,12 @@ export const THREAD_COLORS: ThreadColorDatabase = {
   "358": { name: "Chocolate", hex: "#583820" }, // chocolate
   "360": { name: "Espresso", hex: "#382010" }, // espresso
   "361": { name: "Khaki", hex: "#DCC8A0" }, // khaki
-  "363": { name: "Sand", hex: "#D8B880" }, // sand
+  "363": { name: "Sand", hex: "#D8B878" }, // warm golden sand
   "365": { name: "Camel", hex: "#C8A058" }, // camel
   "367": { name: "Beige", hex: "#E0C890" }, // beige
   "368": { name: "Taupe", hex: "#C0A070" }, // taupe
   "370": { name: "Brown", hex: "#A87040" }, // warm brown
-  "371": { name: "Buff", hex: "#D8B880" }, // buff/khaki
+  "371": { name: "Buff", hex: "#D8C290" }, // buff - slightly lighter/cooler than sand
   "373": { name: "Warm Tan", hex: "#C8A870" }, // warm tan
   "375": { name: "Light Tan", hex: "#E8D8B8" }, // light tan/cream
   "379": { name: "Sienna", hex: "#A07850" }, // sienna
@@ -1009,7 +1009,7 @@ export const THREAD_COLORS: ThreadColorDatabase = {
 
   // ── Creams / Off-Whites ───────────────────────────────────────────────────
   "386": { name: "Off White", hex: "#F0E5D0" }, // warm off-white/cream
-  "392": { name: "Warm Tan", hex: "#C8A880" }, // warm tan
+  "392": { name: "Warm Tan", hex: "#C8A070" }, // warm tan (lighter camel-grey)
   "397": { name: "Pale Cream", hex: "#F0EAE0" }, // very pale/near-white
 
   // ── Greys ─────────────────────────────────────────────────────────────────
@@ -1046,7 +1046,7 @@ export const THREAD_COLORS: ThreadColorDatabase = {
   "873": { name: "Aubergine", hex: "#783070" }, // dark aubergine
 
   // ── Warm Tans ─────────────────────────────────────────────────────────────
-  "877": { name: "Warm Tan", hex: "#C8A880" }, // warm tan/brown
+  "877": { name: "Warm Brown Tan", hex: "#BEA070" }, // warm brown-tan
   "878": { name: "Light Khaki", hex: "#DCC898" }, // light khaki
 
   // ── Light Pinks / Creams ─────────────────────────────────────────────────
@@ -1116,8 +1116,8 @@ export const BASIC_PALETTE = [
   "130", // sky blue
   "131", // blue
   "132", // royal blue
-  "149", // navy
-  "142", // dark navy
+  "142", // navy
+  "149", // dark navy
   "1096", // powder blue
   "1089", // bright blue
   "187", // seafoam
@@ -1141,7 +1141,7 @@ export const BASIC_PALETTE = [
   "360", // espresso
   "386", // off white
   "399", // silver grey
-  "897", // dark grey
+  "897", // very dark wine/maroon
   "400", // very dark grey
   "Black", // black
 ];
