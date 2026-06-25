@@ -852,244 +852,248 @@
 import { ThreadColorDatabase, DesignPresets } from "./types";
 
 export const THREAD_COLORS: ThreadColorDatabase = {
-  // ── Off-White / Pale Pink ──────────────────────────────────────────────────
-  "2":    { name: "Off White",        hex: "#FAF0E8" },
+  // ── Off-White ─────────────────────────────────────────────────────────────
+  "2":    { name: "Off White",           hex: "#F8EEE8" },  // very pale warm white
 
   // ── Pinks & Reds ──────────────────────────────────────────────────────────
-  "6":    { name: "Light Pink",       hex: "#F8D0D8" },
-  "9":    { name: "Blush Pink",       hex: "#F5B8C0" },
-  "10":   { name: "Rose Pink",        hex: "#F2A8B0" },
-  "19":   { name: "Red",              hex: "#C01020" },
-  "22":   { name: "Maroon",           hex: "#680E18" },
-  "27":   { name: "Baby Pink",        hex: "#F2C0C8" },
-  "46":   { name: "Bright Red",       hex: "#D01020" },
-  "47":   { name: "Crimson",          hex: "#B01828" },
-  "49":   { name: "Deep Pink",        hex: "#D84070" },
-  "50":   { name: "Pink",             hex: "#FAC8D8" },
+  "6":    { name: "Light Pink",          hex: "#F8D0C8" },  // pale salmon-pink
+  "9":    { name: "Blush Pink",          hex: "#F0B0A8" },  // salmon blush
+  "10":   { name: "Salmon",             hex: "#ECA098" },  // medium salmon
+  "19":   { name: "Red",                hex: "#BC1018" },  // solid red
+  "22":   { name: "Maroon",             hex: "#5C0E12" },  // dark maroon
+  "27":   { name: "Baby Pink",          hex: "#F5C0C8" },  // light pink
+  "46":   { name: "Bright Red",         hex: "#CC1018" },  // classic red
+  "47":   { name: "Crimson",            hex: "#A81820" },  // dark red
+  "49":   { name: "Deep Pink",          hex: "#E06080" },  // medium-deep pink
+  "50":   { name: "Pink",               hex: "#FAC8D5" },  // light blush pink
 
   // ── Hot Pinks / Raspberry / Wine ──────────────────────────────────────────
-  "52":   { name: "Coral Pink",       hex: "#F06080" },
-  "54":   { name: "Coral",            hex: "#F08878" },
-  "55":   { name: "Hot Pink",         hex: "#E85090" },
-  "57":   { name: "Raspberry",        hex: "#D04878" },
-  "59":   { name: "Wine",             hex: "#801038" },
-  "62":   { name: "Magenta",          hex: "#C02878" },
-  "63":   { name: "Rose",             hex: "#E06095" },
-  "65":   { name: "Pale Peach Pink",  hex: "#FAC8D5" },
-  "66":   { name: "Light Rose",       hex: "#F0B8C8" },
-  "68":   { name: "Deep Rose",        hex: "#C82070" },
-  "69":   { name: "Dark Rose",        hex: "#901850" },
-  "70":   { name: "Dark Maroon",      hex: "#701028" },
-  "72":   { name: "Black Cherry",     hex: "#380810" },
-  "78":   { name: "Darkest Red",      hex: "#280408" },
+  "52":   { name: "Coral Pink",         hex: "#F05878" },  // hot coral pink
+  "54":   { name: "Coral",              hex: "#F08070" },  // warm coral
+  "55":   { name: "Hot Pink",           hex: "#E85090" },  // vivid hot pink
+  "57":   { name: "Raspberry",          hex: "#C84878" },  // raspberry
+  "59":   { name: "Wine",               hex: "#781038" },  // dark wine
+  "62":   { name: "Magenta",            hex: "#C02870" },  // magenta
+  "63":   { name: "Rose",               hex: "#E06090" },  // rose pink
+  "65":   { name: "Pale Pink",          hex: "#FAC8D5" },  // very pale pink
+  "66":   { name: "Light Rose",         hex: "#F0B8C8" },  // light rose
+  "68":   { name: "Deep Rose",          hex: "#C82068" },  // deep rose
+  "69":   { name: "Dark Rose",          hex: "#8E1848" },  // dark rose
+  "70":   { name: "Dark Maroon Rose",   hex: "#6E1028" },  // dark maroon-rose
+  "72":   { name: "Black Cherry",       hex: "#320810" },  // near-black maroon
+  "78":   { name: "Dusty Rose",         hex: "#C07888" },  // medium dusty rose/mauve-pink
 
   // ── Mauves / Purples ──────────────────────────────────────────────────────
-  "86":   { name: "Mauve",            hex: "#C0A0B8" },
-  "87":   { name: "Light Mauve",      hex: "#D0B0C8" },
-  "89":   { name: "Purple",           hex: "#8848A0" },
-  "92":   { name: "Deep Purple",      hex: "#6838A0" },
-  "94":   { name: "Lilac",            hex: "#C8A8D8" },
-  "98":   { name: "Violet",           hex: "#7048A8" },
-  "100":  { name: "Dark Violet",      hex: "#8050A8" },
-  "101":  { name: "Dark Purple",      hex: "#7038A0" },
+  "86":   { name: "Mauve",              hex: "#C098B0" },  // dusty mauve
+  "87":   { name: "Light Mauve",        hex: "#D0A8C0" },  // lighter mauve
+  "89":   { name: "Purple",             hex: "#8848A0" },  // purple
+  "92":   { name: "Deep Purple",        hex: "#6030A0" },  // deep purple
+  "94":   { name: "Lilac",              hex: "#C8A8D8" },  // lilac
+  "98":   { name: "Violet",             hex: "#7040A8" },  // violet
+  "100":  { name: "Dark Violet",        hex: "#7840A8" },  // dark violet
+  "101":  { name: "Dark Purple",        hex: "#6830A0" },  // dark purple
 
   // ── Dark Purple / Blue-Purple / Indigo ─────────────────────────────────
-  "102":  { name: "Eggplant",         hex: "#401878" },
-  "110":  { name: "Blue Purple",      hex: "#5058A8" },
-  "112":  { name: "Indigo",           hex: "#3040A0" },
-  "123":  { name: "Dark Navy Purple", hex: "#2A2060" },
-  "127":  { name: "Very Dark Navy",   hex: "#181430" },
+  "102":  { name: "Eggplant",           hex: "#3C1870" },  // dark eggplant
+  "110":  { name: "Blue Purple",        hex: "#4C50A8" },  // blue-purple
+  "112":  { name: "Indigo",             hex: "#2C3898" },  // indigo
+  "123":  { name: "Dark Navy Purple",   hex: "#1E1C48" },  // dark navy-purple
+  "127":  { name: "Very Dark Navy",     hex: "#120E28" },  // very dark navy
 
   // ── Blues ─────────────────────────────────────────────────────────────────
-  "129":  { name: "Pale Blue",        hex: "#8898B0" },
-  "130":  { name: "Sky Blue",         hex: "#90A8C0" },
-  "131":  { name: "Blue",             hex: "#3878D8" },
-  "132":  { name: "Royal Blue",       hex: "#5890D0" },
-  "133":  { name: "Medium Blue",      hex: "#3870C0" },
-  "134":  { name: "Dark Blue",        hex: "#2060A8" },
-  "142":  { name: "Navy",             hex: "#182058" },
-  "149":  { name: "Dark Navy",        hex: "#101838" },
+  "129":  { name: "Pale Blue",          hex: "#8898B0" },  // pale slate blue
+  "130":  { name: "Sky Blue",           hex: "#8AAAC0" },  // light grey-blue
+  "131":  { name: "Blue",               hex: "#3070D8" },  // mid blue
+  "132":  { name: "Royal Blue",         hex: "#1858B0" },  // royal blue
+  "133":  { name: "Medium Blue",        hex: "#2860A8" },  // medium-dark blue
+  "134":  { name: "Dark Blue",          hex: "#1848A0" },  // dark blue
+  "142":  { name: "Navy",               hex: "#141E58" },  // navy
+  "149":  { name: "Dark Navy",          hex: "#0C1438" },  // dark navy
 
   // ── Teals ─────────────────────────────────────────────────────────────────
-  "168":  { name: "Teal Blue",        hex: "#3888B0" },
-  "169":  { name: "Medium Teal",      hex: "#2898A0" },
-  "170":  { name: "Teal",             hex: "#3898A8" },
-  "185":  { name: "Aqua",             hex: "#78C8C8" },
-  "186":  { name: "Turquoise",        hex: "#58B8B8" },
-  "187":  { name: "Seafoam",          hex: "#40A8B0" },
-  "188":  { name: "Light Teal",       hex: "#78D0D0" },
-  "189":  { name: "Dark Teal",        hex: "#207880" },
+  "168":  { name: "Teal Blue",          hex: "#3080A8" },  // teal-blue
+  "169":  { name: "Medium Teal",        hex: "#2890A0" },  // medium teal
+  "170":  { name: "Teal",               hex: "#3090A8" },  // teal
+  "185":  { name: "Aqua",               hex: "#70C8C0" },  // aqua
+  "186":  { name: "Turquoise",          hex: "#58B8B8" },  // turquoise
+  "187":  { name: "Seafoam",            hex: "#48B0B0" },  // seafoam
+  "188":  { name: "Light Teal",         hex: "#80D0D0" },  // light teal
+  "189":  { name: "Dark Teal",          hex: "#207880" },  // dark teal/green-teal
 
   // ── Greens ────────────────────────────────────────────────────────────────
-  "203":  { name: "Medium Green",     hex: "#88B878" },
-  "205":  { name: "Grass Green",      hex: "#489058" },
-  "210":  { name: "Forest Green",     hex: "#206830" },
-  "211":  { name: "Deep Forest",      hex: "#286030" },
-  "212":  { name: "Dark Forest",      hex: "#185828" },
+  "203":  { name: "Medium Green",       hex: "#88B870" },  // medium olive-green
+  "205":  { name: "Grass Green",        hex: "#408848" },  // grass green
+  "210":  { name: "Forest Green",       hex: "#1C6828" },  // forest green
+  "211":  { name: "Deep Forest",        hex: "#226030" },  // deep forest
+  "212":  { name: "Dark Forest",        hex: "#165020" },  // dark forest
 
   // ── Lime / Bright Greens ─────────────────────────────────────────────────
-  "225":  { name: "Lime Green",       hex: "#98C040" },
-  "228":  { name: "Kelly Green",      hex: "#48A058" },
-  "230":  { name: "Dark Green",       hex: "#307840" },
+  "225":  { name: "Lime Green",         hex: "#90C038" },  // lime/yellow-green
+  "228":  { name: "Kelly Green",        hex: "#409050" },  // kelly green
+  "230":  { name: "Dark Green",         hex: "#287838" },  // dark medium green
 
   // ── Sage / Grey-Green ────────────────────────────────────────────────────
-  "235":  { name: "Sage",             hex: "#A0C890" },
+  "235":  { name: "Sage",               hex: "#A8B898" },  // grey-sage
 
   // ── Olives ────────────────────────────────────────────────────────────────
-  "238":  { name: "Olive",            hex: "#487838" },
-  "239":  { name: "Light Olive",      hex: "#608040" },
-  "246":  { name: "Dark Olive",       hex: "#4A6828" },
+  "238":  { name: "Olive",              hex: "#507838" },  // olive green
+  "239":  { name: "Light Olive",        hex: "#608040" },  // lighter olive
+  "246":  { name: "Dark Olive",         hex: "#486028" },  // dark olive
 
   // ── Yellow-Greens ─────────────────────────────────────────────────────────
-  "253":  { name: "Khaki Green",      hex: "#90A860" },
-  "254":  { name: "Yellow Green",     hex: "#789048" },
-  "255":  { name: "Chartreuse",       hex: "#A8C060" },
-  "256":  { name: "Dark Chartreuse",  hex: "#88A048" },
-  "264":  { name: "Pale Sage",        hex: "#A0B878" },
-  "265":  { name: "Moss",             hex: "#708858" },
+  "253":  { name: "Khaki Green",        hex: "#909858" },  // khaki-green
+  "254":  { name: "Yellow Green",       hex: "#788848" },  // yellow-green
+  "255":  { name: "Chartreuse",         hex: "#A8B850" },  // chartreuse
+  "256":  { name: "Dark Chartreuse",    hex: "#889040" },  // dark chartreuse
+  "264":  { name: "Pale Sage",          hex: "#A0B870" },  // pale sage
+  "265":  { name: "Moss",               hex: "#708050" },  // moss green
 
   // ── Dark Greens ───────────────────────────────────────────────────────────
-  "268":  { name: "Fern",             hex: "#386840" },
-  "269":  { name: "Dark Fern",        hex: "#284830" },
+  "268":  { name: "Fern",               hex: "#306038" },  // dark fern green
+  "269":  { name: "Dark Fern",          hex: "#204828" },  // very dark green
 
   // ── Pale Yellow-Greens ───────────────────────────────────────────────────
-  "278":  { name: "Pale Yellow Green",hex: "#D8E8C0" },
-  "279":  { name: "Pale Sage",        hex: "#C8D8B0" },
-  "280":  { name: "Light Sage",       hex: "#C0D0A8" },
-  "281":  { name: "Pale Lime",        hex: "#B8D0A0" },
+  "278":  { name: "Pale Yellow Green",  hex: "#D8E8C0" },  // very pale
+  "279":  { name: "Pale Sage",          hex: "#C8D8B0" },  // pale sage
+  "280":  { name: "Light Sage",         hex: "#C0D0A8" },  // light sage
+  "281":  { name: "Pale Lime",          hex: "#B8D0A0" },  // pale lime
 
   // ── Yellows / Golds ───────────────────────────────────────────────────────
-  "288":  { name: "Bright Yellow",    hex: "#F8F020" },
-  "290":  { name: "Yellow",           hex: "#F0D820" },
-  "291":  { name: "Gold",             hex: "#E8C020" },
-  "298":  { name: "Amber",            hex: "#D8A820" },
+  "288":  { name: "Bright Yellow",      hex: "#F5EE20" },  // bright yellow
+  "290":  { name: "Yellow",             hex: "#F0D820" },  // yellow/golden
+  "291":  { name: "Gold",               hex: "#E8C018" },  // gold
+  "298":  { name: "Amber",              hex: "#D8A818" },  // amber
 
   // ── Oranges / Peaches ────────────────────────────────────────────────────
-  "301":  { name: "Orange",           hex: "#F08030" },
-  "302":  { name: "Peach Orange",     hex: "#F09060" },
-  "303":  { name: "Peach",            hex: "#F8B080" },
-  "304":  { name: "Dark Orange",      hex: "#E87828" },
-  "305":  { name: "Light Orange",     hex: "#F0C020" },
-  "307":  { name: "Gold Yellow",      hex: "#F0C848" },
-  "308":  { name: "Light Gold",       hex: "#F8E090" },
-  "309":  { name: "Pale Gold",        hex: "#F8EBC0" },
-  "310":  { name: "Cream",            hex: "#F8F8E0" },
-  "313":  { name: "Tan Orange",       hex: "#E0A868" },
+  "301":  { name: "Orange",             hex: "#F07828" },  // orange
+  "302":  { name: "Peach Orange",       hex: "#F09060" },  // peach-orange
+  "303":  { name: "Peach",              hex: "#F8B080" },  // peach
+  "304":  { name: "Dark Orange",        hex: "#E87820" },  // dark orange
+  "305":  { name: "Light Orange",       hex: "#F8C040" },  // light orange/gold
+  "307":  { name: "Gold Yellow",        hex: "#F0C040" },  // golden yellow
+  "308":  { name: "Light Gold",         hex: "#F8DC88" },  // light gold/straw
+  "309":  { name: "Pale Gold",          hex: "#F8EAB8" },  // pale gold
+  "310":  { name: "Cream",              hex: "#F8F5D8" },  // cream
+  "313":  { name: "Tan Orange",         hex: "#E0A860" },  // orange-tan
 
   // ── Orange-Reds / Corals ─────────────────────────────────────────────────
-  "314":  { name: "Orange",           hex: "#E88030" },
-  "316":  { name: "Rust",             hex: "#C86820" },
-  "326":  { name: "Burnt Orange",     hex: "#C05018" },
-  "328":  { name: "Coral",            hex: "#E07860" },
-  "329":  { name: "Salmon",           hex: "#E09080" },
-  "330":  { name: "Terra Cotta",      hex: "#D08068" },
-  "332":  { name: "Dark Terra Cotta", hex: "#B06040" },
-  "335":  { name: "Red",              hex: "#C83828" },
-  "339":  { name: "Dark Reddish Brown",hex:"#883028" },
-  "341":  { name: "Brown Red",        hex: "#682018" },
+  "314":  { name: "Orange",             hex: "#E88028" },  // orange
+  "316":  { name: "Rust",               hex: "#C86018" },  // rust-orange
+  "326":  { name: "Burnt Orange",       hex: "#B84818" },  // burnt orange/dark rust
+  "328":  { name: "Coral",              hex: "#E07858" },  // coral
+  "329":  { name: "Salmon",             hex: "#E09078" },  // salmon
+  "330":  { name: "Terra Cotta",        hex: "#D07860" },  // terra cotta
+  "332":  { name: "Dark Terra Cotta",   hex: "#B06040" },  // dark terra cotta
+  "335":  { name: "Red",                hex: "#C82820" },  // bright red
+  "339":  { name: "Dark Reddish Brown", hex: "#883020" },  // dark reddish-brown
+  "341":  { name: "Brown Red",          hex: "#6A2018" },  // dark brown-red
 
   // ── Tans / Browns ─────────────────────────────────────────────────────────
-  "347":  { name: "Adobe",            hex: "#C89878" },
-  "352":  { name: "Dark Brown Red",   hex: "#902020" },
-  "355":  { name: "Chestnut",         hex: "#803028" },
-  "358":  { name: "Chocolate",        hex: "#604028" },
-  "360":  { name: "Espresso",         hex: "#3A2010" },
-  "361":  { name: "Khaki",            hex: "#D8C8A8" },
-  "363":  { name: "Sand",             hex: "#D8B888" },
-  "365":  { name: "Camel",            hex: "#C8A060" },
-  "367":  { name: "Beige",            hex: "#E0C898" },
-  "368":  { name: "Taupe",            hex: "#C8A878" },
-  "370":  { name: "Brown",            hex: "#A87848" },
-  "371":  { name: "Buff",             hex: "#D8C090" },
-  "373":  { name: "Warm Tan",         hex: "#D0B888" },
-  "375":  { name: "Light Tan",        hex: "#E8DCC8" },
-  "379":  { name: "Sienna",           hex: "#A88068" },
-  "380":  { name: "Dark Brown",       hex: "#704838" },
-  "381":  { name: "Very Dark Brown",  hex: "#382018" },
+  "347":  { name: "Adobe",              hex: "#C89870" },  // sandy adobe
+  "352":  { name: "Dark Brown Red",     hex: "#8C2018" },  // dark maroon-brown
+  "355":  { name: "Chestnut",           hex: "#7A2820" },  // chestnut
+  "358":  { name: "Chocolate",          hex: "#583820" },  // chocolate
+  "360":  { name: "Espresso",           hex: "#382010" },  // espresso
+  "361":  { name: "Khaki",              hex: "#DCC8A0" },  // khaki
+  "363":  { name: "Sand",               hex: "#D8B880" },  // sand
+  "365":  { name: "Camel",              hex: "#C8A058" },  // camel
+  "367":  { name: "Beige",              hex: "#E0C890" },  // beige
+  "368":  { name: "Taupe",              hex: "#C0A070" },  // taupe
+  "370":  { name: "Brown",              hex: "#A87040" },  // warm brown
+  "371":  { name: "Buff",               hex: "#D8B880" },  // buff/khaki
+  "373":  { name: "Warm Tan",           hex: "#C8A870" },  // warm tan
+  "375":  { name: "Light Tan",          hex: "#E8D8B8" },  // light tan/cream
+  "379":  { name: "Sienna",             hex: "#A07850" },  // sienna
+  "380":  { name: "Dark Brown",         hex: "#684030" },  // dark brown
+  "381":  { name: "Very Dark Brown",    hex: "#381808" },  // very dark brown
 
   // ── Creams / Off-Whites ───────────────────────────────────────────────────
-  "386":  { name: "Off White",        hex: "#F0E8D8" },
-  "392":  { name: "Warm Grey",        hex: "#C8A888" },
-  "397":  { name: "Pale Grey",        hex: "#ECDCD8" },
+  "386":  { name: "Off White",          hex: "#F0E5D0" },  // warm off-white/cream
+  "392":  { name: "Warm Tan",           hex: "#C8A880" },  // warm tan
+  "397":  { name: "Pale Cream",         hex: "#F0EAE0" },  // very pale/near-white
 
   // ── Greys ─────────────────────────────────────────────────────────────────
-  "399":  { name: "Silver Grey",      hex: "#C8C8C8" },
-  "400":  { name: "Very Dark Grey",   hex: "#181818" },
-  "401":  { name: "Near Black",       hex: "#100808" },
+  "399":  { name: "Silver Grey",        hex: "#C0C0C0" },  // silver grey
+  "400":  { name: "Very Dark Grey",     hex: "#181818" },  // near-black
+  "401":  { name: "Near Black",         hex: "#0E0808" },  // near-black
 
   // ── Special Blues ─────────────────────────────────────────────────────────
-  "410":  { name: "Bright Blue",      hex: "#1870C8" },
-  "433":  { name: "Cerulean",         hex: "#2890E8" },
+  "410":  { name: "Bright Blue",        hex: "#1870C8" },  // mid bright blue
+  "433":  { name: "Cerulean",           hex: "#60B8E0" },  // light cerulean blue
 
   // ── Neutrals / Pale Greens ────────────────────────────────────────────────
-  "842":  { name: "Pale Sage",        hex: "#C8D0C0" },
-  "843":  { name: "Off White",        hex: "#E0E0D8" },
-  "844":  { name: "Ivory",            hex: "#E8E8E0" },
-  "845":  { name: "Pale Green Grey",  hex: "#B8C0B0" },
-  "846":  { name: "Very Dark",        hex: "#201E18" },
+  "842":  { name: "Pale Sage",          hex: "#C8D0C0" },  // very pale sage
+  "843":  { name: "Off White",          hex: "#E0E0D8" },  // off-white
+  "844":  { name: "Ivory",              hex: "#E8E8D8" },  // ivory
+  "845":  { name: "Pale Green Grey",    hex: "#B8C0B0" },  // pale grey-green
+  "846":  { name: "Very Dark",          hex: "#201E18" },  // very dark
 
   // ── Blue-Greys ────────────────────────────────────────────────────────────
-  "849":  { name: "Slate Blue",       hex: "#708898" },
-  "850":  { name: "Steel Blue",       hex: "#607888" },
-  "851":  { name: "Indigo Navy",      hex: "#202848" },
+  "849":  { name: "Slate Blue",         hex: "#6880A0" },  // slate blue
+  "850":  { name: "Steel Blue",         hex: "#587898" },  // steel blue
+  "851":  { name: "Indigo Navy",        hex: "#1E2848" },  // dark indigo
 
   // ── Olive / Khaki Browns ─────────────────────────────────────────────────
-  "856":  { name: "Olive",            hex: "#688028" },
-  "859":  { name: "Khaki",            hex: "#988060" },
-  "860":  { name: "Warm Brown",       hex: "#806048" },
-  "861":  { name: "Medium Brown",     hex: "#6A4830" },
-  "862":  { name: "Dark Brown",       hex: "#3A2818" },
+  "856":  { name: "Olive",              hex: "#607820" },  // olive
+  "859":  { name: "Khaki",              hex: "#907860" },  // khaki-tan
+  "860":  { name: "Warm Brown",         hex: "#785840" },  // warm khaki-brown
+  "861":  { name: "Medium Brown",       hex: "#604030" },  // medium brown
+  "862":  { name: "Dark Brown",         hex: "#382018" },  // dark brown
 
   // ── Lavenders ─────────────────────────────────────────────────────────────
-  "870":  { name: "Lavender",         hex: "#C0A8D8" },
-  "871":  { name: "Light Lavender",   hex: "#D0B8E0" },
-  "873":  { name: "Aubergine",        hex: "#7A3870" },
+  "870":  { name: "Lavender",           hex: "#C0A8D8" },  // lavender
+  "871":  { name: "Light Lavender",     hex: "#D0B8E0" },  // light lavender
+  "873":  { name: "Aubergine",          hex: "#783070" },  // dark aubergine
 
   // ── Warm Tans ─────────────────────────────────────────────────────────────
-  "877":  { name: "Warm Tan",         hex: "#D0B090" },
-  "878":  { name: "Light Khaki",      hex: "#E0C8A0" },
+  "877":  { name: "Warm Tan",           hex: "#C8A880" },  // warm tan/brown
+  "878":  { name: "Light Khaki",        hex: "#DCC898" },  // light khaki
 
   // ── Light Pinks / Creams ─────────────────────────────────────────────────
-  "881":  { name: "Blush",            hex: "#F8E8E4" },
-  "882":  { name: "Light Salmon",     hex: "#F8D0C4" },
-  "886":  { name: "Pale Yellow",      hex: "#F8ECA8" },
-  "888":  { name: "Khaki Tan",        hex: "#D0B080" },
-  "889":  { name: "Brown Khaki",      hex: "#B09068" },
-  "892":  { name: "Light Pink",       hex: "#F8D0D8" },
-  "893":  { name: "Pink",             hex: "#F8C0C8" },
-  "894":  { name: "Rose Pink",        hex: "#F8C8C8" },
-  "895":  { name: "Flesh",            hex: "#FAD0C0" },
-  "896":  { name: "Light Taupe",      hex: "#E0C8C8" },
-  "897":  { name: "Dark Grey",        hex: "#484840" },
+  "881":  { name: "Blush",              hex: "#F8E5E0" },  // blush/very pale pink
+  "882":  { name: "Light Salmon",       hex: "#F5C8B8" },  // light salmon-pink
+  "886":  { name: "Pale Yellow",        hex: "#F5E8A0" },  // pale yellow/cream
+  "888":  { name: "Khaki Tan",          hex: "#C8A870" },  // khaki tan
+  "889":  { name: "Brown Khaki",        hex: "#A88858" },  // brown khaki
+
+  // ── Pinks (892–894) ───────────────────────────────────────────────────────
+  "892":  { name: "Pale Pink",          hex: "#FAD0D8" },  // very pale pink
+  "893":  { name: "Pink",               hex: "#F8C0C8" },  // pink
+  "894":  { name: "Rose Pink",          hex: "#F0B0B8" },  // rose pink
+
+  // ── Wine / Dark Reds (895–897) ───────────────────────────────────────────
+  "895":  { name: "Brown Red",          hex: "#9A4840" },  // brownish-red
+  "896":  { name: "Dark Wine",          hex: "#6A1828" },  // dark wine/maroon
+  "897":  { name: "Very Dark Wine",     hex: "#380E10" },  // very dark maroon
 
   // ── Browns ────────────────────────────────────────────────────────────────
-  "903":  { name: "Light Brown",      hex: "#C0A080" },
-  "905":  { name: "Brown",            hex: "#906858" },
+  "903":  { name: "Light Brown",        hex: "#B89870" },  // light warm brown
+  "905":  { name: "Brown",              hex: "#886050" },  // medium brown
 
   // ── Misc ──────────────────────────────────────────────────────────────────
-  "921":  { name: "Grey",             hex: "#888888" },
-  "923":  { name: "Dark Green",       hex: "#286840" },
-  "925":  { name: "Orange",           hex: "#F07020" },
-  "926":  { name: "Dark Orange",      hex: "#E86010" },
-  "936":  { name: "Dark Red",         hex: "#802028" },
+  "921":  { name: "Grey",               hex: "#888888" },  // medium grey
+  "923":  { name: "Dark Green",         hex: "#206838" },  // dark green
+  "925":  { name: "Orange",             hex: "#F07020" },  // orange
+  "926":  { name: "Dark Orange",        hex: "#E05810" },  // dark orange
+  "936":  { name: "Dark Red",           hex: "#7A2020" },  // dark red-brown
 
   // ── Oranges (1000s) ───────────────────────────────────────────────────────
-  "1001": { name: "Tangerine",        hex: "#F08040" },
-  "1002": { name: "Light Orange",     hex: "#F09060" },
-  "1003": { name: "Medium Orange",    hex: "#E87840" },
-  "1004": { name: "Dark Orange",      hex: "#E06830" },
-  "1005": { name: "Garnet",           hex: "#C03028" },
+  "1001": { name: "Tangerine",          hex: "#F07838" },  // tangerine
+  "1002": { name: "Light Orange",       hex: "#F09060" },  // light orange
+  "1003": { name: "Medium Orange",      hex: "#E87038" },  // medium orange
+  "1004": { name: "Dark Orange",        hex: "#D86028" },  // darker orange
+  "1005": { name: "Garnet",             hex: "#C02820" },  // garnet/dark red
 
   // ── Blush / Light Peach ──────────────────────────────────────────────────
-  "1009": { name: "Peach",            hex: "#F8D8C8" },
+  "1009": { name: "Peach",              hex: "#F8D5C0" },  // peach/blush
 
   // ── Special Blues ─────────────────────────────────────────────────────────
-  "1089": { name: "Bright Blue",      hex: "#0088E0" },
-  "1096": { name: "Powder Blue",      hex: "#B0D0E8" },
+  "1089": { name: "Bright Blue",        hex: "#0080E0" },  // vivid mid-blue
+  "1096": { name: "Powder Blue",        hex: "#B0D0E8" },  // powder blue
 
   // ── Base ──────────────────────────────────────────────────────────────────
-  White:  { name: "White",            hex: "#F8F8F8" },
-  Black:  { name: "Black",            hex: "#080808" },
+  White:  { name: "White",              hex: "#F8F8F8" },
+  Black:  { name: "Black",              hex: "#080808" },
 };
 
 export const BASIC_PALETTE = [
