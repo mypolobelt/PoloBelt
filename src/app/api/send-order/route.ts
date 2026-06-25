@@ -36,6 +36,7 @@ interface OrderData {
     hasStamp: boolean;
     stampImage?: string;
     teamColorImage?: string;
+    comments?: string;
     beltImage?: string;
   };
   orderQuantities: Array<{
@@ -250,8 +251,6 @@ function buildOrderEmail(data: OrderData, threadColorDetails: ThreadColorDetail[
     )
     .join("");
 
-  const orderId = generateOrderId();
-
   const templateName = data.designDetails.selectedPreset
     ? (PRESET_DISPLAY_NAMES[data.designDetails.selectedPreset] ??
       data.designDetails.selectedPreset)
@@ -304,43 +303,42 @@ function buildOrderEmail(data: OrderData, threadColorDetails: ThreadColorDetail[
             <p style="margin: 10px 0 0 0; text-align: center;">Order submitted: ${new Date(data.timestamp).toLocaleString('en-GB', { timeZone: 'Europe/London', day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', timeZoneName: 'short' })}</p>
           </div>
 
-          <div class="order-id">
-            Order ID: ${orderId}
-          </div>
-
           <!-- DESIGN SPEC SECTION — table layout (Gmail-safe, no flexbox) -->
           <div class="section" style="background:#fafafa;">
             <!-- Header: name LEFT, logo RIGHT -->
             <table style="width:100%;border-collapse:collapse;margin-bottom:16px;">
               <tr>
                 <td style="vertical-align:middle;">
-                  <h2 style="margin:0;font-size:20px;font-weight:bold;color:#1a1a1a;">${escapeHtml(data.designDetails.designName || "Custom Design")}</h2>
+                  <h2 style="margin:0;font-size:18px;font-weight:bold;color:#1a1a1a;">${escapeHtml(data.designDetails.designName || "Custom Design")}</h2>
                 </td>
-                <td style="vertical-align:middle;text-align:right;width:60px;">
-                  <img src="${baseUrl}/assets/logo.webp" alt="MPB Logo" style="width:52px;height:52px;display:inline-block;" />
+                <td style="vertical-align:middle;text-align:right;width:44px;">
+                  <img src="${baseUrl}/assets/logo.webp" alt="MPB Logo" style="width:40px;height:40px;max-width:40px;display:inline-block;" />
                 </td>
               </tr>
             </table>
 
             ${beltImageHtml ? `<div style="margin-bottom:16px;">${beltImageHtml}</div>` : ""}
 
+            <!-- Spec: 2x2 grid for mobile friendliness -->
             <table style="width:100%;border-collapse:collapse;">
               <tr>
-                <td style="vertical-align:top;width:25%;padding-right:12px;">
+                <td style="vertical-align:top;width:50%;padding-right:12px;padding-bottom:12px;">
                   <p class="spec-label">Thread colours:</p>
                   ${threadSwatchesHtml}
                 </td>
-                <td style="vertical-align:top;width:25%;padding-right:12px;">
+                <td style="vertical-align:top;width:50%;padding-bottom:12px;">
                   <p class="spec-label">Leather colour:</p>
                   <p style="font-size:13px;color:#333;margin:0 0 12px 0;">${escapeHtml(data.designDetails.leatherColor)}</p>
                   <p class="spec-label">Buckle colour:</p>
                   <p style="font-size:13px;color:#333;margin:0;">${escapeHtml(data.designDetails.buckleFinish)}</p>
                 </td>
-                <td style="vertical-align:top;width:25%;padding-right:12px;">
+              </tr>
+              <tr>
+                <td style="vertical-align:top;width:50%;padding-right:12px;">
                   <p class="spec-label">Team colours:</p>
                   ${teamColorCellHtml}
                 </td>
-                <td style="vertical-align:top;width:25%;">
+                <td style="vertical-align:top;width:50%;">
                   <p class="spec-label">Stamp:</p>
                   ${stampImageHtml}
                 </td>
@@ -349,6 +347,12 @@ function buildOrderEmail(data: OrderData, threadColorDetails: ThreadColorDetail[
 
             ${downloadBtnHtml}
           </div>
+
+          ${data.designDetails.comments ? `
+          <div class="section" style="background:#fffbf0;border-color:#c9a84c;">
+            <h3 style="color:#6B2E1F;margin-top:0;border-bottom:2px solid #c9a84c;padding-bottom:10px;">Comments / Special Requests</h3>
+            <p style="font-size:14px;color:#333;white-space:pre-wrap;margin:0;">${escapeHtml(data.designDetails.comments)}</p>
+          </div>` : ""}
 
           <div class="section">
             <h3>Customer Information</h3>
@@ -405,6 +409,3 @@ function escapeHtml(text: string): string {
   return text.replace(/[&<>"']/g, (m) => map[m]);
 }
 
-function generateOrderId(): string {
-  return `ORD-${Date.now()}-${Math.random().toString(36).substring(2, 11).toUpperCase()}`;
-}

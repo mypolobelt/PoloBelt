@@ -44,6 +44,8 @@ interface Stage3SizesAndPricingProps {
     hasStamp: boolean
     stampImage: string | null
     teamColorImage: string | null
+    comments: string
+    onCommentsChange: (val: string) => void
     sizeRows: SizeRow[]
     onAddSize: () => void
     onUpdateSize: (id: string, productType: ProductType, size: string, width: 'Standard (3cm)' | 'Slim (2.5cm)' | '', stamped: 'Yes' | 'No', quantity: number) => void
@@ -80,6 +82,8 @@ export const Stage3SizesAndPricing = ({
     hasStamp,
     stampImage,
     teamColorImage,
+    comments,
+    onCommentsChange,
     sizeRows,
     onAddSize,
     onUpdateSize,
@@ -257,6 +261,23 @@ export const Stage3SizesAndPricing = ({
                             included.
                         </p>
                     </div>
+                </div>
+
+                {/* Comments / Special Requests */}
+                <div className="bg-white border p-5 rounded-none shadow-sm mt-4">
+                    <h3 className="text-base font-bold mb-1 pb-2 border-b-2 border-gold">
+                        Comments / Special Requests
+                    </h3>
+                    <p className="text-xs text-blue-500 italic mb-3">
+                        Add any special requests, required delivery dates, or other notes here.
+                    </p>
+                    <textarea
+                        value={comments}
+                        onChange={(e) => onCommentsChange(e.target.value)}
+                        rows={4}
+                        placeholder="e.g. Required by 15th August, special monogram request, gift wrapping needed..."
+                        className="w-full px-3 py-2 border-2 border-gray-300 rounded-none font-sans text-sm focus:outline-none focus:border-gold resize-none"
+                    />
                 </div>
 
                 <div className="flex justify-between items-center gap-2 mt-2">

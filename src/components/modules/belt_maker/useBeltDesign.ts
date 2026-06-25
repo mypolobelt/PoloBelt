@@ -54,6 +54,7 @@ export const useBeltDesign = () => {
   const [stripeColor, setStripeColor] = useState("");
   const [stampImage, setStampImage] = useState<string | null>(null);
   const [teamColorImage, setTeamColorImage] = useState<string | null>(null);
+  const [comments, setComments] = useState<string>("");
   const [sizeRows, setSizeRows] = useState<SizeRow[]>([
     {
       id: "1",
@@ -558,6 +559,8 @@ export const useBeltDesign = () => {
     showStripeColor,
     stampImage,
     teamColorImage,
+    comments,
+    setComments,
     sizeRows,
     selectedPreset,
     classicColorCount,

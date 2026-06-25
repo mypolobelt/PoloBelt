@@ -16,6 +16,7 @@ interface Stage4CustomerDetailsProps {
     hasStamp: boolean
     stampImage: string | null
     teamColorImage: string | null
+    comments: string
     sizeRows: SizeRow[]
     gridData: string[][]
     canvasRef: RefObject<HTMLCanvasElement>
@@ -35,6 +36,7 @@ export const Stage4CustomerDetails = ({
     hasStamp,
     stampImage,
     teamColorImage,
+    comments,
     sizeRows,
     gridData,
     canvasRef,
@@ -112,6 +114,7 @@ export const Stage4CustomerDetails = ({
                         gridData={gridData}
                         stampImage={stampImage}
                         teamColorImage={teamColorImage}
+                        comments={comments}
                         designDetails={{
                             designName,
                             selectedPreset,

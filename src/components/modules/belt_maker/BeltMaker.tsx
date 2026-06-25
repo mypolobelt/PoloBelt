@@ -27,6 +27,8 @@ export default function BeltMaker() {
         showStripeColor,
         stampImage,
         teamColorImage,
+        comments,
+        setComments,
         sizeRows,
         selectedPreset,
         classicColorCount,
@@ -143,6 +145,8 @@ export default function BeltMaker() {
                     <Stage3SizesAndPricing
                         stampImage={stampImage}
                         teamColorImage={teamColorImage}
+                        comments={comments}
+                        onCommentsChange={setComments}
                         designName={designName}
                         threadColors={threadColors}
                         beltWidth={beltWidth}
@@ -170,6 +174,7 @@ export default function BeltMaker() {
                         hasStamp={hasStamp}
                         stampImage={stampImage}
                         teamColorImage={teamColorImage}
+                        comments={comments}
                         sizeRows={sizeRows}
                         gridData={gridData}
                         canvasRef={canvasRef}

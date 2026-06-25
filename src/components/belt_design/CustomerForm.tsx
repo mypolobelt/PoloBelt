@@ -29,6 +29,7 @@ interface CustomerFormProps {
   canvasRef: React.RefObject<HTMLCanvasElement>
   stampImage: string | null
   teamColorImage?: string | null
+  comments?: string
   designDetails?: DesignDetails
   gridData?: string[][]
   sizeOrders?: SizeOrder[]
@@ -54,6 +55,7 @@ export function CustomerForm({
   gridData,
   stampImage,
   teamColorImage,
+  comments,
   designDetails,
   sizeOrders,
   onResetDesign,
@@ -154,6 +156,7 @@ export function CustomerForm({
           }),
           stampImage,
           teamColorImage: teamColorImage || undefined,
+          comments: comments || undefined,
           beltImage,
           threadColorDetails,
         },
@@ -346,6 +349,12 @@ export function CustomerForm({
         <p className="text-xs">
           Once submitted your order will be verified and an invoice emailed to you by one of our team
         </p>
+
+        <div className="mt-4 p-3 border-l-4 border-amber-400 bg-amber-50 rounded-sm">
+          <p className="text-xs text-amber-800 leading-relaxed">
+            <strong>Please note:</strong> Projects typically take <strong>6–8 weeks</strong> to be delivered from the point of payment. If you have a specific deadline, please include it in the Comments / Special Requests field in the previous step.
+          </p>
+        </div>
 
         <Button
           type="submit"
