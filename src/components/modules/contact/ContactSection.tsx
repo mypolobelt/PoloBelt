@@ -108,9 +108,11 @@ const ContactSection = () => {
                         </motion.div>
 
                         <motion.div variants={itemVariants} className="mt-4 sm:mt-6">
-                            <Button className="w-full sm:w-2/3 md:w-1/2 lg:w-1/3">
-                                Get in Touch
-                            </Button>
+                            <a href="mailto:sales@mypolobelt.com">
+                                <Button className="w-full sm:w-2/3 md:w-1/2 lg:w-1/3">
+                                    Get in Touch
+                                </Button>
+                            </a>
                         </motion.div>
                     </motion.div>
 

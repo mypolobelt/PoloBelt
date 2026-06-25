@@ -49,9 +49,9 @@ const Nav = () => {
                         </NavigationMenuItem> */}
                         <NavigationMenuItem>
                             <NavigationMenuLink asChild>
-                                <Link href="https://www.etsy.com/shop/MyPoloBelt" target="_blank" className="px-2 sm:px-3 py-2 text-sm sm:text-base text-white hover:text-white/80 transition-colors">
+                                <a href="https://www.etsy.com/shop/MyPoloBelt" target="_blank" rel="noopener noreferrer" className="px-2 sm:px-3 py-2 text-sm sm:text-base text-white hover:text-white/80 transition-colors">
                                     In Stock Now
-                                </Link>
+                                </a>
                             </NavigationMenuLink>
                         </NavigationMenuItem>
                         <NavigationMenuItem>
@@ -69,7 +69,14 @@ const Nav = () => {
                             </NavigationMenuLink>
                         </NavigationMenuItem>
                         <NavigationMenuItem>
-                            <NavigationMenuTrigger className="text-sm sm:text-base text-white">
+                            <NavigationMenuLink asChild>
+                                <Link href="/thread-chart" className="px-2 sm:px-3 py-2 text-sm sm:text-base text-white hover:text-white/80 transition-colors">
+                                    Thread Chart
+                                </Link>
+                            </NavigationMenuLink>
+                        </NavigationMenuItem>
+                        <NavigationMenuItem>
+                            <NavigationMenuTrigger className="text-sm sm:text-base text-white focus:outline-none focus-visible:outline-none focus:ring-0 focus-visible:ring-0">
                                 Gallery
                             </NavigationMenuTrigger>
                             <NavigationMenuContent>
@@ -96,14 +103,6 @@ const Nav = () => {
                                             className="block hover:bg-white/10 rounded-md px-4 py-2 text-white text-sm"
                                         >
                                             Dog Collars & Leads
-                                        </Link>
-                                    </li>
-                                    <li>
-                                        <Link
-                                            href="/thread-chart"
-                                            className="block hover:bg-white/10 rounded-md px-4 py-2 text-white text-sm"
-                                        >
-                                            Thread Chart
                                         </Link>
                                     </li>
                                 </ul>
@@ -195,13 +194,15 @@ const Nav = () => {
                                         </Link>
                                     </li> */}
                                     <li>
-                                        <Link
-                                            href="https://www.etsy.com/shop/MyPoloBelt" target="_blank"
+                                        <a
+                                            href="https://www.etsy.com/shop/MyPoloBelt"
+                                            target="_blank"
+                                            rel="noopener noreferrer"
                                             className="block px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base text-white hover:bg-white/10 rounded-md transition-colors"
                                             onClick={closeSheet}
                                         >
                                             In Stock Now
-                                        </Link>
+                                        </a>
                                     </li>
                                     <li>
                                         <Link
@@ -219,6 +220,15 @@ const Nav = () => {
                                             onClick={closeSheet}
                                         >
                                             Sizing
+                                        </Link>
+                                    </li>
+                                    <li>
+                                        <Link
+                                            href="/thread-chart"
+                                            className="block px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base text-white hover:bg-white/10 rounded-md transition-colors"
+                                            onClick={closeSheet}
+                                        >
+                                            Thread Chart
                                         </Link>
                                     </li>
                                     <li>
@@ -258,14 +268,6 @@ const Nav = () => {
                                                         onClick={closeSheet}
                                                     >
                                                         Dog Collars & Leads
-                                                    </Link>
-                                                </li>
-                                                <li>
-                                                    <Link
-                                                        href="/thread-chart"
-                                                        className="block hover:bg-white/10 rounded-md px-4 py-2 text-white text-sm"
-                                                    >
-                                                        Thread Chart
                                                     </Link>
                                                 </li>
                                             </ul>
