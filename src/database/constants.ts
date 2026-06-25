@@ -894,21 +894,21 @@ export const THREAD_COLORS: ThreadColorDatabase = {
   "101": { name: "Dark Purple", hex: "#6830A0" }, // dark purple
 
   // ── Dark Purple / Blue-Purple / Indigo ─────────────────────────────────
-  "102": { name: "Eggplant", hex: "#3C1870" }, // dark eggplant
-  "110": { name: "Blue Purple", hex: "#4C50A8" }, // blue-purple
-  "112": { name: "Indigo", hex: "#2C3898" }, // indigo
-  "123": { name: "Dark Navy Purple", hex: "#1E1C48" }, // dark navy-purple
-  "127": { name: "Very Dark Navy", hex: "#120E28" }, // very dark navy
+  "102": { name: "Eggplant",         hex: "#401880" }, // dark purple-eggplant
+  "110": { name: "Violet",           hex: "#5858B0" }, // medium violet/purple-blue
+  "112": { name: "Indigo",           hex: "#303498" }, // dark indigo
+  "123": { name: "Dark Navy Purple", hex: "#1A1A48" }, // very dark navy-purple
+  "127": { name: "Very Dark Navy",   hex: "#0E0C28" }, // near-black navy
 
   // ── Blues ─────────────────────────────────────────────────────────────────
-  "129": { name: "Pale Blue", hex: "#8898B0" }, // pale slate blue
-  "130": { name: "Sky Blue", hex: "#8AAAC0" }, // light grey-blue
-  "131": { name: "Blue", hex: "#3070D8" }, // mid blue
-  "132": { name: "Royal Blue", hex: "#1858B0" }, // royal blue
-  "133": { name: "Medium Blue", hex: "#2860A8" }, // medium-dark blue
-  "134": { name: "Dark Blue", hex: "#1848A0" }, // dark blue
-  "142": { name: "Navy", hex: "#1C2D6E" }, // medium navy blue
-  "149": { name: "Dark Navy", hex: "#0A0E20" }, // very dark navy
+  "129": { name: "Pale Blue",        hex: "#8898B0" }, // pale slate blue
+  "130": { name: "Sky Blue",         hex: "#90A8C0" }, // light blue-grey
+  "131": { name: "Blue",             hex: "#3070D8" }, // mid blue
+  "132": { name: "Royal Blue",       hex: "#1858B0" }, // royal blue
+  "133": { name: "Medium Blue",      hex: "#2060A8" }, // medium-dark blue
+  "134": { name: "Dark Blue",        hex: "#1848A0" }, // dark blue
+  "142": { name: "Cobalt Blue",      hex: "#2A5EA8" }, // medium cobalt blue
+  "149": { name: "Dark Navy",        hex: "#0A0E20" }, // very dark navy
 
   // ── Teals ─────────────────────────────────────────────────────────────────
   "168": { name: "Teal Blue", hex: "#3080A8" }, // teal-blue
@@ -1116,7 +1116,7 @@ export const BASIC_PALETTE = [
   "130", // sky blue
   "131", // blue
   "132", // royal blue
-  "142", // navy
+  "142", // cobalt blue
   "149", // dark navy
   "1096", // powder blue
   "1089", // bright blue

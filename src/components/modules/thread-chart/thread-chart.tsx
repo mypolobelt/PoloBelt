@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion';
 import PoloLogo2 from '../shared/PoloLogo2';
+import { THREAD_COLORS } from '@/database/constants';
 
 type ShadeEntry = {
     shade: string | number;
@@ -53,18 +54,19 @@ const threadGroups: ThreadGroup[] = [
             { shade: 98, color: '#602888' },
             { shade: 100, color: '#8058a8' },
             { shade: 101, color: '#9068b0' },
-            { shade: 102, color: '#402878' },
-            { shade: 110, color: '#5868a8' },
-            { shade: 112, color: '#5080c0' },
-            { shade: 123, color: '#c8b0d8' },
-            { shade: 127, color: '#b098cc' },
-            { shade: 129, color: '#202868' },
-            { shade: 130, color: '#2848a8' },
-            { shade: 131, color: '#3878e0' },
-            { shade: 132, color: '#5898d0' },
-            { shade: 134, color: '#3898c0' },
-            { shade: 142, color: '#182058' },
-            { shade: 149, color: '#205868' },
+            { shade: 102, color: '#401880' },
+            { shade: 110, color: '#5858B0' },
+            { shade: 112, color: '#303498' },
+            { shade: 123, color: '#1A1A48' },
+            { shade: 127, color: '#0E0C28' },
+            { shade: 129, color: '#8898B0' },
+            { shade: 130, color: '#90A8C0' },
+            { shade: 131, color: '#3070D8' },
+            { shade: 132, color: '#1858B0' },
+            { shade: 133, color: '#2060A8' },
+            { shade: 134, color: '#1848A0' },
+            { shade: 142, color: '#2A5EA8' },
+            { shade: 149, color: '#0A0E20' },
             { shade: 168, color: '#2888b0' },
             { shade: 169, color: '#38a898' },
             { shade: 170, color: '#48b8b0' },
@@ -285,7 +287,7 @@ function GroupColumn({ group }: { group: ThreadGroup }) {
                     {/* Color swatch */}
                     <div
                         className="flex-1 h-full"
-                        style={{ backgroundColor: entry.color }}
+                        style={{ backgroundColor: THREAD_COLORS[String(entry.shade)]?.hex ?? entry.color }}
                     />
                 </div>
             ))}
