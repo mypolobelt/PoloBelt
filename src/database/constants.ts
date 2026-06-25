@@ -908,7 +908,7 @@ export const THREAD_COLORS: ThreadColorDatabase = {
   "133": { name: "Medium Blue",      hex: "#2060A8" }, // medium-dark blue
   "134": { name: "Dark Blue",        hex: "#1848A0" }, // dark blue
   "142": { name: "Cobalt Blue",      hex: "#2A5EA8" }, // medium cobalt blue
-  "149": { name: "Dark Navy",        hex: "#0A0E20" }, // very dark navy
+  "149": { name: "Dark Navy",        hex: "#0E1848" }, // classic dark navy blue
 
   // ── Teals ─────────────────────────────────────────────────────────────────
   "168": { name: "Teal Blue", hex: "#3080A8" }, // teal-blue
@@ -970,10 +970,10 @@ export const THREAD_COLORS: ThreadColorDatabase = {
   "303": { name: "Peach", hex: "#F8B080" }, // peach
   "304": { name: "Dark Orange", hex: "#E87820" }, // dark orange
   "305": { name: "Light Orange", hex: "#F8C040" }, // light orange/gold
-  "307": { name: "Gold Yellow", hex: "#F0C040" }, // golden yellow
-  "308": { name: "Light Gold", hex: "#F8DC88" }, // light gold/straw
-  "309": { name: "Pale Gold", hex: "#F8EAB8" }, // pale gold
-  "310": { name: "Cream", hex: "#F8F5D8" }, // cream
+  "307": { name: "Amber Gold", hex: "#C88828" }, // warm amber/dark gold
+  "308": { name: "Dark Gold", hex: "#A87020" }, // dark golden brown
+  "309": { name: "Medium Brown", hex: "#885818" }, // medium brown
+  "310": { name: "Dark Brown", hex: "#6A4010" }, // dark brown
   "313": { name: "Tan Orange", hex: "#E0A860" }, // orange-tan
 
   // ── Orange-Reds / Corals ─────────────────────────────────────────────────
