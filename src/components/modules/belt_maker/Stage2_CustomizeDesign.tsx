@@ -123,15 +123,18 @@ export const Stage2CustomizeDesign = ({
                 {/* Design Name */}
                 <div className="bg-white border p-6 rounded-none shadow-lg mb-6">
                     <h3 className="text-lg font-bold mb-4 pb-2 border-b-2 border-gold">
-                        Design Name
+                        Design Name <span className="text-red-500">*</span>
                     </h3>
                     <input
                         type="text"
                         value={designName}
                         onChange={(e) => setDesignName(e.target.value)}
-                        placeholder="Enter a name for your design"
-                        className="w-full px-3 py-2 border-2 border-gray-300 rounded-none font-sans text-sm focus:outline-none focus:border-gold"
+                        placeholder="Enter a name for your design (required)"
+                        className={`w-full px-3 py-2 border-2 rounded-none font-sans text-sm focus:outline-none focus:border-gold ${!designName.trim() ? 'border-red-300' : 'border-gray-300'}`}
                     />
+                    {!designName.trim() && (
+                        <p className="text-xs text-red-500 mt-1">A design name is required to continue.</p>
+                    )}
                 </div>
 
                 {/* Colour Count Selection — Classic */}
@@ -320,7 +323,7 @@ const ColorField = ({ label, value, onChoose }: { label: string; value: string; 
                 type="text"
                 value={value}
                 readOnly
-                placeholder="Select a color"
+                placeholder="Select a colour"
                 className="flex-1 px-3 py-2 border-2 border-gray-300 rounded-none font-sans text-sm focus:outline-none focus:border-gold"
             />
             <Button onClick={onChoose}>Choose</Button>

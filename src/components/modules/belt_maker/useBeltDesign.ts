@@ -518,6 +518,7 @@ export const useBeltDesign = () => {
 
   // Validation
   const canProceedToStage3 = () => {
+    if (!designName.trim()) return false;
     if (selectedPreset === "Classic_2Stripe") {
       const hasRequiredMainColours =
         classic2StripeColorCount === 2

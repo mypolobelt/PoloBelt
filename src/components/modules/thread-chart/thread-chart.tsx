@@ -1,6 +1,8 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import { useState } from 'react';
+import Image from 'next/image';
 import PoloLogo2 from '../shared/PoloLogo2';
 import { THREAD_COLORS } from '@/database/constants';
 
@@ -296,6 +298,7 @@ function GroupColumn({ group }: { group: ThreadGroup }) {
 }
 
 export default function ThreadChart() {
+    const [activeTab, setActiveTab] = useState<'digital' | 'photo'>('digital');
     const row1 = threadGroups.slice(0, 4);
     const row2 = threadGroups.slice(4, 8);
 
@@ -304,40 +307,85 @@ export default function ThreadChart() {
             <PoloLogo2 />
             <div className="max-w-2xl lg:max-w-5xl mx-auto px-3 sm:px-6 py-8">
                 <motion.h2
-                    className="uppercase text-2xl sm:text-3xl md:text-4xl font-bold text-center mb-8 text-gray-900 tracking-tight"
+                    className="uppercase text-2xl sm:text-3xl md:text-4xl font-bold text-center mb-6 text-gray-900 tracking-tight"
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: false, amount: 0.3 }}
                     transition={{ duration: 0.7 }}
                 >
-                    Thread Color Chart
+                    Thread Colour Chart
                 </motion.h2>
 
-                {/* Groups 1–4 */}
-                <motion.div
-                    className="overflow-x-auto mb-5"
-                    initial={{ opacity: 0, y: 16 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: false, amount: 0.1 }}
-                    transition={{ duration: 0.6 }}
-                >
-                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 lg:gap-3 sm:min-w-120">
-                        {row1.map((g) => <GroupColumn key={g.id} group={g} />)}
-                    </div>
-                </motion.div>
+                {/* Tabs */}
+                <div className="flex gap-2 mb-6 border-b-2 border-gray-200">
+                    {(['digital', 'photo'] as const).map((tab) => (
+                        <button
+                            key={tab}
+                            onClick={() => setActiveTab(tab)}
+                            className={`px-6 py-2 text-base font-semibold transition-all border-b-2 cursor-pointer ${
+                                activeTab === tab
+                                    ? 'border-yellow-600 text-yellow-700'
+                                    : 'border-transparent text-gray-500 hover:text-gray-800'
+                            }`}
+                        >
+                            {tab === 'digital' ? 'Digital' : 'Photo'}
+                        </button>
+                    ))}
+                </div>
 
-                {/* Groups 5–8 */}
-                <motion.div
-                    className="overflow-x-auto"
-                    initial={{ opacity: 0, y: 16 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: false, amount: 0.1 }}
-                    transition={{ duration: 0.6, delay: 0.1 }}
-                >
-                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 lg:gap-3 sm:min-w-120">
-                        {row2.map((g) => <GroupColumn key={g.id} group={g} />)}
-                    </div>
-                </motion.div>
+                {/* Digital Tab */}
+                {activeTab === 'digital' && (
+                    <>
+                        <motion.div
+                            className="overflow-x-auto mb-5"
+                            initial={{ opacity: 0, y: 16 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: false, amount: 0.1 }}
+                            transition={{ duration: 0.6 }}
+                        >
+                            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 lg:gap-3 sm:min-w-120">
+                                {row1.map((g) => <GroupColumn key={g.id} group={g} />)}
+                            </div>
+                        </motion.div>
+                        <motion.div
+                            className="overflow-x-auto"
+                            initial={{ opacity: 0, y: 16 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: false, amount: 0.1 }}
+                            transition={{ duration: 0.6, delay: 0.1 }}
+                        >
+                            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 lg:gap-3 sm:min-w-120">
+                                {row2.map((g) => <GroupColumn key={g.id} group={g} />)}
+                            </div>
+                        </motion.div>
+                    </>
+                )}
+
+                {/* Photo Tab */}
+                {activeTab === 'photo' && (
+                    <motion.div
+                        className="flex flex-col items-center gap-6"
+                        initial={{ opacity: 0, y: 16 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.5 }}
+                    >
+                        <Image
+                            src="/assets/thread-chart-1.jpg"
+                            alt="Thread Colour Chart - Groups 1 to 4"
+                            width={900}
+                            height={1200}
+                            className="w-full max-w-2xl h-auto rounded-lg shadow-md"
+                            priority
+                        />
+                        <Image
+                            src="/assets/thread-chart-2.jpg"
+                            alt="Thread Colour Chart - Groups 5 to 8"
+                            width={900}
+                            height={1200}
+                            className="w-full max-w-2xl h-auto rounded-lg shadow-md"
+                        />
+                    </motion.div>
+                )}
             </div>
         </section>
     );

@@ -125,8 +125,8 @@ export function ControlsPanel({
               className="w-full px-3 py-2 border-2 border-gray-300 rounded-none font-sans text-xs sm:text-sm focus:outline-none focus:border-gold"
             >
               <option value="">-- Select --</option>
-              <option value="2">2 Colors</option>
-              <option value="3">3 Colors</option>
+              <option value="2">2 Colours</option>
+              <option value="3">3 Colours</option>
             </select>
           </div>
         )}
@@ -190,7 +190,7 @@ export function ControlsPanel({
                     type="text"
                     value={threadColor3}
                     readOnly
-                    placeholder="Third color"
+                    placeholder="Third colour"
                     className="flex-1 px-3 py-2 border-2 border-gray-300 rounded-none font-sans text-xs sm:text-sm focus:outline-none focus:border-gold"
                   />
                   <button
@@ -206,14 +206,14 @@ export function ControlsPanel({
             {showStripeColor && (
               <div className="mb-3 sm:mb-4">
                 <label className="block text-xs font-semibold text-charcoal uppercase tracking-wider mb-2">
-                  Stripe Color
+                  Stripe Colour
                 </label>
                 <div className="flex gap-2 flex-col">
                   <input
                     type="text"
                     value={stripeColor}
                     readOnly
-                    placeholder="Stripe color"
+                    placeholder="Stripe colour"
                     className="flex-1 px-3 py-2 border-2 border-gray-300 rounded-none font-sans text-xs sm:text-sm focus:outline-none focus:border-gold"
                   />
                   <button

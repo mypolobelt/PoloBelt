@@ -130,8 +130,10 @@ export async function POST(request: NextRequest) {
     if (data.designDetails.teamColorImage) {
       try {
         const tcBase64 = data.designDetails.teamColorImage.replace(/^data:image\/[^;]+;base64,/, "");
-        const buffer = Buffer.from(tcBase64, "base64");
-        const blob = await put(`team-colours/tc-${Date.now()}.png`, buffer, {
+        const rawBuffer = Buffer.from(tcBase64, "base64");
+        // Convert to PNG via sharp so react-pdf can render it regardless of upload format
+        const pngBuffer = await sharp(rawBuffer).png().toBuffer();
+        const blob = await put(`team-colours/tc-${Date.now()}.png`, pngBuffer, {
           access: "public",
           contentType: "image/png",
         });
@@ -376,9 +378,9 @@ function buildOrderEmail(data: OrderData, threadColorDetails: ThreadColorDetail[
             <p><strong>Design Template:</strong> ${escapeHtml(templateName)}</p>
             <p><strong>Design Name:</strong> ${escapeHtml(data.designDetails.designName)}</p>
             <p><strong>Belt Width:</strong> ${escapeHtml(data.designDetails.beltWidth)}</p>
-            <p><strong>Leather Color:</strong> ${escapeHtml(data.designDetails.leatherColor)}</p>
+            <p><strong>Leather Colour:</strong> ${escapeHtml(data.designDetails.leatherColor)}</p>
             <p><strong>Buckle Finish:</strong> ${escapeHtml(data.designDetails.buckleFinish)}</p>
-            <p><strong>Thread Colors:</strong></p>
+            <p><strong>Thread Colours:</strong></p>
             <ul>${threadColorDetails.map(tc => `<li>${tc.name} ${tc.id}</li>`).join("") || "<li>None specified</li>"}</ul>
             <p><strong>Custom Stamp:</strong> ${data.designDetails.hasStamp ? "Yes - See attached file" : "No"}</p>
           </div>

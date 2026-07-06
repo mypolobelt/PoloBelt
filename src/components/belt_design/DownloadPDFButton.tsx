@@ -32,10 +32,11 @@ function parseThreadColorDetails(threadColors: string[]): ThreadColorDetail[] {
     })
 }
 
-async function getLogoPngDataUri(): Promise<string | undefined> {
+async function convertImageToPng(src: string): Promise<string | null> {
     try {
         const img = new Image()
-        img.src = '/assets/logo.webp'
+        img.crossOrigin = 'anonymous'
+        img.src = src
         await new Promise<void>((resolve, reject) => {
             img.onload = () => resolve()
             img.onerror = reject
@@ -44,12 +45,16 @@ async function getLogoPngDataUri(): Promise<string | undefined> {
         canvas.width = img.naturalWidth || 200
         canvas.height = img.naturalHeight || 200
         const ctx = canvas.getContext('2d')
-        if (!ctx) return undefined
+        if (!ctx) return null
         ctx.drawImage(img, 0, 0)
         return canvas.toDataURL('image/png')
     } catch {
-        return undefined
+        return null
     }
+}
+
+async function getLogoPngDataUri(): Promise<string | undefined> {
+    return (await convertImageToPng('/assets/logo.webp')) ?? undefined
 }
 
 export function DownloadPDFButton({
@@ -81,6 +86,8 @@ export function DownloadPDFButton({
 
             const threadColorDetails = parseThreadColorDetails(threadColors)
             const logoUrl = await getLogoPngDataUri()
+            const pngTeamColorImage = teamColorImage ? await convertImageToPng(teamColorImage) : null
+            const pngStampImage = stampImage ? await convertImageToPng(stampImage) : null
 
             const doc = (
                 <DesignSpecPDFDocument
@@ -89,8 +96,8 @@ export function DownloadPDFButton({
                     threadColorDetails={threadColorDetails}
                     leatherColor={leatherColor}
                     buckleFinish={buckleFinish}
-                    stampImage={stampImage}
-                    teamColorImage={teamColorImage}
+                    stampImage={pngStampImage}
+                    teamColorImage={pngTeamColorImage}
                     logoUrl={logoUrl}
                 />
             )

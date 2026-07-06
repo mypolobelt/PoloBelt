@@ -71,7 +71,7 @@ export function ColorPickerModal({
                   : 'bg-white border-gray-300 text-black hover:border-yellow-400'
                 }`}
             >
-              {tab === 'basic' ? 'Basic Colors' : 'Full Palette'}
+              {tab === 'basic' ? 'Basic Colours' : 'Full Palette'}
             </button>
           ))}
         </div>

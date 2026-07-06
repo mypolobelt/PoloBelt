@@ -861,37 +861,37 @@ export const THREAD_COLORS: ThreadColorDatabase = {
   "10": { name: "Salmon", hex: "#ECA098" }, // medium salmon
   "19": { name: "Red", hex: "#BC1018" }, // solid red
   "22": { name: "Maroon", hex: "#5C0E12" }, // dark maroon
-  "27": { name: "Baby Pink", hex: "#F5C0C8" }, // light pink
+  "27": { name: "Baby Pink", hex: "#E04880" }, // vivid hot pink
   "46": { name: "Bright Red", hex: "#CC1018" }, // classic red
   "47": { name: "Crimson", hex: "#A81820" }, // dark red
-  "49": { name: "Deep Pink", hex: "#E06080" }, // medium-deep pink
-  "50": { name: "Pink", hex: "#FAC8D5" }, // light blush pink
+  "49": { name: "Deep Pink", hex: "#C84870" }, // deep pink
+  "50": { name: "Pink", hex: "#FBC8D8" }, // very pale pink
 
   // ── Hot Pinks / Raspberry / Wine ──────────────────────────────────────────
   "52": { name: "Coral Pink", hex: "#F05878" }, // hot coral pink
-  "54": { name: "Coral", hex: "#F08070" }, // warm coral
+  "54": { name: "Coral", hex: "#F4A880" }, // light peach-salmon
   "55": { name: "Hot Pink", hex: "#E85090" }, // vivid hot pink
   "57": { name: "Raspberry", hex: "#C84878" }, // raspberry
   "59": { name: "Wine", hex: "#781038" }, // dark wine
   "62": { name: "Magenta", hex: "#C02870" }, // magenta
   "63": { name: "Rose", hex: "#E06090" }, // rose pink
-  "65": { name: "Pale Pink", hex: "#FAC8D5" }, // very pale pink
-  "66": { name: "Light Rose", hex: "#F0B8C8" }, // light rose
+  "65": { name: "Pale Pink", hex: "#FDD0DC" }, // very pale pink
+  "66": { name: "Light Rose", hex: "#F5BECA" }, // light rose
   "68": { name: "Deep Rose", hex: "#C82068" }, // deep rose
   "69": { name: "Dark Rose", hex: "#8E1848" }, // dark rose
-  "70": { name: "Dark Maroon Rose", hex: "#6E1028" }, // dark maroon-rose
+  "70": { name: "Dark Maroon Rose", hex: "#641028" }, // dark maroon-rose
   "72": { name: "Black Cherry", hex: "#320810" }, // near-black maroon
-  "78": { name: "Dusty Rose", hex: "#C07888" }, // medium dusty rose/mauve-pink
+  "78": { name: "Dusty Rose", hex: "#A06870" }, // medium dusty rose/mauve-pink
 
   // ── Mauves / Purples ──────────────────────────────────────────────────────
-  "86": { name: "Mauve", hex: "#C098B0" }, // dusty mauve
-  "87": { name: "Light Mauve", hex: "#D0A8C0" }, // lighter mauve
-  "89": { name: "Purple", hex: "#8848A0" }, // purple
-  "92": { name: "Deep Purple", hex: "#6030A0" }, // deep purple
+  "86": { name: "Mauve", hex: "#C090A0" }, // dusty mauve
+  "87": { name: "Light Mauve", hex: "#D0A8B8" }, // lighter mauve
+  "89": { name: "Purple", hex: "#8840A0" }, // purple
+  "92": { name: "Deep Purple", hex: "#5828A0" }, // deep purple
   "94": { name: "Lilac", hex: "#C8A8D8" }, // lilac
-  "98": { name: "Violet", hex: "#7040A8" }, // violet
-  "100": { name: "Dark Violet", hex: "#7840A8" }, // dark violet
-  "101": { name: "Dark Purple", hex: "#6830A0" }, // dark purple
+  "98": { name: "Violet", hex: "#6838A8" }, // violet
+  "100": { name: "Dark Violet", hex: "#7030A0" }, // dark violet
+  "101": { name: "Dark Purple", hex: "#6020A0" }, // dark purple
 
   // ── Dark Purple / Blue-Purple / Indigo ─────────────────────────────────
   "102": { name: "Eggplant",         hex: "#401880" }, // dark purple-eggplant
@@ -906,14 +906,14 @@ export const THREAD_COLORS: ThreadColorDatabase = {
   "131": { name: "Blue",             hex: "#3070D8" }, // mid blue
   "132": { name: "Royal Blue",       hex: "#1858B0" }, // royal blue
   "133": { name: "Medium Blue",      hex: "#2060A8" }, // medium-dark blue
-  "134": { name: "Dark Blue",        hex: "#1848A0" }, // dark blue
+  "134": { name: "Dark Blue",        hex: "#0E3098" }, // dark navy-blue
   "142": { name: "Cobalt Blue",      hex: "#2A5EA8" }, // medium cobalt blue
   "149": { name: "Dark Navy",        hex: "#0E1848" }, // classic dark navy blue
 
   // ── Teals ─────────────────────────────────────────────────────────────────
   "168": { name: "Teal Blue", hex: "#3080A8" }, // teal-blue
   "169": { name: "Medium Teal", hex: "#2890A0" }, // medium teal
-  "170": { name: "Teal", hex: "#3090A8" }, // teal
+  "170": { name: "Teal", hex: "#3898A8" }, // teal
   "185": { name: "Aqua", hex: "#70C8C0" }, // aqua
   "186": { name: "Turquoise", hex: "#58B8B8" }, // turquoise
   "187": { name: "Seafoam", hex: "#48B0B0" }, // seafoam
@@ -933,7 +933,7 @@ export const THREAD_COLORS: ThreadColorDatabase = {
   "230": { name: "Dark Green", hex: "#287838" }, // dark medium green
 
   // ── Sage / Grey-Green ────────────────────────────────────────────────────
-  "235": { name: "Sage", hex: "#A8B898" }, // grey-sage
+  "235": { name: "Sage", hex: "#A0AE88" }, // grey-sage
 
   // ── Olives ────────────────────────────────────────────────────────────────
   "238": { name: "Olive", hex: "#507838" }, // olive green
@@ -953,10 +953,10 @@ export const THREAD_COLORS: ThreadColorDatabase = {
   "269": { name: "Dark Fern", hex: "#204828" }, // very dark green
 
   // ── Pale Yellow-Greens ───────────────────────────────────────────────────
-  "278": { name: "Pale Yellow Green", hex: "#D8E8C0" }, // very pale
-  "279": { name: "Pale Sage", hex: "#C8D8B0" }, // pale sage
-  "280": { name: "Light Sage", hex: "#C0D0A8" }, // light sage
-  "281": { name: "Pale Lime", hex: "#B8D0A0" }, // pale lime
+  "278": { name: "Pale Yellow Green", hex: "#D8E8B8" }, // very pale yellow-green
+  "279": { name: "Pale Sage", hex: "#C8D8A8" }, // pale sage
+  "280": { name: "Light Sage", hex: "#B8C898" }, // light sage
+  "281": { name: "Pale Lime", hex: "#A8C088" }, // pale lime
 
   // ── Yellows / Golds ───────────────────────────────────────────────────────
   "288": { name: "Bright Yellow", hex: "#F5EE20" }, // bright yellow
@@ -965,7 +965,7 @@ export const THREAD_COLORS: ThreadColorDatabase = {
   "298": { name: "Amber", hex: "#D8A818" }, // amber
 
   // ── Oranges / Peaches ────────────────────────────────────────────────────
-  "301": { name: "Orange", hex: "#F07828" }, // orange
+  "301": { name: "Orange", hex: "#F07020" }, // warm orange
   "302": { name: "Peach Orange", hex: "#F09060" }, // peach-orange
   "303": { name: "Peach", hex: "#F8B080" }, // peach
   "304": { name: "Dark Orange", hex: "#E87820" }, // dark orange
@@ -982,7 +982,7 @@ export const THREAD_COLORS: ThreadColorDatabase = {
   "326": { name: "Burnt Orange", hex: "#B84818" }, // burnt orange/dark rust
   "328": { name: "Coral", hex: "#E07858" }, // coral
   "329": { name: "Salmon", hex: "#E09078" }, // salmon
-  "330": { name: "Terra Cotta", hex: "#D07860" }, // terra cotta
+  "330": { name: "Terra Cotta", hex: "#CA6E50" }, // terra cotta
   "332": { name: "Dark Terra Cotta", hex: "#B06040" }, // dark terra cotta
   "335": { name: "Red", hex: "#C82820" }, // bright red
   "339": { name: "Dark Reddish Brown", hex: "#883020" }, // dark reddish-brown
@@ -995,7 +995,7 @@ export const THREAD_COLORS: ThreadColorDatabase = {
   "358": { name: "Chocolate", hex: "#583820" }, // chocolate
   "360": { name: "Espresso", hex: "#382010" }, // espresso
   "361": { name: "Khaki", hex: "#DCC8A0" }, // khaki
-  "363": { name: "Sand", hex: "#D8B878" }, // warm golden sand
+  "363": { name: "Sand", hex: "#D0B068" }, // warm golden sand
   "365": { name: "Camel", hex: "#C8A058" }, // camel
   "367": { name: "Beige", hex: "#E0C890" }, // beige
   "368": { name: "Taupe", hex: "#C0A070" }, // taupe
@@ -1022,9 +1022,10 @@ export const THREAD_COLORS: ThreadColorDatabase = {
   "433": { name: "Cerulean", hex: "#60B8E0" }, // light cerulean blue
 
   // ── Neutrals / Pale Greens ────────────────────────────────────────────────
-  "842": { name: "Pale Sage", hex: "#C8D0C0" }, // very pale sage
-  "843": { name: "Off White", hex: "#E0E0D8" }, // off-white
-  "844": { name: "Ivory", hex: "#E8E8D8" }, // ivory
+  "840": { name: "Olive Khaki", hex: "#909040" }, // warm olive-khaki
+  "842": { name: "Pale Sage", hex: "#9AAE78" }, // medium sage-green
+  "843": { name: "Off White", hex: "#B8C0A0" }, // light sage-grey
+  "844": { name: "Ivory", hex: "#C8D0B0" }, // pale sage
   "845": { name: "Pale Green Grey", hex: "#B8C0B0" }, // pale grey-green
   "846": { name: "Very Dark", hex: "#201E18" }, // very dark
 
@@ -1034,10 +1035,10 @@ export const THREAD_COLORS: ThreadColorDatabase = {
   "851": { name: "Indigo Navy", hex: "#1E2848" }, // dark indigo
 
   // ── Olive / Khaki Browns ─────────────────────────────────────────────────
-  "856": { name: "Olive", hex: "#607820" }, // olive
-  "859": { name: "Khaki", hex: "#907860" }, // khaki-tan
-  "860": { name: "Warm Brown", hex: "#785840" }, // warm khaki-brown
-  "861": { name: "Medium Brown", hex: "#604030" }, // medium brown
+  "856": { name: "Olive", hex: "#6A7820" }, // olive green
+  "859": { name: "Khaki", hex: "#988060" }, // khaki-tan
+  "860": { name: "Warm Brown", hex: "#806040" }, // warm khaki-brown
+  "861": { name: "Medium Brown", hex: "#684030" }, // medium brown
   "862": { name: "Dark Brown", hex: "#382018" }, // dark brown
 
   // ── Lavenders ─────────────────────────────────────────────────────────────
@@ -1045,9 +1046,9 @@ export const THREAD_COLORS: ThreadColorDatabase = {
   "871": { name: "Light Lavender", hex: "#D0B8E0" }, // light lavender
   "873": { name: "Aubergine", hex: "#783070" }, // dark aubergine
 
-  // ── Warm Tans ─────────────────────────────────────────────────────────────
-  "877": { name: "Warm Brown Tan", hex: "#BEA070" }, // warm brown-tan
-  "878": { name: "Light Khaki", hex: "#DCC898" }, // light khaki
+  // ── Dark Greens ───────────────────────────────────────────────────────────
+  "877": { name: "Dark Teal Green", hex: "#1E6838" }, // dark teal-green
+  "878": { name: "Dark Forest Green", hex: "#144820" }, // dark forest green
 
   // ── Light Pinks / Creams ─────────────────────────────────────────────────
   "881": { name: "Blush", hex: "#F8E5E0" }, // blush/very pale pink
@@ -1090,6 +1091,18 @@ export const THREAD_COLORS: ThreadColorDatabase = {
   // ── Special Blues ─────────────────────────────────────────────────────────
   "1089": { name: "Bright Blue", hex: "#0080E0" }, // vivid mid-blue
   "1096": { name: "Powder Blue", hex: "#B0D0E8" }, // powder blue
+
+  // ── Group 8 (701–710) ────────────────────────────────────────────────────
+  "701": { name: "Light Pink", hex: "#FAC8D8" }, // baby pink
+  "702": { name: "Pink", hex: "#F090B8" }, // medium pink
+  "703": { name: "Coral Pink", hex: "#E87090" }, // coral pink
+  "704": { name: "Peach", hex: "#ECA878" }, // warm peach-salmon
+  "705": { name: "Vivid Teal", hex: "#18B8C0" }, // vivid teal/aqua
+  "706": { name: "Dark Olive Green", hex: "#3A7040" }, // dark olive-green
+  "707": { name: "Dark Forest Green", hex: "#205028" }, // dark forest green
+  "708": { name: "Charcoal", hex: "#2A2A28" }, // dark charcoal
+  "709": { name: "Light Peach", hex: "#F0D8C0" }, // light peach-tan
+  "710": { name: "Cream", hex: "#F8F4E8" }, // very pale cream
 
   // ── Base ──────────────────────────────────────────────────────────────────
   White: { name: "White", hex: "#F8F8F8" },

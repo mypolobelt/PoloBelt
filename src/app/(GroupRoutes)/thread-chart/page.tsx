@@ -4,8 +4,8 @@ import { Metadata } from 'next';
 import { Suspense } from 'react';
 
 export const metadata: Metadata = {
-    title: "Thread Color Chart - Polo Belt",
-    description: "Browse our complete thread color chart with 200+ shade options for bespoke Argentine style polo belts.",
+    title: "Thread Colour Chart - Polo Belt",
+    description: "Browse our complete thread colour chart with 200+ shade options for bespoke Argentine style polo belts.",
 };
 
 const page = () => {
