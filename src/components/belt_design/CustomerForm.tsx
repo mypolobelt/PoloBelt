@@ -23,6 +23,7 @@ interface DesignDetails {
   leatherColor: string
   buckleFinish: string
   hasStamp: boolean
+  stampOrientation?: string
 }
 
 interface CustomerFormProps {

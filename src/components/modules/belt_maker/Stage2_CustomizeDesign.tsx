@@ -1,3 +1,4 @@
+'use client'
 import { Button } from '@/components/ui/button'
 import { useState } from 'react'
 import Image from 'next/image'
@@ -33,6 +34,8 @@ interface Stage2CustomizeDesignProps {
     setBuckleFinish: (finish: string) => void
     stampImage: string | null
     setStampImage: (image: string | null) => void
+    stampOrientation: 'Buckle Left' | 'Buckle Right' | ''
+    setStampOrientation: (val: 'Buckle Left' | 'Buckle Right' | '') => void
     teamColorImage: string | null
     setTeamColorImage: (image: string | null) => void
     canProceed: boolean
@@ -70,6 +73,8 @@ export const Stage2CustomizeDesign = ({
     setBuckleFinish,
     stampImage,
     setStampImage,
+    stampOrientation,
+    setStampOrientation,
     teamColorImage,
     setTeamColorImage,
     canProceed,
@@ -78,6 +83,7 @@ export const Stage2CustomizeDesign = ({
 }: Stage2CustomizeDesignProps) => {
     const [colorPickerOpen, setColorPickerOpen] = useState(false)
     const [currentColorField, setCurrentColorField] = useState<1 | 2 | 3 | 4 | 5 | 6 | null>(null)
+    const [showOrientationInfo, setShowOrientationInfo] = useState(false)
 
     const openColorPicker = (field: 1 | 2 | 3 | 4 | 5 | 6) => {
         setCurrentColorField(field)
@@ -258,11 +264,36 @@ export const Stage2CustomizeDesign = ({
                         className="w-full px-2 py-2 border-2 border-gray-300 rounded-none text-sm"
                     />
                     {stampImage && (
-                        <div className="mt-3">
-                            <Image src={stampImage} alt="Logo preview" height={1000} width={1000} className="max-w-12 max-h-12" />
-                            <Button onClick={() => setStampImage(null)} className="mt-2 px-3 py-1 bg-red-600 text-white text-xs">
-                                Remove
-                            </Button>
+                        <div className="mt-3 space-y-4">
+                            <div className="flex items-center gap-3">
+                                <Image src={stampImage} alt="Logo preview" height={1000} width={1000} className="max-w-12 max-h-12" />
+                                <Button onClick={() => setStampImage(null)} className="px-3 py-1 bg-red-600 text-white text-xs">
+                                    Remove
+                                </Button>
+                            </div>
+                            <div>
+                                <div className="flex items-center gap-2 mb-2">
+                                    <label className="block text-xs font-semibold text-charcoal uppercase tracking-wider">
+                                        Stamp Orientation
+                                    </label>
+                                    <button
+                                        type="button"
+                                        onClick={() => setShowOrientationInfo(true)}
+                                        className="w-5 h-5 rounded-full bg-gray-200 text-gray-600 text-xs font-bold hover:bg-gold hover:text-white transition-colors flex items-center justify-center"
+                                    >
+                                        i
+                                    </button>
+                                </div>
+                                <select
+                                    value={stampOrientation}
+                                    onChange={(e) => setStampOrientation(e.target.value as 'Buckle Left' | 'Buckle Right' | '')}
+                                    className="w-full px-3 py-2 border-2 border-gray-300 rounded-none font-sans text-sm focus:outline-none focus:border-gold"
+                                >
+                                    <option value="">-- Select Orientation --</option>
+                                    <option value="Buckle Left">Buckle Left</option>
+                                    <option value="Buckle Right">Buckle Right</option>
+                                </select>
+                            </div>
                         </div>
                     )}
                 </div>
@@ -309,6 +340,29 @@ export const Stage2CustomizeDesign = ({
                 onClose={() => setColorPickerOpen(false)}
                 onSelectColor={handleSelectColor}
             />
+
+            {showOrientationInfo && (
+                <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
+                    <div className="bg-white rounded-none shadow-2xl max-w-lg w-full">
+                        <div className="sticky top-0 bg-white border-b-2 border-gold p-4 flex justify-between items-center">
+                            <h2 className="text-lg font-bold">Stamp Orientation</h2>
+                            <button onClick={() => setShowOrientationInfo(false)} className="text-2xl text-charcoal">×</button>
+                        </div>
+                        <div className="p-6 space-y-3 text-sm text-charcoal">
+                            <p className="font-semibold">Buckle Left / Buckle Right — what this means:</p>
+                            <p>This refers to which side the buckle sits on when you&apos;re wearing the belt.</p>
+                            <ul className="space-y-2 pl-2">
+                                <li><span className="font-semibold">Buckle Left</span> — the buckle is held in your left hand, with the belt tail in your right.</li>
+                                <li><span className="font-semibold">Buckle Right</span> — the buckle is held in your right hand, with the belt tail in your left.</li>
+                            </ul>
+                            <p className="text-xs text-gray-500 italic pt-1">This affects which direction your stamp will appear once the belt is worn, so it&apos;s worth getting right before you order.</p>
+                        </div>
+                        <div className="border-t-2 border-gold p-4 flex justify-center">
+                            <Button onClick={() => setShowOrientationInfo(false)}>Close</Button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </section>
     )
 }

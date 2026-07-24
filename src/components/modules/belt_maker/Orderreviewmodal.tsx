@@ -72,6 +72,7 @@ interface OrderReviewModalProps {
     buckleFinish: string
     hasStamp: boolean
     stampImage: string | null
+    stampOrientation?: 'Buckle Left' | 'Buckle Right' | ''
     sizeRows: SizeRow[]
     onConfirm: () => void
     onEdit: () => void
@@ -99,6 +100,7 @@ export const OrderReviewModal = ({
     buckleFinish,
     hasStamp,
     stampImage,
+    stampOrientation,
     sizeRows,
     onConfirm,
     onEdit,
@@ -255,9 +257,16 @@ export const OrderReviewModal = ({
                                     alt="Custom stamp"
                                     className="w-16 h-16 object-contain border border-gray-200 bg-gray-50 p-1"
                                 />
-                                <p className="text-xs text-gray-500">
-                                    Your uploaded logo will be embossed on stamped belts.
-                                </p>
+                                <div>
+                                    <p className="text-xs text-gray-500">
+                                        Your uploaded logo will be embossed on stamped belts.
+                                    </p>
+                                    {stampOrientation && (
+                                        <p className="text-xs text-gray-700 mt-1">
+                                            <span className="font-semibold">Orientation:</span> {stampOrientation}
+                                        </p>
+                                    )}
+                                </div>
                             </div>
                         </div>
                     )}

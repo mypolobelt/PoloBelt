@@ -15,6 +15,7 @@ interface Stage4CustomerDetailsProps {
     buckleFinish: string
     hasStamp: boolean
     stampImage: string | null
+    stampOrientation: 'Buckle Left' | 'Buckle Right' | ''
     teamColorImage: string | null
     comments: string
     sizeRows: SizeRow[]
@@ -35,6 +36,7 @@ export const Stage4CustomerDetails = ({
     buckleFinish,
     hasStamp,
     stampImage,
+    stampOrientation,
     teamColorImage,
     comments,
     sizeRows,
@@ -123,6 +125,7 @@ export const Stage4CustomerDetails = ({
                             leatherColor,
                             buckleFinish,
                             hasStamp,
+                            stampOrientation,
                         }}
                         sizeOrders={sizeOrders}
                         onResetDesign={onResetDesign}
@@ -150,6 +153,7 @@ export const Stage4CustomerDetails = ({
                     buckleFinish={buckleFinish}
                     hasStamp={hasStamp}
                     stampImage={stampImage}
+                    stampOrientation={stampOrientation}
                     sizeRows={sizeRows}
                     onConfirm={handleModalConfirm}
                     onEdit={() => setShowReviewModal(false)}

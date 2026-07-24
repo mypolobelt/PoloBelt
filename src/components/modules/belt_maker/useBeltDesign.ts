@@ -53,6 +53,7 @@ export const useBeltDesign = () => {
   const [threadColor3, setThreadColor3] = useState("");
   const [stripeColor, setStripeColor] = useState("");
   const [stampImage, setStampImage] = useState<string | null>(null);
+  const [stampOrientation, setStampOrientation] = useState<'Buckle Left' | 'Buckle Right' | ''>('');
   const [teamColorImage, setTeamColorImage] = useState<string | null>(null);
   const [comments, setComments] = useState<string>("");
   const [sizeRows, setSizeRows] = useState<SizeRow[]>([
@@ -559,6 +560,8 @@ export const useBeltDesign = () => {
     showThreadColor3,
     showStripeColor,
     stampImage,
+    stampOrientation,
+    setStampOrientation,
     teamColorImage,
     comments,
     setComments,

@@ -34,6 +34,7 @@ interface OrderData {
     leatherColor: string;
     buckleFinish: string;
     hasStamp: boolean;
+    stampOrientation?: string;
     stampImage?: string;
     teamColorImage?: string;
     comments?: string;
@@ -383,6 +384,7 @@ function buildOrderEmail(data: OrderData, threadColorDetails: ThreadColorDetail[
             <p><strong>Thread Colours:</strong></p>
             <ul>${threadColorDetails.map(tc => `<li>${tc.name} ${tc.id}</li>`).join("") || "<li>None specified</li>"}</ul>
             <p><strong>Custom Stamp:</strong> ${data.designDetails.hasStamp ? "Yes - See attached file" : "No"}</p>
+            ${data.designDetails.stampOrientation ? `<p><strong>Stamp Orientation:</strong> ${escapeHtml(data.designDetails.stampOrientation)}</p>` : ""}
           </div>
 
           <div class="section">

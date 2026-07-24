@@ -26,6 +26,8 @@ export default function BeltMaker() {
         showThreadColor3,
         showStripeColor,
         stampImage,
+        stampOrientation,
+        setStampOrientation,
         teamColorImage,
         comments,
         setComments,
@@ -133,6 +135,8 @@ export default function BeltMaker() {
                         setBuckleFinish={setBuckleFinish}
                         stampImage={stampImage}
                         setStampImage={setStampImage}
+                        stampOrientation={stampOrientation}
+                        setStampOrientation={setStampOrientation}
                         teamColorImage={teamColorImage}
                         setTeamColorImage={setTeamColorImage}
                         canProceed={canProceedToStage3()}
@@ -173,6 +177,7 @@ export default function BeltMaker() {
                         buckleFinish={buckleFinish}
                         hasStamp={hasStamp}
                         stampImage={stampImage}
+                        stampOrientation={stampOrientation}
                         teamColorImage={teamColorImage}
                         comments={comments}
                         sizeRows={sizeRows}
