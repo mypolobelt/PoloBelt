@@ -228,7 +228,7 @@ export function OrderForm({
               </div>
 
               {/* Desktop: single row */}
-              <div className="hidden lg:grid lg:grid-cols-[1fr_1fr_1.2fr_1fr_1fr_80px_36px] gap-3 items-center">
+              <div className={`hidden lg:grid ${stampImage ? 'lg:grid-cols-[1fr_1fr_1.2fr_1fr_1fr_80px_36px]' : 'lg:grid-cols-[1fr_1fr_1.2fr_1fr_80px_36px]'} gap-3 items-center`}>
                 <select
                   value={row.productType}
                   onChange={(e) => {
@@ -273,18 +273,20 @@ export function OrderForm({
 
                 <StampedField row={row} />
 
-                {stampImage && row.productType === 'Belt' && row.stamped === 'Yes' ? (
-                  <select
-                    value={row.stampOrientation || ''}
-                    onChange={(e) => onUpdateOrientation(row.id, e.target.value as 'Buckle Left' | 'Buckle Right' | '')}
-                    className={selectClass}
-                  >
-                    <option value="">Orientation?</option>
-                    <option value="Buckle Left">Buckle Left</option>
-                    <option value="Buckle Right">Buckle Right</option>
-                  </select>
-                ) : (
-                  <div className={disabledSelectClass}>—</div>
+                {stampImage && (
+                  row.productType === 'Belt' && row.stamped === 'Yes' ? (
+                    <select
+                      value={row.stampOrientation || ''}
+                      onChange={(e) => onUpdateOrientation(row.id, e.target.value as 'Buckle Left' | 'Buckle Right' | '')}
+                      className={selectClass}
+                    >
+                      <option value="">Orientation?</option>
+                      <option value="Buckle Left">Buckle Left</option>
+                      <option value="Buckle Right">Buckle Right</option>
+                    </select>
+                  ) : (
+                    <div className={disabledSelectClass}>—</div>
+                  )
                 )}
 
                 {/* Qty stepper */}

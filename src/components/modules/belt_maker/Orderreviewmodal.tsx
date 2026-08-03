@@ -268,7 +268,8 @@ export const OrderReviewModal = ({
                         {validRows.length === 0 ? (
                             <p className="text-xs text-gray-400 italic">No sizes added.</p>
                         ) : (
-                            <table className="w-full text-xs">
+                            <div className="overflow-x-auto -mx-1">
+                            <table className="w-full text-xs min-w-85">
                                 <thead>
                                     <tr className="text-left text-[10px] uppercase tracking-wider text-gray-400 border-b border-gray-200">
                                         <th className="pb-2 font-semibold">Product</th>
@@ -327,6 +328,7 @@ export const OrderReviewModal = ({
                                     </tr>
                                 </tfoot>
                             </table>
+                            </div>
                         )}
                     </div>
 
