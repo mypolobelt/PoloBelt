@@ -26,9 +26,7 @@ export default function BeltMaker() {
         showThreadColor3,
         showStripeColor,
         stampImage,
-        stampOrientation,
-        setStampOrientation,
-        teamColorImage,
+        teamColorImages,
         comments,
         setComments,
         sizeRows,
@@ -46,13 +44,14 @@ export default function BeltMaker() {
         setThreadColor3,
         setStripeColor,
         setStampImage,
-        setTeamColorImage,
+        setTeamColorImages,
         setOuterStripeColor,
         setInnerStripeColor,
         goToStage,
         handleAddSizeRow,
         handleUpdateSizeRow,
         handleRemoveSizeRow,
+        handleUpdateRowOrientation,
         handleResetDesign,
         handleResetOrder,
         handlePresetLoad,
@@ -135,10 +134,8 @@ export default function BeltMaker() {
                         setBuckleFinish={setBuckleFinish}
                         stampImage={stampImage}
                         setStampImage={setStampImage}
-                        stampOrientation={stampOrientation}
-                        setStampOrientation={setStampOrientation}
-                        teamColorImage={teamColorImage}
-                        setTeamColorImage={setTeamColorImage}
+                        teamColorImages={teamColorImages}
+                        setTeamColorImages={setTeamColorImages}
                         canProceed={canProceedToStage3()}
                         onBack={handleBackToDesignSelection}
                         onContinue={() => goToStage(3)}
@@ -148,7 +145,8 @@ export default function BeltMaker() {
                 {currentStage === 3 && (
                     <Stage3SizesAndPricing
                         stampImage={stampImage}
-                        teamColorImage={teamColorImage}
+                        teamColorImages={teamColorImages}
+                        onUpdateOrientation={handleUpdateRowOrientation}
                         comments={comments}
                         onCommentsChange={setComments}
                         designName={designName}
@@ -177,8 +175,7 @@ export default function BeltMaker() {
                         buckleFinish={buckleFinish}
                         hasStamp={hasStamp}
                         stampImage={stampImage}
-                        stampOrientation={stampOrientation}
-                        teamColorImage={teamColorImage}
+                        teamColorImages={teamColorImages}
                         comments={comments}
                         sizeRows={sizeRows}
                         gridData={gridData}

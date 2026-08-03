@@ -72,7 +72,6 @@ interface OrderReviewModalProps {
     buckleFinish: string
     hasStamp: boolean
     stampImage: string | null
-    stampOrientation?: 'Buckle Left' | 'Buckle Right' | ''
     sizeRows: SizeRow[]
     onConfirm: () => void
     onEdit: () => void
@@ -100,7 +99,6 @@ export const OrderReviewModal = ({
     buckleFinish,
     hasStamp,
     stampImage,
-    stampOrientation,
     sizeRows,
     onConfirm,
     onEdit,
@@ -257,16 +255,9 @@ export const OrderReviewModal = ({
                                     alt="Custom stamp"
                                     className="w-16 h-16 object-contain border border-gray-200 bg-gray-50 p-1"
                                 />
-                                <div>
-                                    <p className="text-xs text-gray-500">
-                                        Your uploaded logo will be embossed on stamped belts.
-                                    </p>
-                                    {stampOrientation && (
-                                        <p className="text-xs text-gray-700 mt-1">
-                                            <span className="font-semibold">Orientation:</span> {stampOrientation}
-                                        </p>
-                                    )}
-                                </div>
+                                <p className="text-xs text-gray-500">
+                                    Your uploaded logo will be embossed on stamped belts. Orientation is set per size below.
+                                </p>
                             </div>
                         </div>
                     )}
@@ -284,6 +275,7 @@ export const OrderReviewModal = ({
                                         <th className="pb-2 font-semibold">Size</th>
                                         <th className="pb-2 font-semibold">Width</th>
                                         {hasStamp && <th className="pb-2 font-semibold">Stamp</th>}
+                                        {hasStamp && <th className="pb-2 font-semibold">Orientation</th>}
                                         <th className="pb-2 font-semibold text-right">Qty</th>
                                     </tr>
                                 </thead>
@@ -309,6 +301,14 @@ export const OrderReviewModal = ({
                                                     }
                                                 </td>
                                             )}
+                                            {hasStamp && (
+                                                <td className="py-2 text-xs text-gray-600">
+                                                    {row.stamped === 'Yes' && row.stampOrientation
+                                                        ? row.stampOrientation
+                                                        : <span className="text-gray-300">—</span>
+                                                    }
+                                                </td>
+                                            )}
                                             <td className="py-2 text-right font-bold text-gray-900">{row.quantity}</td>
                                         </tr>
                                     ))}
@@ -316,7 +316,7 @@ export const OrderReviewModal = ({
                                 <tfoot>
                                     <tr className="border-t-2 border-gray-200">
                                         <td
-                                            colSpan={hasStamp ? 4 : 3}
+                                            colSpan={hasStamp ? 5 : 3}
                                             className="pt-2.5 text-[10px] uppercase tracking-wider text-gray-400 font-semibold"
                                         >
                                             Total items

@@ -12,6 +12,7 @@ interface SizeOrder {
   size: string
   width: string
   stamped: 'Yes' | 'No'
+  stampOrientation?: string
   quantity: number
 }
 
@@ -23,13 +24,12 @@ interface DesignDetails {
   leatherColor: string
   buckleFinish: string
   hasStamp: boolean
-  stampOrientation?: string
 }
 
 interface CustomerFormProps {
   canvasRef: React.RefObject<HTMLCanvasElement>
   stampImage: string | null
-  teamColorImage?: string | null
+  teamColorImages?: string[]
   comments?: string
   designDetails?: DesignDetails
   gridData?: string[][]
@@ -55,7 +55,7 @@ export function CustomerForm({
   canvasRef: _canvasRef,
   gridData,
   stampImage,
-  teamColorImage,
+  teamColorImages,
   comments,
   designDetails,
   sizeOrders,
@@ -156,7 +156,7 @@ export function CustomerForm({
             hasStamp: false,
           }),
           stampImage,
-          teamColorImage: teamColorImage || undefined,
+          teamColorImages: teamColorImages && teamColorImages.length > 0 ? teamColorImages : undefined,
           comments: comments || undefined,
           beltImage,
           threadColorDetails,

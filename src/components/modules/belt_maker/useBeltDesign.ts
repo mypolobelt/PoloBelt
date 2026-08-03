@@ -37,6 +37,7 @@ export interface SizeRow {
   size: string;
   width: "Standard (3cm)" | "Slim (2.5cm)" | "";
   stamped: "Yes" | "No";
+  stampOrientation?: "Buckle Left" | "Buckle Right" | "";
   quantity: number;
 }
 export type Stage = 1 | 2 | 3 | 4;
@@ -53,8 +54,7 @@ export const useBeltDesign = () => {
   const [threadColor3, setThreadColor3] = useState("");
   const [stripeColor, setStripeColor] = useState("");
   const [stampImage, setStampImage] = useState<string | null>(null);
-  const [stampOrientation, setStampOrientation] = useState<'Buckle Left' | 'Buckle Right' | ''>('');
-  const [teamColorImage, setTeamColorImage] = useState<string | null>(null);
+  const [teamColorImages, setTeamColorImages] = useState<string[]>([]);
   const [comments, setComments] = useState<string>("");
   const [sizeRows, setSizeRows] = useState<SizeRow[]>([
     {
@@ -322,6 +322,7 @@ export const useBeltDesign = () => {
           size,
           width,
           stamped: resolvedStamped,
+          stampOrientation: resolvedStamped === "No" ? "" : row.stampOrientation,
           quantity,
         };
       }),
@@ -334,6 +335,17 @@ export const useBeltDesign = () => {
     }
   };
 
+  const handleUpdateRowOrientation = (
+    id: string,
+    orientation: "Buckle Left" | "Buckle Right" | "",
+  ) => {
+    setSizeRows((rows) =>
+      rows.map((row) =>
+        row.id === id ? { ...row, stampOrientation: orientation } : row,
+      ),
+    );
+  };
+
   const handleSetStampImage = (image: string | null) => {
     setStampImage(image);
     if (image) {
@@ -343,7 +355,9 @@ export const useBeltDesign = () => {
         ),
       );
     } else {
-      setSizeRows((rows) => rows.map((row) => ({ ...row, stamped: "No" })));
+      setSizeRows((rows) =>
+        rows.map((row) => ({ ...row, stamped: "No", stampOrientation: "" })),
+      );
     }
   };
 
@@ -358,7 +372,7 @@ export const useBeltDesign = () => {
     setThreadColor3("");
     setStripeColor("");
     setStampImage(null);
-    setTeamColorImage(null);
+    setTeamColorImages([]);
     setSelectedPreset(null);
     setClassicColorCount(null);
     setClassic2StripeColorCount(null);
@@ -560,9 +574,7 @@ export const useBeltDesign = () => {
     showThreadColor3,
     showStripeColor,
     stampImage,
-    stampOrientation,
-    setStampOrientation,
-    teamColorImage,
+    teamColorImages,
     comments,
     setComments,
     sizeRows,
@@ -581,7 +593,7 @@ export const useBeltDesign = () => {
     setThreadColor3: handleSetThreadColor3,
     setStripeColor: handleSetStripeColor,
     setStampImage: handleSetStampImage,
-    setTeamColorImage,
+    setTeamColorImages,
     setOuterStripeColor: handleSetOuterStripeColor,
     setInnerStripeColor: handleSetInnerStripeColor,
     // Actions
@@ -589,6 +601,7 @@ export const useBeltDesign = () => {
     handleAddSizeRow,
     handleUpdateSizeRow,
     handleRemoveSizeRow,
+    handleUpdateRowOrientation,
     handleResetDesign,
     handleResetOrder,
     handlePresetLoad,

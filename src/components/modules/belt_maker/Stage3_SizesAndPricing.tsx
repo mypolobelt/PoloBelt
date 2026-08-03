@@ -43,12 +43,13 @@ interface Stage3SizesAndPricingProps {
     buckleFinish: string
     hasStamp: boolean
     stampImage: string | null
-    teamColorImage: string | null
+    teamColorImages: string[]
     comments: string
     onCommentsChange: (val: string) => void
     sizeRows: SizeRow[]
     onAddSize: () => void
     onUpdateSize: (id: string, productType: ProductType, size: string, width: 'Standard (3cm)' | 'Slim (2.5cm)' | '', stamped: 'Yes' | 'No', quantity: number) => void
+    onUpdateOrientation: (id: string, orientation: 'Buckle Left' | 'Buckle Right' | '') => void
     onRemoveSize: (id: string) => void
     canProceed: boolean
     onBack: () => void
@@ -81,12 +82,13 @@ export const Stage3SizesAndPricing = ({
     buckleFinish,
     hasStamp,
     stampImage,
-    teamColorImage,
+    teamColorImages,
     comments,
     onCommentsChange,
     sizeRows,
     onAddSize,
     onUpdateSize,
+    onUpdateOrientation,
     onRemoveSize,
     canProceed,
     onBack,
@@ -175,7 +177,7 @@ export const Stage3SizesAndPricing = ({
                     buckleFinish={buckleFinish}
                     hasStamp={hasStamp}
                     stampImage={stampImage}
-                    teamColorImage={teamColorImage}
+                    teamColorImages={teamColorImages}
                 />
                 <div className="mt-6">
                     <OrderForm
@@ -183,6 +185,7 @@ export const Stage3SizesAndPricing = ({
                         stampImage={stampImage}
                         onAddSize={onAddSize}
                         onUpdateSize={onUpdateSize}
+                        onUpdateOrientation={onUpdateOrientation}
                         onRemoveSize={onRemoveSize}
                     />
                 </div>

@@ -34,9 +34,8 @@ interface OrderData {
     leatherColor: string;
     buckleFinish: string;
     hasStamp: boolean;
-    stampOrientation?: string;
     stampImage?: string;
-    teamColorImage?: string;
+    teamColorImages?: string[];
     comments?: string;
     beltImage?: string;
   };
@@ -44,6 +43,7 @@ interface OrderData {
     size: string;
     width?: string;
     stamped?: "Yes" | "No";
+    stampOrientation?: string;
     quantity: number;
   }>;
   timestamp: string;
@@ -126,24 +126,24 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // Upload team colour image to Vercel Blob → public URL for email
-    let teamColorImageUrl: string | null = null;
-    if (data.designDetails.teamColorImage) {
+    // Upload team colour images (up to 3) to Vercel Blob → public URLs for email
+    const teamColorImageUrls: string[] = [];
+    for (const tcDataUrl of (data.designDetails.teamColorImages || [])) {
       try {
-        const tcBase64 = data.designDetails.teamColorImage.replace(/^data:image\/[^;]+;base64,/, "");
+        const tcBase64 = tcDataUrl.replace(/^data:image\/[^;]+;base64,/, "");
         const rawBuffer = Buffer.from(tcBase64, "base64");
-        // Convert to PNG via sharp so react-pdf can render it regardless of upload format
         const pngBuffer = await sharp(rawBuffer).png().toBuffer();
         const blob = await put(`team-colours/tc-${Date.now()}.png`, pngBuffer, {
           access: "public",
           contentType: "image/png",
         });
-        teamColorImageUrl = blob.url;
+        teamColorImageUrls.push(blob.url);
         blobUrlsToDelete.push(blob.url);
       } catch (err) {
         console.error("Team colour image blob upload error:", err);
       }
     }
+    const teamColorImageUrl = teamColorImageUrls[0] ?? null;
 
     // Convert logo.webp → PNG base64 for @react-pdf/renderer (webp not supported)
     let logoPngDataUri: string | null = null;
@@ -181,7 +181,7 @@ export async function POST(request: NextRequest) {
       console.error("PDF generation error:", err);
     }
 
-    const emailHTML = buildOrderEmail(data, threadColorDetails, beltImageUrl, stampImageUrl, baseUrl, designPdfUrl, teamColorImageUrl);
+    const emailHTML = buildOrderEmail(data, threadColorDetails, beltImageUrl, stampImageUrl, baseUrl, designPdfUrl, teamColorImageUrls);
     const fromAddress = process.env.RESEND_FROM_ADDRESS || "";
     const adminEmail = process.env.ADMIN_EMAIL || "";
 
@@ -238,7 +238,7 @@ export async function POST(request: NextRequest) {
   }
 }
 
-function buildOrderEmail(data: OrderData, threadColorDetails: ThreadColorDetail[], beltImageUrl: string | null = null, stampImageUrl: string | null = null, baseUrl: string = "", designPdfUrl: string | null = null, teamColorImageUrl: string | null = null): string {
+function buildOrderEmail(data: OrderData, threadColorDetails: ThreadColorDetail[], beltImageUrl: string | null = null, stampImageUrl: string | null = null, baseUrl: string = "", designPdfUrl: string | null = null, teamColorImageUrls: string[] = []): string {
   const threadSwatchesHtml = threadColorDetails.length > 0
     ? threadColorDetails.map(tc => `
         <div style="display:flex;align-items:center;margin-bottom:6px;">
@@ -249,8 +249,10 @@ function buildOrderEmail(data: OrderData, threadColorDetails: ThreadColorDetail[
 
   const orderItemsList = data.orderQuantities
     .map(
-      (item) =>
-        `<li>${item.size} | ${item.width || "Width not specified"} | Stamped: ${item.stamped || "No"} | Qty: ${item.quantity}</li>`,
+      (item) => {
+        const orientationPart = item.stamped === "Yes" && item.stampOrientation ? ` | Orientation: ${item.stampOrientation}` : "";
+        return `<li>${item.size} | ${item.width || "Width not specified"} | Stamped: ${item.stamped || "No"}${orientationPart} | Qty: ${item.quantity}</li>`;
+      }
     )
     .join("");
 
@@ -276,8 +278,8 @@ function buildOrderEmail(data: OrderData, threadColorDetails: ThreadColorDetail[
     ? `<img src="${stampImageUrl}" alt="Stamp" style="width:80px;height:80px;object-fit:contain;" />`
     : "<p style='font-size:13px;color:#888;'>None</p>";
 
-  const teamColorCellHtml = teamColorImageUrl
-    ? `<img src="${teamColorImageUrl}" alt="Team Colours" style="width:80px;height:80px;object-fit:contain;" />`
+  const teamColorCellHtml = teamColorImageUrls.length > 0
+    ? teamColorImageUrls.map((url, i) => `<img src="${url}" alt="Team Colour ${i + 1}" style="width:60px;height:60px;object-fit:contain;margin-right:6px;" />`).join("")
     : "<p style='font-size:13px;color:#888;'>None</p>";
 
   return `
@@ -384,7 +386,6 @@ function buildOrderEmail(data: OrderData, threadColorDetails: ThreadColorDetail[
             <p><strong>Thread Colours:</strong></p>
             <ul>${threadColorDetails.map(tc => `<li>${tc.name} ${tc.id}</li>`).join("") || "<li>None specified</li>"}</ul>
             <p><strong>Custom Stamp:</strong> ${data.designDetails.hasStamp ? "Yes - See attached file" : "No"}</p>
-            ${data.designDetails.stampOrientation ? `<p><strong>Stamp Orientation:</strong> ${escapeHtml(data.designDetails.stampOrientation)}</p>` : ""}
           </div>
 
           <div class="section">
