@@ -75,6 +75,7 @@ const styles = StyleSheet.create({
     stampImage: {
         width: 80,
         height: 80,
+        objectFit: 'contain' as const,
     },
     noStampText: {
         fontSize: 9,
