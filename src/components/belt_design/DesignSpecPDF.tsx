@@ -82,6 +82,16 @@ const styles = StyleSheet.create({
         color: '#888',
         fontStyle: 'italic',
     },
+    teamColorRow: {
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        gap: 6,
+    },
+    teamColorImage: {
+        width: 38,
+        height: 38,
+        objectFit: 'contain' as const,
+    },
 })
 
 export interface ThreadColorDetail {
@@ -97,7 +107,7 @@ export interface DesignSpecPDFProps {
     leatherColor: string
     buckleFinish: string
     stampImage: string | null
-    teamColorImage?: string | null
+    teamColorImages?: string[]
     logoUrl?: string
 }
 
@@ -108,7 +118,7 @@ export const DesignSpecPDFDocument = ({
     leatherColor,
     buckleFinish,
     stampImage,
-    teamColorImage,
+    teamColorImages,
     logoUrl,
 }: DesignSpecPDFProps) => (
     <Document>
@@ -160,8 +170,12 @@ export const DesignSpecPDFDocument = ({
                 {/* Team Colours Reference */}
                 <View style={styles.infoSection}>
                     <Text style={styles.sectionTitle}>Team Colours:</Text>
-                    {teamColorImage ? (
-                        <Image src={teamColorImage} style={{ width: 80, height: 80, objectFit: 'contain' }} />
+                    {teamColorImages && teamColorImages.length > 0 ? (
+                        <View style={styles.teamColorRow}>
+                            {teamColorImages.map((img, i) => (
+                                <Image key={i} src={img} style={styles.teamColorImage} />
+                            ))}
+                        </View>
                     ) : (
                         <Text style={styles.noStampText}>None</Text>
                     )}

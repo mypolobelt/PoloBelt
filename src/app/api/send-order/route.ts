@@ -143,8 +143,6 @@ export async function POST(request: NextRequest) {
         console.error("Team colour image blob upload error:", err);
       }
     }
-    const teamColorImageUrl = teamColorImageUrls[0] ?? null;
-
     // Convert logo.webp → PNG base64 for @react-pdf/renderer (webp not supported)
     let logoPngDataUri: string | null = null;
     try {
@@ -165,7 +163,7 @@ export async function POST(request: NextRequest) {
         leatherColor: data.designDetails.leatherColor,
         buckleFinish: data.designDetails.buckleFinish,
         stampImage: stampImageUrl || data.designDetails.stampImage || null,
-        teamColorImage: teamColorImageUrl || null,
+        teamColorImages: teamColorImageUrls,
         logoUrl: logoPngDataUri || undefined,
       });
       // @ts-expect-error — renderToBuffer expects DocumentProps but our wrapper renders a Document

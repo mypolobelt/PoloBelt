@@ -13,7 +13,7 @@ interface DownloadPDFButtonProps {
     leatherColor: string
     buckleFinish: string
     stampImage: string | null
-    teamColorImage?: string | null
+    teamColorImages?: string[]
     canvasRef: RefObject<HTMLCanvasElement>
     gridData?: string[][]
 }
@@ -63,7 +63,7 @@ export function DownloadPDFButton({
     leatherColor,
     buckleFinish,
     stampImage,
-    teamColorImage,
+    teamColorImages,
     canvasRef,
     gridData,
 }: DownloadPDFButtonProps) {
@@ -86,7 +86,9 @@ export function DownloadPDFButton({
 
             const threadColorDetails = parseThreadColorDetails(threadColors)
             const logoUrl = await getLogoPngDataUri()
-            const pngTeamColorImage = teamColorImage ? await convertImageToPng(teamColorImage) : null
+            const pngTeamColorImages = (
+                await Promise.all((teamColorImages ?? []).map((img) => convertImageToPng(img)))
+            ).filter((img): img is string => img !== null)
             const pngStampImage = stampImage ? await convertImageToPng(stampImage) : null
 
             const doc = (
@@ -97,7 +99,7 @@ export function DownloadPDFButton({
                     leatherColor={leatherColor}
                     buckleFinish={buckleFinish}
                     stampImage={pngStampImage}
-                    teamColorImage={pngTeamColorImage}
+                    teamColorImages={pngTeamColorImages}
                     logoUrl={logoUrl}
                 />
             )

@@ -103,7 +103,7 @@ export const Stage4CustomerDetails = ({
                         leatherColor={leatherColor}
                         buckleFinish={buckleFinish}
                         stampImage={stampImage}
-                        teamColorImage={teamColorImages[0] ?? null}
+                        teamColorImages={teamColorImages}
                         canvasRef={canvasRef}
                         gridData={gridData}
                     />
