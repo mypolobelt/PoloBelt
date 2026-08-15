@@ -46,6 +46,7 @@ export function OrderForm({
   onRemoveSize,
 }: OrderFormProps) {
   const [showSizingModal, setShowSizingModal] = useState(false)
+  const [showOrientationInfo, setShowOrientationInfo] = useState(false)
 
   // Determines whether the stamped dropdown should be disabled for a given row,
   // and what label to show in place of the dropdown.
@@ -94,12 +95,22 @@ export function OrderForm({
         <h3 className="text-xl   font-bold  ">
           Order Quantities
         </h3>
-        <button
-          onClick={() => setShowSizingModal(true)}
-          className="text-xs font-semibold text-blue-600 hover:underline whitespace-nowrap"
-        >
-          Sizing Guide →
-        </button>
+        <div className="flex items-center gap-4">
+          {stampImage && (
+            <button
+              onClick={() => setShowOrientationInfo(true)}
+              className="text-xs font-semibold text-blue-600 hover:underline whitespace-nowrap"
+            >
+              What does Buckle Left/Right mean?
+            </button>
+          )}
+          <button
+            onClick={() => setShowSizingModal(true)}
+            className="text-xs font-semibold text-blue-600 hover:underline whitespace-nowrap"
+          >
+            Sizing Guide →
+          </button>
+        </div>
       </div>
 
       <div className="px-5 py-3 bg-amber-50 border-b border-amber-200">
@@ -185,7 +196,16 @@ export function OrderForm({
                   </div>
                   {stampImage && row.productType === 'Belt' && row.stamped === 'Yes' && (
                     <div className="col-span-2">
-                      <label className={labelClass}>Stamp Orientation</label>
+                      <div className="flex items-center gap-2 mb-1">
+                        <label className={labelClass}>Stamp Orientation</label>
+                        <button
+                          type="button"
+                          onClick={() => setShowOrientationInfo(true)}
+                          className="w-4 h-4 rounded-full bg-gray-200 text-gray-600 text-[10px] font-bold hover:bg-gold hover:text-white transition-colors flex items-center justify-center"
+                        >
+                          i
+                        </button>
+                      </div>
                       <select
                         value={row.stampOrientation || ''}
                         onChange={(e) => onUpdateOrientation(row.id, e.target.value as 'Buckle Left' | 'Buckle Right' | '')}
@@ -369,6 +389,30 @@ export function OrderForm({
             </div>
             <div className="sticky bottom-0 bg-white border-t-2 border-gold p-4 flex justify-center">
               <Button onClick={() => setShowSizingModal(false)}>Close</Button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Stamp Orientation Info Modal */}
+      {showOrientationInfo && (
+        <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-none shadow-2xl max-w-lg w-full">
+            <div className="sticky top-0 bg-white border-b-2 border-gold p-4 flex justify-between items-center">
+              <h2 className="text-lg font-bold">Stamp Orientation</h2>
+              <button onClick={() => setShowOrientationInfo(false)} className="text-2xl text-charcoal">×</button>
+            </div>
+            <div className="p-6 space-y-3 text-sm text-charcoal">
+              <p className="font-semibold">Buckle Left / Buckle Right — what this means:</p>
+              <p>This refers to which side the buckle sits on when you&apos;re wearing the belt.</p>
+              <ul className="space-y-2 pl-2">
+                <li><span className="font-semibold">Buckle Left</span> — the buckle is held in your left hand, with the belt tail in your right.</li>
+                <li><span className="font-semibold">Buckle Right</span> — the buckle is held in your right hand, with the belt tail in your left.</li>
+              </ul>
+              <p className="text-xs text-gray-500 italic pt-1">This affects which direction your stamp will appear once the belt is worn, so it&apos;s worth getting right before you order.</p>
+            </div>
+            <div className="border-t-2 border-gold p-4 flex justify-center">
+              <Button onClick={() => setShowOrientationInfo(false)}>Close</Button>
             </div>
           </div>
         </div>
