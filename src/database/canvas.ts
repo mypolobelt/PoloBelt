@@ -71,7 +71,7 @@ export const renderBeltCanvas = (
   const leatherColourMap: Record<string, string> = {
     Brown: '#552B06',
     Black: '#1A1A1A',
-    Tan: '#B8906B',
+    Tan: '#A6672D',
   };
 
   const leatherColour = leatherColourMap[leatherColorName] || '#552B06';

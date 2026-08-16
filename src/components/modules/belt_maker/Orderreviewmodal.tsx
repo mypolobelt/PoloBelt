@@ -150,7 +150,7 @@ export const OrderReviewModal = ({
     const leatherDotColor: Record<string, string> = {
         Brown: '#7B4F2E',
         Black: '#1A1A1A',
-        Tan: '#C8935A',
+        Tan: '#A6672D',
     }
 
     return (

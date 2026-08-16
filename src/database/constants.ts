@@ -1162,7 +1162,7 @@ export const BASIC_PALETTE = [
 export const LEATHER_COLORS = {
   Brown: "#552B06",
   Black: "#1A1A1A",
-  Tan: "#B8906B",
+  Tan: "#A6672D",
 };
 
 export const DESIGN_PRESETS: DesignPresets = {
