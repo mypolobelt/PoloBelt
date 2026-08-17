@@ -95,22 +95,12 @@ export function OrderForm({
         <h3 className="text-xl   font-bold  ">
           Order Quantities
         </h3>
-        <div className="flex items-center gap-4">
-          {stampImage && (
-            <button
-              onClick={() => setShowOrientationInfo(true)}
-              className="text-xs font-semibold text-blue-600 hover:underline whitespace-nowrap"
-            >
-              What does Buckle Left/Right mean?
-            </button>
-          )}
-          <button
-            onClick={() => setShowSizingModal(true)}
-            className="text-xs font-semibold text-blue-600 hover:underline whitespace-nowrap"
-          >
-            Sizing Guide →
-          </button>
-        </div>
+        <button
+          onClick={() => setShowSizingModal(true)}
+          className="text-xs font-semibold text-blue-600 hover:underline whitespace-nowrap"
+        >
+          Sizing Guide →
+        </button>
       </div>
 
       <div className="px-5 py-3 bg-amber-50 border-b border-amber-200">
@@ -295,15 +285,24 @@ export function OrderForm({
 
                 {stampImage && (
                   row.productType === 'Belt' && row.stamped === 'Yes' ? (
-                    <select
-                      value={row.stampOrientation || ''}
-                      onChange={(e) => onUpdateOrientation(row.id, e.target.value as 'Buckle Left' | 'Buckle Right' | '')}
-                      className={selectClass}
-                    >
-                      <option value="">Orientation?</option>
-                      <option value="Buckle Left">Buckle Left</option>
-                      <option value="Buckle Right">Buckle Right</option>
-                    </select>
+                    <div className="flex items-center gap-1.5">
+                      <select
+                        value={row.stampOrientation || ''}
+                        onChange={(e) => onUpdateOrientation(row.id, e.target.value as 'Buckle Left' | 'Buckle Right' | '')}
+                        className={selectClass}
+                      >
+                        <option value="">Orientation?</option>
+                        <option value="Buckle Left">Buckle Left</option>
+                        <option value="Buckle Right">Buckle Right</option>
+                      </select>
+                      <button
+                        type="button"
+                        onClick={() => setShowOrientationInfo(true)}
+                        className="w-4 h-4 shrink-0 rounded-full bg-gray-200 text-gray-600 text-[10px] font-bold hover:bg-gold hover:text-white transition-colors flex items-center justify-center"
+                      >
+                        i
+                      </button>
+                    </div>
                   ) : (
                     <div className={disabledSelectClass}>—</div>
                   )
@@ -397,7 +396,7 @@ export function OrderForm({
       {/* Stamp Orientation Info Modal */}
       {showOrientationInfo && (
         <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-none shadow-2xl max-w-lg w-full">
+          <div className="bg-white rounded-none shadow-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto">
             <div className="sticky top-0 bg-white border-b-2 border-gold p-4 flex justify-between items-center">
               <h2 className="text-lg font-bold">Stamp Orientation</h2>
               <button onClick={() => setShowOrientationInfo(false)} className="text-2xl text-charcoal">×</button>
