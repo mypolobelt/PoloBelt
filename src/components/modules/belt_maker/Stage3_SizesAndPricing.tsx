@@ -268,17 +268,13 @@ export const Stage3SizesAndPricing = ({
 
                 {/* Comments / Special Requests */}
                 <div className="bg-white border p-5 rounded-none shadow-sm mt-4">
-                    <h3 className="text-base font-bold mb-1 pb-2 border-b-2 border-gold">
+                    <h3 className="text-base font-bold mb-3 pb-2 border-b-2 border-gold">
                         Comments / Special Requests
                     </h3>
-                    <p className="text-xs text-blue-500 italic mb-3">
-                        Add any special requests, required delivery dates, or other notes here.
-                    </p>
                     <textarea
                         value={comments}
                         onChange={(e) => onCommentsChange(e.target.value)}
                         rows={4}
-                        placeholder="e.g. Required by 15th August, special monogram request..."
                         className="w-full px-3 py-2 border-2 border-gray-300 rounded-none font-sans text-sm focus:outline-none focus:border-gold resize-none"
                     />
                 </div>
