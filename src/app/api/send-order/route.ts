@@ -109,8 +109,10 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // Upload stamp image to Vercel Blob → public URL for email
+    // Upload stamp image to Vercel Blob → public URL for email (full, original quality —
+    // the client needs this exact file to cut the physical stamp)
     let stampImageUrl: string | null = null;
+    let stampImageForPdf: string | null = null;
     if (data.designDetails.stampImage) {
       try {
         const stampBase64 = data.designDetails.stampImage.replace(/^data:image\/[^;]+;base64,/, "");
@@ -121,6 +123,19 @@ export async function POST(request: NextRequest) {
         });
         stampImageUrl = blob.url;
         blobUrlsToDelete.push(blob.url);
+
+        // Original, un-resized file as a real attachment (not just a link) —
+        // this is what the client cuts the physical stamp from.
+        attachments.push({ filename: "stamp-logo-original.png", content: stampBase64 });
+
+        // Small, compressed copy just for the PDF spec sheet — the PDF only
+        // ever displays this at 80x80, so there's no reason to embed the
+        // multi-MB original and bloat the PDF's file size.
+        const resizedBuffer = await sharp(buffer)
+          .resize(240, 240, { fit: "inside", withoutEnlargement: true })
+          .png({ compressionLevel: 9 })
+          .toBuffer();
+        stampImageForPdf = `data:image/png;base64,${resizedBuffer.toString("base64")}`;
       } catch (err) {
         console.error("Stamp image blob upload error:", err);
       }
@@ -128,6 +143,7 @@ export async function POST(request: NextRequest) {
 
     // Upload team colour images (up to 3) to Vercel Blob → public URLs for email
     const teamColorImageUrls: string[] = [];
+    const teamColorImagesForPdf: string[] = [];
     for (const tcDataUrl of (data.designDetails.teamColorImages || [])) {
       try {
         const tcBase64 = tcDataUrl.replace(/^data:image\/[^;]+;base64,/, "");
@@ -139,6 +155,13 @@ export async function POST(request: NextRequest) {
         });
         teamColorImageUrls.push(blob.url);
         blobUrlsToDelete.push(blob.url);
+
+        // Small copy for the PDF (displayed at 38x38 there) — same reasoning as the stamp.
+        const resizedTcBuffer = await sharp(rawBuffer)
+          .resize(160, 160, { fit: "inside", withoutEnlargement: true })
+          .jpeg({ quality: 75 })
+          .toBuffer();
+        teamColorImagesForPdf.push(`data:image/jpeg;base64,${resizedTcBuffer.toString("base64")}`);
       } catch (err) {
         console.error("Team colour image blob upload error:", err);
       }
@@ -162,8 +185,8 @@ export async function POST(request: NextRequest) {
         threadColorDetails,
         leatherColor: data.designDetails.leatherColor,
         buckleFinish: data.designDetails.buckleFinish,
-        stampImage: stampImageUrl || data.designDetails.stampImage || null,
-        teamColorImages: teamColorImageUrls,
+        stampImage: stampImageForPdf || stampImageUrl || data.designDetails.stampImage || null,
+        teamColorImages: teamColorImagesForPdf.length > 0 ? teamColorImagesForPdf : teamColorImageUrls,
         logoUrl: logoPngDataUri || undefined,
       });
       // @ts-expect-error — renderToBuffer expects DocumentProps but our wrapper renders a Document
@@ -273,7 +296,9 @@ function buildOrderEmail(data: OrderData, threadColorDetails: ThreadColorDetail[
     : "";
 
   const stampImageHtml = stampImageUrl
-    ? `<img src="${stampImageUrl}" alt="Stamp" style="width:80px;height:80px;object-fit:contain;" />`
+    ? `<img src="${stampImageUrl}" alt="Stamp" style="width:80px;height:80px;object-fit:contain;" /><br/>
+       <a href="${stampImageUrl}" style="font-size:11px;color:#1a1a2e;text-decoration:underline;">Download original stamp file</a>
+       <span style="font-size:11px;color:#888;"> (also attached)</span>`
     : "<p style='font-size:13px;color:#888;'>None</p>";
 
   const teamColorCellHtml = teamColorImageUrls.length > 0

@@ -32,7 +32,7 @@ function parseThreadColorDetails(threadColors: string[]): ThreadColorDetail[] {
     })
 }
 
-async function convertImageToPng(src: string): Promise<string | null> {
+async function convertImageToPng(src: string, maxDim?: number): Promise<string | null> {
     try {
         const img = new Image()
         img.crossOrigin = 'anonymous'
@@ -41,12 +41,18 @@ async function convertImageToPng(src: string): Promise<string | null> {
             img.onload = () => resolve()
             img.onerror = reject
         })
+        const naturalWidth = img.naturalWidth || 200
+        const naturalHeight = img.naturalHeight || 200
+        // Downscale oversized uploads before embedding — the PDF only ever
+        // displays these at a small fixed size, so there's no reason to embed
+        // a multi-MB original and bloat the PDF's file size.
+        const scale = maxDim ? Math.min(1, maxDim / Math.max(naturalWidth, naturalHeight)) : 1
         const canvas = document.createElement('canvas')
-        canvas.width = img.naturalWidth || 200
-        canvas.height = img.naturalHeight || 200
+        canvas.width = Math.round(naturalWidth * scale)
+        canvas.height = Math.round(naturalHeight * scale)
         const ctx = canvas.getContext('2d')
         if (!ctx) return null
-        ctx.drawImage(img, 0, 0)
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height)
         return canvas.toDataURL('image/png')
     } catch {
         return null
@@ -87,9 +93,9 @@ export function DownloadPDFButton({
             const threadColorDetails = parseThreadColorDetails(threadColors)
             const logoUrl = await getLogoPngDataUri()
             const pngTeamColorImages = (
-                await Promise.all((teamColorImages ?? []).map((img) => convertImageToPng(img)))
+                await Promise.all((teamColorImages ?? []).map((img) => convertImageToPng(img, 160)))
             ).filter((img): img is string => img !== null)
-            const pngStampImage = stampImage ? await convertImageToPng(stampImage) : null
+            const pngStampImage = stampImage ? await convertImageToPng(stampImage, 240) : null
 
             const doc = (
                 <DesignSpecPDFDocument
