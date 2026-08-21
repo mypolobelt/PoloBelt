@@ -42,7 +42,7 @@ interface OrderData {
   orderQuantities: Array<{
     size: string;
     width?: string;
-    stamped?: "Yes" | "No";
+    stamped?: "Yes" | "No" | "";
     stampOrientation?: string;
     quantity: number;
   }>;

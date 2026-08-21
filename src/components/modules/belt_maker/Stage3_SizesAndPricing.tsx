@@ -48,7 +48,7 @@ interface Stage3SizesAndPricingProps {
     onCommentsChange: (val: string) => void
     sizeRows: SizeRow[]
     onAddSize: () => void
-    onUpdateSize: (id: string, productType: ProductType, size: string, width: 'Standard (3cm)' | 'Slim (2.5cm)' | '', stamped: 'Yes' | 'No', quantity: number) => void
+    onUpdateSize: (id: string, productType: ProductType, size: string, width: 'Standard (3cm)' | 'Slim (2.5cm)' | '', stamped: 'Yes' | 'No' | '', quantity: number) => void
     onUpdateOrientation: (id: string, orientation: 'Buckle Left' | 'Buckle Right' | '') => void
     onRemoveSize: (id: string) => void
     canProceed: boolean

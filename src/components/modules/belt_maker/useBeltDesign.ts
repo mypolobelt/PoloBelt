@@ -36,7 +36,7 @@ export interface SizeRow {
   productType: ProductType;
   size: string;
   width: "Standard (3cm)" | "Slim (2.5cm)" | "";
-  stamped: "Yes" | "No";
+  stamped: "Yes" | "No" | "";
   stampOrientation?: "Buckle Left" | "Buckle Right" | "";
   quantity: number;
 }
@@ -62,7 +62,7 @@ export const useBeltDesign = () => {
       productType: "",
       size: "",
       width: "",
-      stamped: "No",
+      stamped: "",
       quantity: 1,
     },
   ]);
@@ -276,7 +276,6 @@ export const useBeltDesign = () => {
     const newId = (
       Math.max(...sizeRows.map((r) => parseInt(r.id)), 0) + 1
     ).toString();
-    const defaultStamped: "Yes" | "No" = stampImage ? "Yes" : "No";
     setSizeRows([
       ...sizeRows,
       {
@@ -284,7 +283,7 @@ export const useBeltDesign = () => {
         productType: "",
         size: "",
         width: "",
-        stamped: defaultStamped,
+        stamped: "",
         quantity: 1,
       },
     ]);
@@ -295,26 +294,18 @@ export const useBeltDesign = () => {
     productType: ProductType,
     size: string,
     width: "Standard (3cm)" | "Slim (2.5cm)" | "",
-    stamped: "Yes" | "No",
+    stamped: "Yes" | "No" | "",
     quantity: number,
   ) => {
     setSizeRows(
       sizeRows.map((row) => {
         if (row.id !== id) return row;
 
-        // When switching product type away from Belt, clear stamp
+        // Non-belt products can't be stamped (special request only) —
+        // otherwise leave the customer's own Yes/No/unset choice as-is,
+        // never guess it for them.
         const isBelt = productType === "Belt";
-
-        // When width changes, re-apply stamp default based on stampImage
-        // rather than blindly carrying over the old stamped value
-        const widthChanged = width !== row.width;
-        const resolvedStamped: "Yes" | "No" = !isBelt
-          ? "No"
-          : widthChanged
-            ? stampImage
-              ? "Yes"
-              : "No"
-            : stamped;
+        const resolvedStamped: "Yes" | "No" | "" = !isBelt ? "No" : stamped;
 
         return {
           ...row,
@@ -322,7 +313,7 @@ export const useBeltDesign = () => {
           size,
           width,
           stamped: resolvedStamped,
-          stampOrientation: resolvedStamped === "No" ? "" : row.stampOrientation,
+          stampOrientation: resolvedStamped === "Yes" ? row.stampOrientation : "",
           quantity,
         };
       }),
@@ -348,15 +339,12 @@ export const useBeltDesign = () => {
 
   const handleSetStampImage = (image: string | null) => {
     setStampImage(image);
-    if (image) {
+    // Removing the stamp makes "stamped" moot for every row — clear it back
+    // to unset. Adding a stamp does NOT auto-select "Yes" for anyone; the
+    // customer chooses per row.
+    if (!image) {
       setSizeRows((rows) =>
-        rows.map((row) =>
-          row.width === "Standard (3cm)" ? { ...row, stamped: "Yes" } : row,
-        ),
-      );
-    } else {
-      setSizeRows((rows) =>
-        rows.map((row) => ({ ...row, stamped: "No", stampOrientation: "" })),
+        rows.map((row) => ({ ...row, stamped: "", stampOrientation: "" })),
       );
     }
   };

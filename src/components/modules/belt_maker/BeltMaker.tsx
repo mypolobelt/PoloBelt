@@ -67,7 +67,7 @@ export default function BeltMaker() {
         productType: Parameters<typeof handleUpdateSizeRow>[1],
         size: string,
         width: 'Standard (3cm)' | 'Slim (2.5cm)' | '',
-        stamped: 'Yes' | 'No',
+        stamped: 'Yes' | 'No' | '',
         quantity: number
     ) => {
         handleUpdateSizeRow(id, productType, size, width || 'Standard (3cm)', stamped, quantity)

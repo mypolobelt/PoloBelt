@@ -15,7 +15,7 @@ interface OrderFormProps {
     productType: ProductType,
     size: string,
     width: 'Standard (3cm)' | 'Slim (2.5cm)' | '',
-    stamped: 'Yes' | 'No',
+    stamped: 'Yes' | 'No' | '',
     quantity: number
   ) => void
   onUpdateOrientation: (id: string, orientation: 'Buckle Left' | 'Buckle Right' | '') => void
@@ -47,6 +47,21 @@ export function OrderForm({
 }: OrderFormProps) {
   const [showSizingModal, setShowSizingModal] = useState(false)
   const [showOrientationInfo, setShowOrientationInfo] = useState(false)
+  const [customSizeRowIds, setCustomSizeRowIds] = useState<Set<string>>(new Set())
+
+  const exitCustomSize = (rowId: string) => {
+    setCustomSizeRowIds((prev) => {
+      if (!prev.has(rowId)) return prev
+      const next = new Set(prev)
+      next.delete(rowId)
+      return next
+    })
+  }
+
+  const handleRemoveRow = (rowId: string) => {
+    exitCustomSize(rowId)
+    onRemoveSize(rowId)
+  }
 
   // Determines whether the stamped dropdown should be disabled for a given row,
   // and what label to show in place of the dropdown.
@@ -88,6 +103,58 @@ export function OrderForm({
     )
   }
 
+  const OTHER_SIZE = '__OTHER__'
+
+  const SizeField = ({ row, className }: { row: SizeRow; className?: string }) => {
+    const availableSizes = getSizesForProductType(row.productType)
+
+    if (customSizeRowIds.has(row.id)) {
+      return (
+        <div className="flex items-center gap-1">
+          <input
+            type="text"
+            value={row.size}
+            onChange={(e) => onUpdateSize(row.id, row.productType, e.target.value, row.width, row.stamped, row.quantity)}
+            placeholder="Enter size"
+            className={`${selectClass} ${className ?? ''}`}
+          />
+          <button
+            type="button"
+            onClick={() => {
+              exitCustomSize(row.id)
+              onUpdateSize(row.id, row.productType, '', row.width, row.stamped, row.quantity)
+            }}
+            title="Back to size list"
+            className="shrink-0 text-xs text-gray-400 hover:text-gray-600"
+          >
+            ↺
+          </button>
+        </div>
+      )
+    }
+
+    return (
+      <select
+        value={row.size}
+        onChange={(e) => {
+          if (e.target.value === OTHER_SIZE) {
+            setCustomSizeRowIds((prev) => new Set(prev).add(row.id))
+            onUpdateSize(row.id, row.productType, '', row.width, row.stamped, row.quantity)
+          } else {
+            onUpdateSize(row.id, row.productType, e.target.value, row.width, row.stamped, row.quantity)
+          }
+        }}
+        className={`${selectClass} ${className ?? ''}`}
+      >
+        <option value="">Select size</option>
+        {availableSizes.map((size) => (
+          <option key={size} value={size}>{size}</option>
+        ))}
+        <option value={OTHER_SIZE}>Other - specify below</option>
+      </select>
+    )
+  }
+
   return (
     <div className="bg-white rounded-none shadow-lg overflow-hidden">
       {/* Header */}
@@ -113,8 +180,6 @@ export function OrderForm({
       {/* Rows */}
       <div className="divide-y divide-gray-100">
         {sizeRows.map((row, index) => {
-          const availableSizes = getSizesForProductType(row.productType)
-
           return (
             <div key={row.id} className="px-5 py-4">
               {/* Mobile: stacked card */}
@@ -125,7 +190,7 @@ export function OrderForm({
                   </span>
                   {sizeRows.length > 1 && (
                     <button
-                      onClick={() => onRemoveSize(row.id)}
+                      onClick={() => handleRemoveRow(row.id)}
                       className="text-xs text-red-400 hover:text-red-600 font-semibold"
                     >
                       Remove
@@ -139,8 +204,8 @@ export function OrderForm({
                       value={row.productType}
                       onChange={(e) => {
                         const newProductType = e.target.value as ProductType
-                        const newSizes = getSizesForProductType(newProductType)
-                        onUpdateSize(row.id, newProductType, newSizes[0] || '', row.width, row.stamped, row.quantity)
+                        exitCustomSize(row.id)
+                        onUpdateSize(row.id, newProductType, '', row.width, row.stamped, row.quantity)
                       }}
                       className={selectClass}
                     >
@@ -152,16 +217,7 @@ export function OrderForm({
                   </div>
                   <div>
                     {/* <label className={labelClass}>Size</label> */}
-                    <select
-                      value={row.size}
-                      onChange={(e) => onUpdateSize(row.id, row.productType, e.target.value, row.width, row.stamped, row.quantity)}
-                      className={selectClass}
-                    >
-                      <option value="">Select size</option>
-                      {availableSizes.map((size) => (
-                        <option key={size} value={size}>{size}</option>
-                      ))}
-                    </select>
+                    <SizeField row={row} />
                   </div>
                   <div>
                     {/* <label className={labelClass}>Width</label> */}
@@ -173,7 +229,7 @@ export function OrderForm({
                         }
                         className={selectClass}
                       >
-                        <option value="">Width?</option>
+                        <option value="">Select Width</option>
                         <option value="Standard (3cm)">Regular (3cm)</option>
                         <option value="Slim (2.5cm)">Slim (2.5cm)</option>
                       </select>
@@ -201,7 +257,7 @@ export function OrderForm({
                         onChange={(e) => onUpdateOrientation(row.id, e.target.value as 'Buckle Left' | 'Buckle Right' | '')}
                         className={selectClass}
                       >
-                        <option value="">-- Select Orientation --</option>
+                        <option value="">Select Orientation</option>
                         <option value="Buckle Left">Buckle Left</option>
                         <option value="Buckle Right">Buckle Right</option>
                       </select>
@@ -243,8 +299,8 @@ export function OrderForm({
                   value={row.productType}
                   onChange={(e) => {
                     const newProductType = e.target.value as ProductType
-                    const newSizes = getSizesForProductType(newProductType)
-                    onUpdateSize(row.id, newProductType, newSizes[0] || '', row.width, row.stamped, row.quantity)
+                    exitCustomSize(row.id)
+                    onUpdateSize(row.id, newProductType, '', row.width, row.stamped, row.quantity)
                   }}
                   className={selectClass}
                 >
@@ -254,16 +310,7 @@ export function OrderForm({
                   ))}
                 </select>
 
-                <select
-                  value={row.size}
-                  onChange={(e) => onUpdateSize(row.id, row.productType, e.target.value, row.width, row.stamped, row.quantity)}
-                  className={selectClass}
-                >
-                  <option value="">Select size</option>
-                  {availableSizes.map((size) => (
-                    <option key={size} value={size}>{size}</option>
-                  ))}
-                </select>
+                <SizeField row={row} />
 
                 {row.productType === 'Belt' ? (
                   <select
@@ -273,7 +320,7 @@ export function OrderForm({
                     }
                     className={selectClass}
                   >
-                    <option value="">Width?</option>
+                    <option value="">Select Width</option>
                     <option value="Standard (3cm)">Regular (3cm)</option>
                     <option value="Slim (2.5cm)">Slim (2.5cm)</option>
                   </select>
@@ -291,7 +338,7 @@ export function OrderForm({
                         onChange={(e) => onUpdateOrientation(row.id, e.target.value as 'Buckle Left' | 'Buckle Right' | '')}
                         className={selectClass}
                       >
-                        <option value="">Orientation?</option>
+                        <option value="">Select Orientation</option>
                         <option value="Buckle Left">Buckle Left</option>
                         <option value="Buckle Right">Buckle Right</option>
                       </select>
@@ -337,7 +384,7 @@ export function OrderForm({
                 {/* Remove */}
                 {sizeRows.length > 1 ? (
                   <button
-                    onClick={() => onRemoveSize(row.id)}
+                    onClick={() => handleRemoveRow(row.id)}
                     className="w-9 h-9 flex items-center justify-center text-gray-300 hover:text-red-500 border-2 border-transparent hover:border-red-200 transition-colors text-lg"
                     title="Remove row"
                   >
