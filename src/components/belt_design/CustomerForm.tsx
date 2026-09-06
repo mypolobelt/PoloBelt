@@ -7,6 +7,23 @@ import { Button } from '../ui/button'
 import { useRouter } from 'next/navigation'
 import { countries } from '@/database/countries'
 import { renderBeltCanvas } from '@/database/canvas'
+import { upload } from '@vercel/blob/client'
+
+// Order photos (stamp / team colours / belt render) can easily be several MB
+// each — sending them as base64 inside the JSON body risks hitting Vercel's
+// ~4.5MB function payload limit (FUNCTION_PAYLOAD_TOO_LARGE). Upload them
+// straight from the browser to Blob storage instead, and send only the
+// resulting URL in the order payload.
+async function uploadDataUrlToBlob(dataUrl: string, pathPrefix: string): Promise<string> {
+  const res = await fetch(dataUrl)
+  const blob = await res.blob()
+  const ext = blob.type.split('/')[1] || 'png'
+  const { url } = await upload(`${pathPrefix}-${Date.now()}.${ext}`, blob, {
+    access: 'public',
+    handleUploadUrl: '/api/blob-upload',
+  })
+  return url
+}
 
 interface SizeOrder {
   size: string
@@ -135,6 +152,17 @@ export function CustomerForm({
       const threadColors = designDetails?.threadColors || []
       const threadColorDetails = parseThreadColorDetails(threadColors)
 
+      // Upload the (potentially large) photos straight to Blob storage from
+      // the browser, so the API request body stays small regardless of how
+      // big the customer's stamp/team-colour photos are.
+      const [uploadedStampImage, uploadedBeltImage, uploadedTeamColorImages] = await Promise.all([
+        stampImage ? uploadDataUrlToBlob(stampImage, 'stamps/stamp') : Promise.resolve(undefined),
+        beltImage ? uploadDataUrlToBlob(beltImage, 'belt-designs/belt') : Promise.resolve(undefined),
+        Promise.all(
+          (teamColorImages || []).map((img) => uploadDataUrlToBlob(img, 'team-colours/tc'))
+        ),
+      ])
+
       const orderData = {
         customerName,
         email,
@@ -155,10 +183,10 @@ export function CustomerForm({
             buckleFinish: 'Brass',
             hasStamp: false,
           }),
-          stampImage,
-          teamColorImages: teamColorImages && teamColorImages.length > 0 ? teamColorImages : undefined,
+          stampImage: uploadedStampImage,
+          teamColorImages: uploadedTeamColorImages.length > 0 ? uploadedTeamColorImages : undefined,
           comments: comments || undefined,
-          beltImage,
+          beltImage: uploadedBeltImage,
           threadColorDetails,
         },
         orderQuantities: sizeOrders || [],

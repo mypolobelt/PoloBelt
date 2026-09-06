@@ -49,6 +49,20 @@ interface OrderData {
   timestamp: string;
 }
 
+// The browser now uploads large photos (stamp / team colours / belt render)
+// straight to Blob storage and sends us the resulting URL instead of raw
+// base64 — this keeps our own request body tiny. Base64 is still accepted
+// as a fallback for anything small that didn't go through that path.
+async function toBuffer(src: string): Promise<Buffer> {
+  if (src.startsWith("http")) {
+    const res = await fetch(src);
+    const arrayBuffer = await res.arrayBuffer();
+    return Buffer.from(arrayBuffer);
+  }
+  const base64 = src.replace(/^data:image\/[^;]+;base64,/, "");
+  return Buffer.from(base64, "base64");
+}
+
 function parseThreadColorDetails(threadColors: string[]): ThreadColorDetail[] {
   return threadColors.map((raw) => {
     const parts = raw.trim().split(" ");
@@ -92,41 +106,48 @@ export async function POST(request: NextRequest) {
     const attachments: Array<{ filename: string; content: string }> = [];
     const blobUrlsToDelete: string[] = [];
 
-    // Upload belt image to Vercel Blob → public URL for email
+    // Belt image: the browser already uploads this to Blob and sends the URL —
+    // fall back to uploading it ourselves only if we somehow got raw base64.
     let beltImageUrl: string | null = null;
     if (data.designDetails.beltImage) {
       try {
-        const beltBase64 = data.designDetails.beltImage.replace(/^data:image\/[^;]+;base64,/, "");
-        const buffer = Buffer.from(beltBase64, "base64");
-        const blob = await put(`belt-designs/belt-${Date.now()}.jpg`, buffer, {
-          access: "public",
-          contentType: "image/jpeg",
-        });
-        beltImageUrl = blob.url;
-        blobUrlsToDelete.push(blob.url);
+        if (data.designDetails.beltImage.startsWith("http")) {
+          beltImageUrl = data.designDetails.beltImage;
+        } else {
+          const buffer = await toBuffer(data.designDetails.beltImage);
+          const blob = await put(`belt-designs/belt-${Date.now()}.jpg`, buffer, {
+            access: "public",
+            contentType: "image/jpeg",
+          });
+          beltImageUrl = blob.url;
+        }
       } catch (err) {
-        console.error("Belt image blob upload error:", err);
+        console.error("Belt image processing error:", err);
       }
     }
 
-    // Upload stamp image to Vercel Blob → public URL for email (full, original quality —
-    // the client needs this exact file to cut the physical stamp)
+    // Stamp image: same deal — already on Blob at full, original quality
+    // (the client needs this exact file to cut the physical stamp).
     let stampImageUrl: string | null = null;
     let stampImageForPdf: string | null = null;
     if (data.designDetails.stampImage) {
       try {
-        const stampBase64 = data.designDetails.stampImage.replace(/^data:image\/[^;]+;base64,/, "");
-        const buffer = Buffer.from(stampBase64, "base64");
-        const blob = await put(`stamps/stamp-${Date.now()}.png`, buffer, {
-          access: "public",
-          contentType: "image/png",
-        });
-        stampImageUrl = blob.url;
-        blobUrlsToDelete.push(blob.url);
+        if (data.designDetails.stampImage.startsWith("http")) {
+          stampImageUrl = data.designDetails.stampImage;
+        } else {
+          const buffer = await toBuffer(data.designDetails.stampImage);
+          const blob = await put(`stamps/stamp-${Date.now()}.png`, buffer, {
+            access: "public",
+            contentType: "image/png",
+          });
+          stampImageUrl = blob.url;
+        }
+
+        const buffer = await toBuffer(stampImageUrl);
 
         // Original, un-resized file as a real attachment (not just a link) —
         // this is what the client cuts the physical stamp from.
-        attachments.push({ filename: "stamp-logo-original.png", content: stampBase64 });
+        attachments.push({ filename: "stamp-logo-original.png", content: buffer.toString("base64") });
 
         // Small, compressed copy just for the PDF spec sheet — the PDF only
         // ever displays this at 80x80, so there's no reason to embed the
@@ -137,33 +158,39 @@ export async function POST(request: NextRequest) {
           .toBuffer();
         stampImageForPdf = `data:image/png;base64,${resizedBuffer.toString("base64")}`;
       } catch (err) {
-        console.error("Stamp image blob upload error:", err);
+        console.error("Stamp image processing error:", err);
       }
     }
 
-    // Upload team colour images (up to 3) to Vercel Blob → public URLs for email
+    // Team colour images (up to 3): already on Blob — fetch bytes only to
+    // build the small PDF-embed copies.
     const teamColorImageUrls: string[] = [];
     const teamColorImagesForPdf: string[] = [];
-    for (const tcDataUrl of (data.designDetails.teamColorImages || [])) {
+    for (const tcSrc of (data.designDetails.teamColorImages || [])) {
       try {
-        const tcBase64 = tcDataUrl.replace(/^data:image\/[^;]+;base64,/, "");
-        const rawBuffer = Buffer.from(tcBase64, "base64");
-        const pngBuffer = await sharp(rawBuffer).png().toBuffer();
-        const blob = await put(`team-colours/tc-${Date.now()}.png`, pngBuffer, {
-          access: "public",
-          contentType: "image/png",
-        });
-        teamColorImageUrls.push(blob.url);
-        blobUrlsToDelete.push(blob.url);
+        let tcUrl: string;
+        if (tcSrc.startsWith("http")) {
+          tcUrl = tcSrc;
+        } else {
+          const rawBuffer = await toBuffer(tcSrc);
+          const pngBuffer = await sharp(rawBuffer).png().toBuffer();
+          const blob = await put(`team-colours/tc-${Date.now()}.png`, pngBuffer, {
+            access: "public",
+            contentType: "image/png",
+          });
+          tcUrl = blob.url;
+        }
+        teamColorImageUrls.push(tcUrl);
 
         // Small copy for the PDF (displayed at 38x38 there) — same reasoning as the stamp.
+        const rawBuffer = await toBuffer(tcUrl);
         const resizedTcBuffer = await sharp(rawBuffer)
           .resize(160, 160, { fit: "inside", withoutEnlargement: true })
           .jpeg({ quality: 75 })
           .toBuffer();
         teamColorImagesForPdf.push(`data:image/jpeg;base64,${resizedTcBuffer.toString("base64")}`);
       } catch (err) {
-        console.error("Team colour image blob upload error:", err);
+        console.error("Team colour image processing error:", err);
       }
     }
     // Convert logo.webp → PNG base64 for @react-pdf/renderer (webp not supported)
@@ -181,7 +208,7 @@ export async function POST(request: NextRequest) {
     try {
       const pdfElement = createElement(DesignSpecPDFDocument, {
         designName: data.designDetails.designName || "Custom Design",
-        beltImage: data.designDetails.beltImage || null,
+        beltImage: beltImageUrl || data.designDetails.beltImage || null,
         threadColorDetails,
         leatherColor: data.designDetails.leatherColor,
         buckleFinish: data.designDetails.buckleFinish,
