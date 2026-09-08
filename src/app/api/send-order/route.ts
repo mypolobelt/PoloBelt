@@ -153,6 +153,7 @@ export async function POST(request: NextRequest) {
         // ever displays this at 80x80, so there's no reason to embed the
         // multi-MB original and bloat the PDF's file size.
         const resizedBuffer = await sharp(buffer)
+          .rotate() // normalise EXIF orientation (phone photos) before resizing
           .resize(240, 240, { fit: "inside", withoutEnlargement: true })
           .png({ compressionLevel: 9 })
           .toBuffer();
@@ -173,7 +174,7 @@ export async function POST(request: NextRequest) {
           tcUrl = tcSrc;
         } else {
           const rawBuffer = await toBuffer(tcSrc);
-          const pngBuffer = await sharp(rawBuffer).png().toBuffer();
+          const pngBuffer = await sharp(rawBuffer).rotate().png().toBuffer();
           const blob = await put(`team-colours/tc-${Date.now()}.png`, pngBuffer, {
             access: "public",
             contentType: "image/png",
@@ -182,9 +183,10 @@ export async function POST(request: NextRequest) {
         }
         teamColorImageUrls.push(tcUrl);
 
-        // Small copy for the PDF (displayed at 38x38 there) — same reasoning as the stamp.
+        // Small copy for the PDF (displayed at 80x80 there) — same reasoning as the stamp.
         const rawBuffer = await toBuffer(tcUrl);
         const resizedTcBuffer = await sharp(rawBuffer)
+          .rotate() // normalise EXIF orientation (phone photos) before resizing
           .resize(160, 160, { fit: "inside", withoutEnlargement: true })
           .jpeg({ quality: 75 })
           .toBuffer();
@@ -329,7 +331,7 @@ function buildOrderEmail(data: OrderData, threadColorDetails: ThreadColorDetail[
     : "<p style='font-size:13px;color:#888;'>None</p>";
 
   const teamColorCellHtml = teamColorImageUrls.length > 0
-    ? teamColorImageUrls.map((url, i) => `<img src="${url}" alt="Team Colour ${i + 1}" style="width:60px;height:60px;object-fit:contain;margin-right:6px;" />`).join("")
+    ? teamColorImageUrls.map((url, i) => `<img src="${url}" alt="Team Colour ${i + 1}" style="width:80px;height:80px;object-fit:contain;margin-right:6px;" />`).join("")
     : "<p style='font-size:13px;color:#888;'>None</p>";
 
   return `

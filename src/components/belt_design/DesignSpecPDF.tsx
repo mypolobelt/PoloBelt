@@ -88,8 +88,8 @@ const styles = StyleSheet.create({
         gap: 6,
     },
     teamColorImage: {
-        width: 38,
-        height: 38,
+        width: 80,
+        height: 80,
         objectFit: 'contain' as const,
     },
 })
