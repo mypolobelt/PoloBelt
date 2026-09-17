@@ -68,6 +68,15 @@ const Nav = () => {
                                 </Link>
                             </NavigationMenuLink>
                         </NavigationMenuItem>
+                        {/* Thread Chart link removed from main nav per client request (too many errors, confusing customers) — page still exists at /thread-chart, uncomment to restore
+                        <NavigationMenuItem>
+                            <NavigationMenuLink asChild>
+                                <Link href="/thread-chart" className="px-2 sm:px-3 py-2 text-sm sm:text-base text-white hover:text-white/80 transition-colors">
+                                    Thread Chart
+                                </Link>
+                            </NavigationMenuLink>
+                        </NavigationMenuItem>
+                        */}
                         <NavigationMenuItem>
                             <NavigationMenuTrigger className="text-sm sm:text-base text-white focus:outline-none focus-visible:outline-none focus:ring-0 focus-visible:ring-0">
                                 Gallery
@@ -215,6 +224,17 @@ const Nav = () => {
                                             Sizing
                                         </Link>
                                     </li>
+                                    {/* Thread Chart link removed from main nav per client request (too many errors, confusing customers) — page still exists at /thread-chart, uncomment to restore
+                                    <li>
+                                        <Link
+                                            href="/thread-chart"
+                                            className="block px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base text-white hover:bg-white/10 rounded-md transition-colors"
+                                            onClick={closeSheet}
+                                        >
+                                            Thread Chart
+                                        </Link>
+                                    </li>
+                                    */}
                                     <li>
                                         <button
                                             onClick={() => setMobileOfferOpen(!mobileOfferOpen)}
