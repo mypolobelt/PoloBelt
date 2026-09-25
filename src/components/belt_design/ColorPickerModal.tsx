@@ -2,7 +2,6 @@
 
 import { BASIC_PALETTE, THREAD_COLORS } from '@/database/constants'
 import { X } from 'lucide-react'
-import { useState } from 'react'
 import { createPortal } from 'react-dom'
 
 interface ColorPickerModalProps {
@@ -16,8 +15,6 @@ export function ColorPickerModal({
   onClose,
   onSelectColor,
 }: ColorPickerModalProps) {
-  const [activeTab, setActiveTab] = useState<'basic' | 'full'>('basic')
-
   if (!isOpen) return null
 
   const handleColorSelect = (colorId: string) => {
@@ -28,10 +25,7 @@ export function ColorPickerModal({
     }
   }
 
-  const colors =
-    activeTab === 'basic'
-      ? BASIC_PALETTE.map((id) => ({ id, ...THREAD_COLORS[id] }))
-      : Object.entries(THREAD_COLORS).map(([id, color]) => ({ id, ...color }))
+  const colors = BASIC_PALETTE.map((id) => ({ id, ...THREAD_COLORS[id] }))
 
   const modal = (
     <div
@@ -60,22 +54,6 @@ export function ColorPickerModal({
           </button>
         </div>
 
-        {/* Tabs */}
-        <div className="flex gap-2 sm:gap-4 px-5 sm:px-8 pt-4 pb-2 shrink-0">
-          {(['basic', 'full'] as const).map((tab) => (
-            <button
-              key={tab}
-              onClick={() => setActiveTab(tab)}
-              className={`px-4 sm:px-6 py-2 text-sm sm:text-base font-semibold transition-all border-2 ${activeTab === tab
-                  ? 'bg-yellow-600 text-white border-yellow-600'
-                  : 'bg-white border-gray-300 text-black hover:border-yellow-400'
-                }`}
-            >
-              {tab === 'basic' ? 'Basic Colours' : 'Full Palette'}
-            </button>
-          ))}
-        </div>
-
         {/* Color grid — scrollable */}
         <div className="overflow-y-auto px-5 sm:px-8 py-4" style={{ WebkitOverflowScrolling: 'touch' }}>
           <div className="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 lg:grid-cols-8 gap-2 sm:gap-3">
@@ -90,7 +68,7 @@ export function ColorPickerModal({
                   style={{ backgroundColor: hex }}
                 />
                 <div className="font-bold text-xs leading-tight text-gray-800">{id}</div>
-                {activeTab === 'basic' && name && (
+                {name && (
                   <div className="text-xs mt-0.5 leading-tight text-gray-500 truncate">{name}</div>
                 )}
               </button>
