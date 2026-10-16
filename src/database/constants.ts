@@ -1107,12 +1107,15 @@ export const THREAD_COLORS: ThreadColorDatabase = {
   // ── Base ──────────────────────────────────────────────────────────────────
   White: { name: "White", hex: "#FFFFFF" }, // client thread chart
   Black: { name: "Black", hex: "#000000" }, // client thread chart
+  // No catalogue number in the client's chart (same as White/Black) — the
+  // belt-photo filename for this thread used the placeholder "PPP" the same
+  // way "BBB"/"WWW" were used for Black/White, confirming it's unnumbered.
+  CerisePink: { name: "Cerise Pink", hex: "#D62E97" },
 };
 
 // The full customer-facing thread palette, reduced to exactly what the
 // client's thread chart specifies (see client-provided thread chart PDF,
-// Sep 2026). Order matches the client's chart. Cerise Pink (D62E97) is
-// pending a thread number from the client before it can be added.
+// Sep 2026).
 export const BASIC_PALETTE = [
   "Black",
   "White",
@@ -1156,6 +1159,7 @@ export const BASIC_PALETTE = [
   "50", // pink
   "52", // pink
   "62", // pink
+  "CerisePink", // cerise pink
 ];
 
 export const LEATHER_COLORS = {

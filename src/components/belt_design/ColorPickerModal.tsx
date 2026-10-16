@@ -1,8 +1,11 @@
 'use client'
 
+import { useState } from 'react'
 import { BASIC_PALETTE, THREAD_COLORS } from '@/database/constants'
+import { THREAD_FAMILIES, THREAD_FAMILY_MAP } from '@/database/threadChart'
 import { X } from 'lucide-react'
 import { createPortal } from 'react-dom'
+import { ThreadPreviewModal } from './ThreadPreviewModal'
 
 interface ColorPickerModalProps {
   isOpen: boolean
@@ -15,17 +18,20 @@ export function ColorPickerModal({
   onClose,
   onSelectColor,
 }: ColorPickerModalProps) {
+  const [previewId, setPreviewId] = useState<string | null>(null)
+
   if (!isOpen) return null
 
-  const handleColorSelect = (colorId: string) => {
-    const color = THREAD_COLORS[colorId]
-    if (color) {
-      onSelectColor(colorId, color.name)
-      onClose()
-    }
-  }
+  const familyGroups = THREAD_FAMILIES.map((fam) => ({
+    family: fam,
+    ids: BASIC_PALETTE.filter((id) => THREAD_FAMILY_MAP[id] === fam.id),
+  }))
 
-  const colors = BASIC_PALETTE.map((id) => ({ id, ...THREAD_COLORS[id] }))
+  const selectAndClose = (colorId: string, colorName: string) => {
+    onSelectColor(colorId, colorName)
+    setPreviewId(null)
+    onClose()
+  }
 
   const modal = (
     <div
@@ -54,28 +60,48 @@ export function ColorPickerModal({
           </button>
         </div>
 
-        {/* Color grid — scrollable */}
+        {/* Color grid — scrollable, grouped the same way as the thread chart page */}
         <div className="overflow-y-auto px-5 sm:px-8 py-4" style={{ WebkitOverflowScrolling: 'touch' }}>
-          <div className="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 lg:grid-cols-8 gap-2 sm:gap-3">
-            {colors.map(({ id, name, hex }) => (
-              <button
-                key={id}
-                onClick={() => handleColorSelect(id)}
-                className="border-2 border-gray-200 hover:border-yellow-500 active:scale-95 transition-all text-center bg-white p-1.5 sm:p-2 cursor-pointer"
-              >
-                <div
-                  className="w-full aspect-square mb-1.5 border border-gray-300"
-                  style={{ backgroundColor: hex }}
-                />
-                <div className="font-bold text-xs leading-tight text-gray-800">{id}</div>
-                {name && (
-                  <div className="text-xs mt-0.5 leading-tight text-gray-500 truncate">{name}</div>
-                )}
-              </button>
-            ))}
-          </div>
+          {familyGroups.map(({ family, ids }) => (
+            <div key={family.id} className="mb-5 last:mb-0">
+              <h4 className="text-xs font-bold uppercase tracking-wider text-gray-500 mb-2">{family.name}</h4>
+              <div className="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 lg:grid-cols-8 gap-2 sm:gap-3">
+                {ids.map((id) => {
+                  const color = THREAD_COLORS[id]
+                  if (!color) return null
+                  return (
+                    <button
+                      key={id}
+                      onClick={() => setPreviewId(id)}
+                      className="border-2 border-gray-200 hover:border-yellow-500 active:scale-95 transition-all text-center bg-white p-1.5 sm:p-2 cursor-pointer"
+                    >
+                      <div
+                        className="w-full aspect-square mb-1.5 border border-gray-300"
+                        style={{ backgroundColor: color.hex }}
+                      />
+                      <div className="font-bold text-xs leading-tight text-gray-800 truncate">{color.name}</div>
+                      {/^\d+$/.test(id) && (
+                        <div className="text-[10px] mt-0.5 leading-tight text-gray-500">No. {id}</div>
+                      )}
+                    </button>
+                  )
+                })}
+              </div>
+            </div>
+          ))}
         </div>
       </div>
+
+      {previewId && (
+        <ThreadPreviewModal
+          threadId={previewId}
+          allIds={BASIC_PALETTE}
+          onNavigate={setPreviewId}
+          onClose={() => setPreviewId(null)}
+          ctaLabel="Select this colour"
+          onCta={selectAndClose}
+        />
+      )}
     </div>
   )
 
