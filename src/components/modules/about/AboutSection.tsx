@@ -50,7 +50,7 @@ const AboutSection = () => {
                     variants={containerVariants}
                     initial="hidden"
                     whileInView="visible"
-                    viewport={{ once: false, amount: 0.3 }}
+                    viewport={{ once: true, amount: 0.3 }}
                 >
                     <div className="max-w-xl space-y-4 sm:space-y-5 md:space-y-6">
 
@@ -108,7 +108,7 @@ const AboutSection = () => {
                     variants={imageVariants}
                     initial="hidden"
                     whileInView="visible"
-                    viewport={{ once: false, amount: 0.3 }}
+                    viewport={{ once: true, amount: 0.3 }}
                 >
                     <Image
                         src="/assets/belt1.webp"

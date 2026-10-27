@@ -1,8 +1,6 @@
 'use client';
 
 import Link from "next/link"
-import { Separator } from "@/components/ui/separator"
-import { SiGodaddy } from "react-icons/si"
 import { motion } from "framer-motion"
 import { usePathname } from "next/navigation"
 
@@ -81,39 +79,6 @@ export default function Footer() {
                             className="hover:text-white transition-colors"
                         >
                             Privacy Policy
-                        </Link>
-                    </motion.div>
-                </motion.div>
-
-                {/* Small Divider */}
-                <motion.div
-                    className="w-12 sm:w-16 mb-4 sm:mb-6"
-                    variants={itemVariants}
-                >
-                    <Separator className="bg-gray-700" />
-                </motion.div>
-
-                {/* Powered By */}
-                <motion.div
-                    className="flex flex-col items-center gap-2"
-                    variants={containerVariants}
-                >
-                    <motion.span
-                        className="text-base sm:text-lg text-gray-400"
-                        variants={itemVariants}
-                    >
-                        Powered by
-                    </motion.span>
-
-                    <motion.div variants={itemVariants}>
-                        <Link
-                            href="https://www.godaddy.com/airo"
-                            target="_blank"
-                            className="flex items-center gap-2 hover:text-white transition-colors"
-                        >
-                            <span className="font-semibold flex items-center gap-2 text-xs sm:text-sm">
-                                <SiGodaddy /> GoDaddy Airo
-                            </span>
                         </Link>
                     </motion.div>
                 </motion.div>
