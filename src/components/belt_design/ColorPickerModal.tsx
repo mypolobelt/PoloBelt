@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { BASIC_PALETTE, THREAD_COLORS } from '@/database/constants'
 import { THREAD_FAMILIES, THREAD_FAMILY_MAP } from '@/database/threadChart'
 import { X } from 'lucide-react'
@@ -19,13 +19,40 @@ export function ColorPickerModal({
   onSelectColor,
 }: ColorPickerModalProps) {
   const [previewId, setPreviewId] = useState<string | null>(null)
-
-  if (!isOpen) return null
+  const [activeFamily, setActiveFamily] = useState(THREAD_FAMILIES[0].id)
+  const scrollRef = useRef<HTMLDivElement | null>(null)
+  const sectionRefs = useRef<Record<string, HTMLDivElement | null>>({})
 
   const familyGroups = THREAD_FAMILIES.map((fam) => ({
     family: fam,
     ids: BASIC_PALETTE.filter((id) => THREAD_FAMILY_MAP[id] === fam.id),
   }))
+
+  useEffect(() => {
+    if (!isOpen || !scrollRef.current || !('IntersectionObserver' in window)) return
+    const visible = new Set<string>()
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((en) => {
+          const id = en.target.getAttribute('data-family')
+          if (!id) return
+          if (en.isIntersecting) visible.add(id)
+          else visible.delete(id)
+        })
+        const first = THREAD_FAMILIES.find((f) => visible.has(f.id))
+        if (first) setActiveFamily(first.id)
+      },
+      { root: scrollRef.current, rootMargin: '-45px 0px -55% 0px', threshold: 0 }
+    )
+    Object.values(sectionRefs.current).forEach((el) => el && io.observe(el))
+    return () => io.disconnect()
+  }, [isOpen])
+
+  if (!isOpen) return null
+
+  const jumpToFamily = (id: string) => {
+    sectionRefs.current[id]?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }
 
   const selectAndClose = (colorId: string, colorName: string) => {
     onSelectColor(colorId, colorName)
@@ -60,10 +87,39 @@ export function ColorPickerModal({
           </button>
         </div>
 
+        {/* Family nav — matches the main thread-chart page */}
+        <div className="px-5 sm:px-8 py-2.5 border-b border-gray-200 shrink-0">
+          <div className="flex gap-2 overflow-x-auto no-scrollbar">
+            {THREAD_FAMILIES.map((fam) => {
+              const swatch = THREAD_COLORS[fam.swatch]
+              const active = activeFamily === fam.id
+              return (
+                <button
+                  key={fam.id}
+                  onClick={() => jumpToFamily(fam.id)}
+                  className={`shrink-0 inline-flex items-center gap-2 px-3 py-1.5 rounded-full border text-xs font-medium transition-colors ${active ? 'bg-gray-900 border-gray-900 text-white' : 'bg-white border-gray-300 text-gray-700 hover:border-gray-500'
+                    }`}
+                >
+                  <span
+                    className="w-2.5 h-2.5 rounded-full border border-black/10 shrink-0"
+                    style={{ backgroundColor: swatch?.hex }}
+                  />
+                  {fam.name}
+                </button>
+              )
+            })}
+          </div>
+        </div>
+
         {/* Color grid — scrollable, grouped the same way as the thread chart page */}
-        <div className="overflow-y-auto px-5 sm:px-8 py-4" style={{ WebkitOverflowScrolling: 'touch' }}>
+        <div ref={scrollRef} className="overflow-y-auto px-5 sm:px-8 py-4" style={{ WebkitOverflowScrolling: 'touch' }}>
           {familyGroups.map(({ family, ids }) => (
-            <div key={family.id} className="mb-5 last:mb-0">
+            <div
+              key={family.id}
+              data-family={family.id}
+              ref={(el) => { sectionRefs.current[family.id] = el }}
+              className="mb-5 last:mb-0 scroll-mt-2"
+            >
               <h4 className="text-xs font-bold uppercase tracking-wider text-gray-500 mb-2">{family.name}</h4>
               <div className="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 lg:grid-cols-8 gap-2 sm:gap-3">
                 {ids.map((id) => {
@@ -77,7 +133,11 @@ export function ColorPickerModal({
                     >
                       <div
                         className="w-full aspect-square mb-1.5 border border-gray-300"
-                        style={{ backgroundColor: color.hex }}
+                        style={{
+                          backgroundColor: color.hex,
+                          backgroundImage:
+                            'repeating-linear-gradient(90deg, rgba(255,255,255,.09) 0 1.5px, transparent 1.5px 3px, rgba(0,0,0,.08) 3px 4.5px, transparent 4.5px 6px), linear-gradient(160deg, rgba(255,255,255,.10), rgba(0,0,0,.07))',
+                        }}
                       />
                       <div className="font-bold text-xs leading-tight text-gray-800 truncate">{color.name}</div>
                       {/^\d+$/.test(id) && (

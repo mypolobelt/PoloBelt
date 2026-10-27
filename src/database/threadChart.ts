@@ -47,9 +47,9 @@ export const THREAD_FAMILY_MAP: Record<string, string> = {
   "397": "greys", "399": "greys", "400": "greys", Black: "greys",
 };
 
-// Thread id -> real belt photo. Ids not listed here fall back to a
-// generated illustration (see threadIllustration.ts). 32 photos supplied by
-// the client (Oct 2026); the remaining shades are awaiting photos.
+// Thread id -> real belt photo. Ids not listed here show an "Example photo
+// coming soon" placeholder instead. 32 photos supplied by the client
+// (Oct 2026); the remaining shades are awaiting photos.
 export const THREAD_PHOTOS: Record<string, string> = {
   Black: "/assets/thread-photos/Black.jpg",
   White: "/assets/thread-photos/White.jpg",
@@ -84,7 +84,3 @@ export const THREAD_PHOTOS: Record<string, string> = {
   "897": "/assets/thread-photos/897.jpg",
   "926": "/assets/thread-photos/926.jpg",
 };
-
-// Threads most likely to pair well as illustration companions, in order of
-// preference, for shades that don't have a real photo yet.
-export const COMPANION_POOL = ["149", "1009", "46", "White", "212", "307", "Black"];

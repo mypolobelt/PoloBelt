@@ -6,46 +6,13 @@ import { motion } from 'framer-motion';
 import PoloLogo2 from '../shared/PoloLogo2';
 import { THREAD_COLORS } from '@/database/constants';
 import { THREAD_FAMILIES, THREAD_FAMILY_MAP, THREAD_FAMILY_ORDER } from '@/database/threadChart';
-import { ThreadPreviewModal, threadLabel } from '@/components/belt_design/ThreadPreviewModal';
-
-const STORAGE_KEY = 'mpb-thread-shortlist';
-const MAX_SAVED = 6;
-
-function loadSaved(): string[] {
-    try {
-        const arr = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
-        return Array.isArray(arr) ? arr.filter((id) => THREAD_COLORS[id]).slice(0, MAX_SAVED) : [];
-    } catch {
-        return [];
-    }
-}
-
-function persistSaved(ids: string[]) {
-    try {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(ids));
-    } catch {
-        // storage unavailable (private browsing etc.) — shortlist just won't persist
-    }
-}
+import { ThreadPreviewModal } from '@/components/belt_design/ThreadPreviewModal';
 
 export default function ThreadChart() {
     const router = useRouter();
     const [openId, setOpenId] = useState<string | null>(null);
-    const [saved, setSaved] = useState<string[]>([]);
     const [activeFamily, setActiveFamily] = useState(THREAD_FAMILIES[0].id);
-    const [toast, setToast] = useState<string | null>(null);
     const sectionRefs = useRef<Record<string, HTMLDivElement | null>>({});
-    const famBarRef = useRef<HTMLDivElement>(null);
-
-    useEffect(() => {
-        setSaved(loadSaved());
-    }, []);
-
-    useEffect(() => {
-        if (!toast) return;
-        const t = setTimeout(() => setToast(null), 3000);
-        return () => clearTimeout(t);
-    }, [toast]);
 
     const familyGroups = useMemo(
         () =>
@@ -80,32 +47,8 @@ export default function ThreadChart() {
         sectionRefs.current[id]?.scrollIntoView({ behavior: 'smooth', block: 'start' });
     };
 
-    const toggleSave = (id: string) => {
-        setSaved((prev) => {
-            let next: string[];
-            if (prev.includes(id)) {
-                next = prev.filter((x) => x !== id);
-            } else if (prev.length >= MAX_SAVED) {
-                setToast(`You can keep up to ${MAX_SAVED} shades. Remove one first.`);
-                return prev;
-            } else {
-                next = [...prev, id];
-            }
-            persistSaved(next);
-            return next;
-        });
-    };
-
-    const startBeltInColour = () => {
+    const designBeltNow = () => {
         router.push('/custom-design-tool');
-    };
-
-    const copyShortlist = () => {
-        const text = saved.map((id) => threadLabel(id, THREAD_COLORS[id].name)).join(', ');
-        navigator.clipboard
-            ?.writeText(text)
-            .then(() => setToast(`Copied: ${text}`))
-            .catch(() => setToast(`Your shades: ${text}`));
     };
 
     return (
@@ -113,10 +56,7 @@ export default function ThreadChart() {
             <PoloLogo2 />
 
             {/* Family nav */}
-            <div
-                ref={famBarRef}
-                className="sticky top-0 z-30 bg-white/95 backdrop-blur border-b border-gray-200 px-3 sm:px-6 py-2.5"
-            >
+            <div className="sticky top-0 z-30 bg-white/95 backdrop-blur border-b border-gray-200 px-3 sm:px-6 py-2.5">
                 <div className="max-w-5xl mx-auto flex gap-2 overflow-x-auto no-scrollbar">
                     {THREAD_FAMILIES.map((fam) => {
                         const swatch = THREAD_COLORS[fam.swatch];
@@ -139,7 +79,7 @@ export default function ThreadChart() {
                 </div>
             </div>
 
-            <div className={`max-w-5xl mx-auto px-3 sm:px-6 py-8 ${saved.length > 0 ? 'pb-28' : ''}`}>
+            <div className="max-w-5xl mx-auto px-3 sm:px-6 py-8">
                 <motion.h2
                     className="uppercase text-2xl sm:text-3xl md:text-4xl font-bold text-center mb-2 text-gray-900 tracking-tight"
                     initial={{ opacity: 0, y: 20 }}
@@ -169,7 +109,6 @@ export default function ThreadChart() {
                             {ids.map((id) => {
                                 const t = THREAD_COLORS[id];
                                 if (!t) return null;
-                                const isSaved = saved.includes(id);
                                 return (
                                     <button
                                         key={id}
@@ -181,15 +120,9 @@ export default function ThreadChart() {
                                             style={{
                                                 backgroundColor: t.hex,
                                                 backgroundImage:
-                                                    'repeating-linear-gradient(135deg, rgba(255,255,255,.09) 0 1.5px, transparent 1.5px 3px, rgba(0,0,0,.08) 3px 4.5px, transparent 4.5px 6px), linear-gradient(160deg, rgba(255,255,255,.10), rgba(0,0,0,.07))',
+                                                    'repeating-linear-gradient(90deg, rgba(255,255,255,.09) 0 1.5px, transparent 1.5px 3px, rgba(0,0,0,.08) 3px 4.5px, transparent 4.5px 6px), linear-gradient(160deg, rgba(255,255,255,.10), rgba(0,0,0,.07))',
                                             }}
-                                        >
-                                            {isSaved && (
-                                                <span className="absolute top-1 right-1 w-4 h-4 rounded-full bg-white shadow flex items-center justify-center text-[9px] font-bold">
-                                                    ✓
-                                                </span>
-                                            )}
-                                        </div>
+                                        />
                                         <div className="text-xs font-semibold text-gray-800 leading-tight truncate">{t.name}</div>
                                         <div className="text-[10px] text-gray-400 leading-tight">
                                             {/^\d+$/.test(id) ? `No. ${id}` : ''}
@@ -213,51 +146,9 @@ export default function ThreadChart() {
                     allIds={THREAD_FAMILY_ORDER}
                     onNavigate={setOpenId}
                     onClose={() => setOpenId(null)}
-                    ctaLabel="Start a belt in this colour →"
-                    onCta={startBeltInColour}
-                    isSaved={saved.includes(openId)}
-                    onToggleSave={toggleSave}
+                    ctaLabel="Design a belt now →"
+                    onCta={designBeltNow}
                 />
-            )}
-
-            {/* Shortlist tray */}
-            {saved.length > 0 && (
-                <div className="fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur border-t border-gray-200 px-3 sm:px-6 py-2.5">
-                    <div className="max-w-5xl mx-auto flex items-center gap-3">
-                        <span className="text-xs font-semibold text-gray-500 shrink-0 hidden sm:inline">
-                            My shades <span className="text-gray-900">{saved.length}</span>
-                        </span>
-                        <div className="flex-1 flex gap-2 overflow-x-auto no-scrollbar">
-                            {saved.map((id) => (
-                                <button
-                                    key={id}
-                                    onClick={() => setOpenId(id)}
-                                    className="shrink-0 w-9 h-9 rounded-md border border-black/10"
-                                    style={{ backgroundColor: THREAD_COLORS[id]?.hex }}
-                                    title={threadLabel(id, THREAD_COLORS[id]?.name ?? '')}
-                                />
-                            ))}
-                        </div>
-                        <button
-                            onClick={copyShortlist}
-                            className="shrink-0 text-xs font-semibold border border-gray-300 px-3 py-2 hover:border-gray-500"
-                        >
-                            Copy list
-                        </button>
-                        <button
-                            onClick={() => { setSaved([]); persistSaved([]) }}
-                            className="shrink-0 text-xs font-semibold text-gray-400 hover:text-gray-700 px-1"
-                        >
-                            Clear
-                        </button>
-                    </div>
-                </div>
-            )}
-
-            {toast && (
-                <div className="fixed left-1/2 -translate-x-1/2 bottom-24 z-50 bg-gray-900 text-white text-xs px-4 py-2.5 rounded-lg shadow-lg max-w-[90vw]">
-                    {toast}
-                </div>
             )}
         </section>
     );

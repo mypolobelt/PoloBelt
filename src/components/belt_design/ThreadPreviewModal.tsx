@@ -1,11 +1,10 @@
 'use client'
 
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { createPortal } from 'react-dom'
-import { X, ChevronLeft, ChevronRight, Check, Plus } from 'lucide-react'
+import { X, ChevronLeft, ChevronRight, Camera } from 'lucide-react'
 import { THREAD_COLORS } from '@/database/constants'
 import { THREAD_FAMILIES, THREAD_FAMILY_MAP, THREAD_PHOTOS } from '@/database/threadChart'
-import { beltIllustrationSrc, companionsFor } from '@/database/threadIllustration'
 
 interface ThreadPreviewModalProps {
   threadId: string
@@ -16,14 +15,6 @@ interface ThreadPreviewModalProps {
   /** Primary action button. */
   ctaLabel: string
   onCta: (id: string, name: string) => void
-  /** "Add to my shades" shortlist — omit to hide (e.g. inside the design tool picker). */
-  isSaved?: boolean
-  onToggleSave?: (id: string) => void
-}
-
-const threadLabel = (id: string, name: string) => {
-  const isNumbered = /^\d+$/.test(id)
-  return isNumbered ? `${name} No. ${id}` : name
 }
 
 export function ThreadPreviewModal({
@@ -33,8 +24,6 @@ export function ThreadPreviewModal({
   onClose,
   ctaLabel,
   onCta,
-  isSaved,
-  onToggleSave,
 }: ThreadPreviewModalProps) {
   const [mounted, setMounted] = useState(false)
   useEffect(() => setMounted(true), [])
@@ -43,15 +32,7 @@ export function ThreadPreviewModal({
   const index = allIds.indexOf(threadId)
   const familyId = THREAD_FAMILY_MAP[threadId]
   const familyName = THREAD_FAMILIES.find((f) => f.id === familyId)?.name ?? ''
-
-  const imageSrc = useMemo(() => {
-    const photo = THREAD_PHOTOS[threadId]
-    if (photo) return photo
-    const [a, b] = companionsFor(threadId)
-    return beltIllustrationSrc(color?.hex ?? '#888888', THREAD_COLORS[a]?.hex ?? '#888888', THREAD_COLORS[b]?.hex ?? '#888888')
-  }, [threadId, color])
-
-  const isIllustration = !THREAD_PHOTOS[threadId]
+  const photo = THREAD_PHOTOS[threadId]
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -93,15 +74,17 @@ export function ThreadPreviewModal({
         </button>
 
         <div className="grid sm:grid-cols-[1.3fr_1fr]">
-          {/* Photo / illustration */}
+          {/* Photo, or a "coming soon" placeholder when none exists yet */}
           <div className="relative p-3 sm:p-4">
             <div className="relative aspect-[4/3] rounded-lg overflow-hidden bg-gray-100">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={imageSrc} alt={`${color.name} on a polo belt`} className="w-full h-full object-cover" />
-              {isIllustration && (
-                <span className="absolute left-3 bottom-3 text-[10px] font-semibold uppercase tracking-wider bg-white/90 text-gray-900 px-2.5 py-1 rounded-full">
-                  Illustration
-                </span>
+              {photo ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img src={photo} alt={`${color.name} on a polo belt`} className="w-full h-full object-cover" />
+              ) : (
+                <div className="w-full h-full flex flex-col items-center justify-center gap-2 text-gray-400">
+                  <Camera className="size-8" />
+                  <p className="text-sm font-medium">Example photo coming soon!</p>
+                </div>
               )}
             </div>
           </div>
@@ -121,31 +104,12 @@ export function ThreadPreviewModal({
               </div>
             </div>
 
-            {isIllustration && (
-              <p className="text-xs text-gray-500 leading-relaxed">
-                A photo of a real belt in this shade will go here.
-              </p>
-            )}
-
-            <div className="flex flex-col gap-2">
-              {onToggleSave && (
-                <button
-                  onClick={() => onToggleSave(threadId)}
-                  aria-pressed={!!isSaved}
-                  className={`min-h-11 px-4 inline-flex items-center justify-center gap-2 text-sm font-semibold border-2 transition-colors ${isSaved ? 'border-charcoal bg-gray-50' : 'border-gray-300 hover:border-yellow-500'
-                    }`}
-                >
-                  {isSaved ? <Check className="size-4" /> : <Plus className="size-4" />}
-                  {isSaved ? 'In my shades' : 'Add to my shades'}
-                </button>
-              )}
-              <button
-                onClick={() => onCta(threadId, color.name)}
-                className="min-h-11 px-4 bg-[#1a1a2e] text-white text-sm font-semibold hover:bg-[#2a2a46] transition-colors"
-              >
-                {ctaLabel}
-              </button>
-            </div>
+            <button
+              onClick={() => onCta(threadId, color.name)}
+              className="min-h-11 px-4 bg-[#1a1a2e] text-white text-sm font-semibold hover:bg-[#2a2a46] transition-colors"
+            >
+              {ctaLabel}
+            </button>
 
             <div className="flex items-center justify-between gap-2 pt-3 border-t border-gray-200 mt-auto">
               <button
@@ -172,5 +136,3 @@ export function ThreadPreviewModal({
 
   return createPortal(modal, document.body)
 }
-
-export { threadLabel }
